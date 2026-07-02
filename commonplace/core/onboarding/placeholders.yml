@@ -1,0 +1,164 @@
+# placeholders.yml — onboarding placeholder registry + allowlist (SSOT)
+#
+# This file is the single source of truth (SSOT) for the onboarding-fill tokens.
+# `apply.py` reads THIS file (via PyYAML — already a workspace dep, see
+# requirements.txt) together with `values.json` (the per-instance answers), then
+# substitutes every `<<NAME>>` occurrence across the git-tracked tree. Nothing
+# else defines the token set: the README placeholder table, AGENTS.md, and the
+# onboarding interview all defer to the `tokens:` list below. Add a token here
+# or nowhere.
+#
+# Two distinct marker syntaxes live in the template; only ONE is filled here:
+#   <<NAME>>  — onboarding-fill tokens. Replaced ONCE at instantiation by
+#               apply.py. The nine entries under `tokens:` are the ONLY <<...>>
+#               markers apply.py fills.
+#   {{...}}   — runtime markers (e.g. {{YYYY-MM-DD}} in 40_templates/daily-brief.md).
+#               Filled per-artefact/per-run, NEVER by apply.py. Left untouched.
+#
+# The generic literal `<<TOKEN>>` (and the bare word "<<...>>") that appears in
+# README.md / 00_meta/README.md / AGENTS.md is DOCUMENTATION PROSE describing the
+# marker convention — it is NOT a fill token. apply.py and the leftover-validator
+# MUST ignore `<<TOKEN>>`; the validator flags a leftover only when it is
+# `<<X>>` and X is one of the nine names under `tokens:`.
+#
+# Derivation: workspace_slug / agent_slug are DERIVED from the corresponding
+# *_NAME value (slugify) when not explicitly supplied; CREATED_DATE auto-fills to
+# today (YYYY-MM-DD) when not supplied. Everything else is asked in the interview.
+#
+# OKF note: this is a YAML config file, not an OKF concept `.md`, so it carries
+# no frontmatter and needs no related[]/body-link mirroring.
+
+schema_version: 1
+
+# Slugify rule shared by the derivable slug tokens:
+#   lowercase -> replace any run of non [a-z0-9] with '-' -> strip leading/
+#   trailing '-' -> must then satisfy ^[a-z][a-z0-9-]{0,40}$ (i.e. start with a
+#   letter; if the slug would start with a digit or be empty, ask instead of derive).
+slugify_rule: >-
+  lowercase; collapse each run of characters outside [a-z0-9] to a single '-';
+  strip leading and trailing '-'; the result must match ^[a-z][a-z0-9-]{0,40}$,
+  otherwise fall back to asking the operator.
+
+# ---------------------------------------------------------------------------
+# tokens — the complete onboarding allowlist (exactly nine). apply.py fills only
+# these; the leftover-validator flags only these.
+# ---------------------------------------------------------------------------
+tokens:
+  - name: WORKSPACE_NAME
+    meaning: Workspace / instance name.
+    source: asked
+    question: "What is the workspace (instance) name?"
+    example: Acme
+    validation:
+      rule: "1-60 characters, single line (no newline)."
+      regex: '^[^\n]{1,60}$'
+
+  - name: ENTITY
+    meaning: Legal / operating business entity the workspace serves.
+    source: asked
+    question: "What legal/operating entity does this workspace serve? (Drop any company number unless wanted.)"
+    example: Acme Ltd
+    validation:
+      rule: "1-80 characters, single line (no newline)."
+      regex: '^[^\n]{1,80}$'
+
+  - name: OWNER
+    meaning: Founder / operator name.
+    source: asked
+    question: "Who is the founder/operator (owner) of this workspace?"
+    example: Alex
+    validation:
+      rule: "1-60 characters, single line (no newline)."
+      regex: '^[^\n]{1,60}$'
+
+  - name: AGENT_NAME
+    meaning: Agent persona name.
+    source: asked
+    question: "What is the agent's name/persona for this workspace?"
+    example: Aster
+    validation:
+      rule: "1-40 characters, single line (no newline)."
+      regex: '^[^\n]{1,40}$'
+
+  - name: workspace_slug
+    meaning: "Lowercase id handle (frontmatter id: prefixes, reaper build marker, .py)."
+    source: derivable
+    derive_from: WORKSPACE_NAME
+    derive: slugify        # see slugify_rule; ask if it cannot be derived cleanly
+    question: "Lowercase workspace slug (default: slugified WORKSPACE_NAME)?"
+    example: acme
+    validation:
+      rule: "Start with a letter, then lowercase letters/digits/hyphens; up to 41 chars."
+      regex: '^[a-z][a-z0-9-]{0,40}$'
+
+  - name: agent_slug
+    meaning: "Lowercase agent handle (journal who: field via session-digest hook)."
+    source: derivable
+    derive_from: AGENT_NAME
+    derive: slugify        # see slugify_rule; ask if it cannot be derived cleanly
+    question: "Lowercase agent slug (default: slugified AGENT_NAME)?"
+    example: aster
+    validation:
+      rule: "Start with a letter, then lowercase letters/digits/hyphens; up to 41 chars."
+      regex: '^[a-z][a-z0-9-]{0,40}$'
+
+  - name: WORKSPACE_ROOT_ENV
+    meaning: Env-var name the hooks read for the workspace-root override (.py os.environ.get).
+    source: asked
+    question: "What environment-variable name should the hooks read for the workspace-root override (e.g. ACME_ROOT)?"
+    example: ACME_ROOT
+    validation:
+      rule: "Start with an uppercase letter, then uppercase letters/digits/underscores; up to 41 chars."
+      regex: '^[A-Z][A-Z0-9_]{0,40}$'
+
+  - name: SHARED_CONTEXT_PATH
+    meaning: Absolute path to this instance's shared-context / calibration store (may be empty).
+    source: asked
+    question: "Absolute path to the shared-context store? Leave blank if none is wired yet."
+    example: /home/alex/Shared
+    validation:
+      rule: "Single line (no newline). Empty string is allowed (no store wired)."
+      regex: '^[^\n]*$'
+      allow_empty: true
+
+  - name: CREATED_DATE
+    meaning: Instantiation date (YYYY-MM-DD).
+    source: derivable
+    derive: today          # auto-fills to today's date when not supplied
+    question: "Instantiation date (default: today, YYYY-MM-DD)?"
+    example: "2026-06-27"   # quoted so YAML keeps it a string, not a date object
+    validation:
+      rule: "ISO date YYYY-MM-DD."
+      regex: '^\d{4}-\d{2}-\d{2}$'
+
+# ---------------------------------------------------------------------------
+# replacement_order — the order apply.py performs substitutions.
+#
+# The `<<...>>` delimiters already make every token name unambiguous (no token
+# name is a prefix of another *inside* the delimiters), so order is not strictly
+# required for correctness. We declare it longest-name-first anyway as a
+# belt-and-braces safeguard, so a more-specific name can never be shadowed by a
+# shorter one if the delimiters were ever relaxed. Ties broken alphabetically for
+# determinism. All nine tokens are listed.
+# ---------------------------------------------------------------------------
+replacement_order:
+  - SHARED_CONTEXT_PATH   # 19
+  - WORKSPACE_ROOT_ENV    # 18
+  - WORKSPACE_NAME        # 14
+  - workspace_slug        # 14
+  - CREATED_DATE          # 12
+  - AGENT_NAME            # 10
+  - agent_slug            # 10
+  - ENTITY                # 6
+  - OWNER                 # 5
+
+# ---------------------------------------------------------------------------
+# validator — leftover-scan contract after apply.py runs.
+# ---------------------------------------------------------------------------
+validator:
+  # A clean instance has NO `<<NAME>>` left where NAME is one of `tokens[].name`.
+  flag_only: tokens          # flag leftover <<X>> only when X is a declared token
+  ignore_literals:
+    - TOKEN                  # the generic <<TOKEN>> is documentation prose, not a fill token
+  # Runtime {{...}} markers are out of scope — never scanned, never flagged.
+  leave_runtime_markers: true

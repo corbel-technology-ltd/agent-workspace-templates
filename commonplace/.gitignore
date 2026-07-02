@@ -1,0 +1,21 @@
+# transient / local-only
+.DS_Store
+*.swp
+.firecrawl/
+# secrets live outside the repo or in an untracked .env
+.env
+.env.*
+__pycache__/
+*.pyc
+# local binaries; unzip in place when needed
+*.zip
+# outbound email audit log (local only) — instance integration
+70_integrations/sent/
+# inbound poll watermark + fetched mail (local only) — instance integration
+70_integrations/inbox/
+# reaper build marker — deterministic, regenerated locally; dirties every push
+20_memory/_meta/build.md
+# onboarding transients — written by the onboarding skill / apply.py, never committed
+values.json
+.onboarding_apply/
+.onboarding_apply_snapshot/

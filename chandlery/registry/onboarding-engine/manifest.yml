@@ -1,0 +1,12 @@
+name: onboarding-engine
+version: 4
+description: Deterministic onboarding substitution engine - validates values, fills
+  placeholder tokens with context-aware escaping; atomic, idempotent, --dry-run.
+provenance: FAW family shared tooling; upstream home is the Commonplace workspace
+  template
+requires:
+- PyYAML
+files:
+- src: files/apply.py
+  target: core/onboarding/apply.py
+  sha256: c51e0e6a2ce8cfb263d9f907343676b2f5de91b5e27cfe45594481e4b6e908b3

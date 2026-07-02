@@ -1,0 +1,105 @@
+# Memory homeostasis — the set-points panel (v2, research-backed).
+# Tunable. The reaper (fast pass) and sleep (deep pass) read these; nothing here is hardcoded
+# elsewhere. Defaults are engineering choices for a solo founder at low volume, NOT research
+# constants. Adjust as the store grows; record changes in 00_meta/log.md.
+# Full rationale: 00_meta/memory-architecture.md.
+
+version: 2
+as_of_clock: explicit            # passes take an explicit --as-of date for reproducible runs
+
+# --- ACT-R base-level activation (retrieval ranking) ---
+# A_i = ln( sum_j (t - t_j)^(-decay) ) + W_i
+activation:
+  decay: 0.5
+  touches_window: 12             # consider the last N touches (mentions + retrievals + reviews)
+  weights:                       # W_i terms
+    importance: 0.8
+    trust: 0.4
+    assoc_prime: 0.5
+    surprise: 0.6                # prediction-error: contradicts current world model
+    decision_impact: 0.7         # drove a commitment/SOP/deadline  (outranks mention-count)
+    conflict: -1.0
+    obsolete: -1.5
+
+# --- layer membership (hysteresis: enter high, leave low => no thrash) ---
+thresholds:
+  short_term_enter: 1.6
+  short_term_exit:  1.1
+  long_term_enter:  2.4
+  long_term_exit:   1.5
+  long_term_months_below_exit_before_archive: 3
+
+# --- promotion signals (short-term -> long-term); strongest first ---
+promotion:
+  explicit_pivotal: true         # always promotes (trust_tier >= 4)
+  min_recurrence_days: 3         # same fact-family on >=3 distinct days within 60d
+  min_retrievals_90d: 4
+  min_trust_for_long: 3
+  decision_impact_promotes: true # a fact that drove a commitment promotes regardless of count
+
+# --- the non-drop invariant ---
+invariants:
+  pivotal_never_drops: true      # pivotal / do_not_drop atoms bypass the decay loop entirely
+  supersede_never_overwrite: true
+
+# --- layer budgets ---
+budgets:
+  working_max_tokens: 2500
+  working_max_items: 8
+  short_term_max_items: 200
+  short_term_max_dossiers: 20
+  long_term_target_cards: 2000
+  max_atoms_per_tag: 40
+  redundancy_floor_per_entity: 1
+
+# --- decay / validity windows (S-VALID), per layer ---
+decay:
+  default_valid_for:
+    working: 1d
+    short-term: 30d
+    long-term: until-superseded   # pivotal => permanent
+    subconscious: 90d             # weak edges decay; reinforced ones persist
+  expired_action: archive         # never delete; journal is the backstop
+
+# --- dedup ---
+dedup:
+  hash_normalisation: [lowercase, collapse-whitespace]   # NOT stop-word stripping
+  on_collision: first-writer-wins
+  consolidate_by: fact-family     # repeated evidence strengthens one canonical card
+
+# --- subconscious layer ---
+subconscious:
+  edge_weight_floor: 0.15         # edges below this decay out
+  max_edges_per_node: 20
+  default_assertable: false       # primes interpretation; never asserts unsourced facts
+  prior_decay_half_life_days: 90
+  trend_methods: [moving_average, theil_sen_slope, change_point]   # minimal/deterministic mode
+  priming_score_weight: 0.05      # association bonus can never outrank exact evidence
+
+# --- tiering (retrieval budget order) ---
+tiering:
+  inputs: [recency, inbound_link_count]
+  hot_inbound_links_min: 3
+
+# --- trust ---
+trust:
+  default_for_imports: untrusted  # quarantine-at-the-door; promotion earned
+  retrieval_excludes: [untrusted] # untrusted atoms never enter assembled context
+  escalation: monotonic           # trust only rises via review; never auto-launders
+  floor_for_assertion: 3          # a claim stated as fact needs trust_tier >= this + a source
+
+# --- deep (sleep) pass guardrails ---
+sleep_pass:
+  max_changed_items_per_run: 50   # bounded LLM input
+  output: strict_json_only        # {claim, support_event_ids, confidence, changed_entities, proposed_edges}
+  validator_rejects: [unsupported_claim, new_named_entity, untraceable_contradiction]
+
+# --- stability circuit-breaker ---
+stability:
+  churn_freeze_pct: 25            # a pass that would rewrite > this % of atoms aborts -> _review/churn-alert.md
+  min_atoms_for_check: 8          # below this count, skip the churn freeze (too few atoms to judge)
+
+# --- graduation trigger (file-native -> database + vector + graph) ---
+graduation:
+  long_term_cards_over: 10000
+  or_retrieval_latency_ms_over: 200

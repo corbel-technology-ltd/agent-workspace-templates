@@ -1,0 +1,12 @@
+# transient / local-only
+.DS_Store
+*.swp
+__pycache__/
+*.pyc
+# a registry never holds secrets; belt-and-braces ignore anyway
+.env
+.env.*
+# onboarding transients — written by the onboarding playbook / apply.py, never committed
+values.json
+.onboarding_apply/
+.onboarding_apply_snapshot/

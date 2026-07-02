@@ -1,0 +1,72 @@
+# placeholders.yml — onboarding placeholder registry + allowlist (SSOT)
+#
+# The single source of truth for the onboarding-fill tokens of a Chandlery capability
+# registry. `apply.py` reads THIS file (via PyYAML) together with `values.json`, then
+# substitutes every `<<NAME>>` occurrence across the git-tracked tree. Add a token here
+# or nowhere.
+#
+# Two marker syntaxes; only ONE is filled here:
+#   <<NAME>>  — onboarding-fill tokens, replaced ONCE at instantiation by apply.py.
+#               The four entries under `tokens:` are the ONLY <<...>> markers filled.
+#   {{...}}   — runtime markers, filled per-artefact, NEVER by apply.py.
+#
+# The generic literal `<<TOKEN>>` in prose is DOCUMENTATION, not a fill token.
+
+schema_version: 1
+
+slugify_rule: >-
+  lowercase; collapse each run of characters outside [a-z0-9] to a single '-';
+  strip leading and trailing '-'; the result must match ^[a-z][a-z0-9-]{0,40}$,
+  otherwise fall back to asking the owner.
+
+tokens:
+  - name: CHANDLERY_NAME
+    meaning: This registry's name.
+    source: asked
+    question: "What is this chandlery called? (e.g. Acme Chandlery)"
+    example: Acme Chandlery
+    validation:
+      rule: "1-60 characters, single line (no newline)."
+      regex: '^[^\n]{1,60}$'
+
+  - name: OWNER
+    meaning: The person who gates installs and packs.
+    source: asked
+    question: "Who owns this chandlery (gates installs and packs)?"
+    example: Alex
+    validation:
+      rule: "1-60 characters, single line (no newline)."
+      regex: '^[^\n]{1,60}$'
+
+  - name: chandlery_slug
+    meaning: "Lowercase id handle (frontmatter id: prefixes)."
+    source: derivable
+    derive_from: CHANDLERY_NAME
+    derive: slugify
+    question: "Lowercase chandlery slug (default: slugified CHANDLERY_NAME)?"
+    example: acme-chandlery
+    validation:
+      rule: "Start with a letter, then lowercase letters/digits/hyphens; up to 41 chars."
+      regex: '^[a-z][a-z0-9-]{0,40}$'
+
+  - name: CREATED_DATE
+    meaning: Instantiation date (YYYY-MM-DD).
+    source: derivable
+    derive: today
+    question: "Instantiation date (default: today, YYYY-MM-DD)?"
+    example: "2026-07-02"
+    validation:
+      rule: "ISO date YYYY-MM-DD."
+      regex: '^\d{4}-\d{2}-\d{2}$'
+
+replacement_order:
+  - CHANDLERY_NAME          # 14
+  - chandlery_slug          # 14
+  - CREATED_DATE            # 12
+  - OWNER                   # 5
+
+validator:
+  flag_only: tokens
+  ignore_literals:
+    - TOKEN
+  leave_runtime_markers: true

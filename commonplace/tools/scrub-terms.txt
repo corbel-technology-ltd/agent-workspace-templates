@@ -1,0 +1,28 @@
+# scrub-terms.txt — your in-house term denylist for the confidentiality scrub.
+#
+# scrub-check reads this list and FAILS if any term appears in a tracked file, so
+# you can prove a copy of this workspace carries none of your private terms before
+# you share or publish it.
+#
+# Format: one lowercase term per line. Blank lines and `#` comments are ignored.
+# Matching is case-insensitive and whole-word, so a short term never fires as a
+# substring of a longer one (e.g. a codename "cat" will not match "category").
+#
+# This list ships EMPTY on purpose — the blank template carries no in-house
+# content, so there is nothing to scrub for yet. When you onboard, add YOUR
+# instance's distinctive private terms here, one per line:
+#   - your company / brand / product names
+#   - your agent's name and the owner's name
+#   - internal hostnames, server names, infra / vendor names
+#   - project codenames
+#   - the owner's contact email(s)
+#
+# Illustration only (commented out — replace with your own, then uncomment):
+#   # acme-corp
+#   # internal-fileserver
+#   # project-bluebird
+#   # owner@example.com
+#
+# Tip: for a term that is also an ordinary word (a codename like "spark", or a
+# short name), whole-word matching prevents false hits — but still sanity-check
+# any reported hit before you distribute.
