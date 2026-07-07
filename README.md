@@ -11,7 +11,8 @@ for running your work as plain Markdown + git that an AI agent operates and you 
   tooling that installs into workspaces, flows improvements back, and makes drift visible.
 
 Each stands alone; together they click. The whole story, the composition diagram, and the
-take-just-one-part paths: **[FAMILY.md](FAMILY.md)**.
+take-just-one-part paths: **[FAMILY.md](FAMILY.md)**. Agents start at
+**[AGENTS.md](AGENTS.md)** — the family-root constitution.
 
 ## Quick start
 
