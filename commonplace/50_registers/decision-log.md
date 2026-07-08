@@ -77,7 +77,7 @@ weekly review reads.
 
 ## Related
 
-- [Decision queue — open founder decisions](decision-queue.md)
+- [Decision queue - open founder decisions](decision-queue.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)
-- [Daily brief — the run-by-hand morning assembly](../60_workflows/daily-brief.md)
-- [Journal — the append-only event log](../20_memory/journal/README.md)
+- [Daily brief - the run-by-hand morning assembly](../60_workflows/daily-brief.md)
+- [Journal - the append-only event log](../20_memory/journal/README.md)

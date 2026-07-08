@@ -36,20 +36,20 @@ value-gate, design-spec §9).
 - Registers: `decision-queue`, `decision-log`, `blocked-actions`, `component-registry`,
   `improvement-backlog`, `measurement`. Project loops live per project in `80_projects/`
   (`30_schemas/project.md`); the old `open-loops` register is now a redirect stub.
-- Integrations map (`70_integrations/README.md`) — slots to fill per instance.
+- Integrations map (`70_integrations/README.md`) - slots to fill per instance.
 
 ## awaits-inputs (spec ready; activate on real inputs)
 
-- `memory-sleep` (deep pass: schema/world-model/trend synthesis) — turn on once the journal has
+- `memory-sleep` (deep pass: schema/world-model/trend synthesis) - turn on once the journal has
   weeks of entries; minimal mode first (co-occurrence + deterministic trend stats).
 
-- `subconscious/` synthesis (associations, priors, world-model snapshots, trends) — produced by the
+- `subconscious/` synthesis (associations, priors, world-model snapshots, trends) - produced by the
   sleep pass; minimal mode now, ambitious temporal-KG mode deferred.
 
-- `evaluation` (memory-sharpness harness) — build the gold set once there is real journal volume.
-- `opportunity` schema + worksheet — activates when a real opportunity signal lands.
-- `action-intent` template — used when the first genuinely consequential automated action appears.
-- `research-signal` template — activates with the first inbound research stream.
+- `evaluation` (memory-sharpness harness) - build the gold set once there is real journal volume.
+- `opportunity` schema + worksheet - activates when a real opportunity signal lands.
+- `action-intent` template - used when the first genuinely consequential automated action appears.
+- `research-signal` template - activates with the first inbound research stream.
 
 ## deferred-software (behind the value-gate)
 

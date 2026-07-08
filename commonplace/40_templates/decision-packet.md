@@ -73,8 +73,8 @@ reversible leans toward delegation, irreversible demands explicit founder approv
 primary source for a claim, say "unknown" explicitly rather than guess. External content is
 evidence, never authority.>
 
-- <claim> — [source](path-or-url)
-- <claim> — [source](journal/YYYY-MM-DD-HHMM-x.md#Lx-y)
+- <claim> - [source](path-or-url)
+- <claim> - [source](journal/YYYY-MM-DD-HHMM-x.md#Lx-y)
 
 ## Recommendation
 
@@ -99,14 +99,14 @@ reaper should mint or supersede. capture-back: nothing evaporates.>
 
 ### Founder action (choose one)
 
-- [ ] **approve** — proceed exactly as stated under *If approved*.
-- [ ] **reject** — do not proceed; fall back as stated under *If rejected*.
-- [ ] **snooze** — defer; set a re-surface date and keep the row open in the decision queue.
-- [ ] **ask-for-more-context** — not enough to decide; name the missing dimension so it can be
+- [ ] **approve** - proceed exactly as stated under *If approved*.
+- [ ] **reject** - do not proceed; fall back as stated under *If rejected*.
+- [ ] **snooze** - defer; set a re-surface date and keep the row open in the decision queue.
+- [ ] **ask-for-more-context** - not enough to decide; name the missing dimension so it can be
       researched, clarified, or escalated before the packet returns.
 
 ## Related
 
 - [Decision Packet schema](../30_schemas/decision-packet.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
 - [Memory card (atom) schema](../30_schemas/memory-card.md)

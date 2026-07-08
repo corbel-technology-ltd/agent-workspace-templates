@@ -45,15 +45,15 @@ found fact), `source` (the journal entry or primary source that closed it).
 
 ## Status lifecycle
 
-- **open** — named, not yet being worked.
-- **investigating** — a route is in flight (`Plan -> Validate -> Execute` applies to the route).
-- **answered** — a source was found; the answer and `source` are recorded, and the finding is
+- **open** - named, not yet being worked.
+- **investigating** - a route is in flight (`Plan -> Validate -> Execute` applies to the route).
+- **answered** - a source was found; the answer and `source` are recorded, and the finding is
   written back to `journal/` so the reaper can mint or update an atom.
 
-- **waived** — the founder has decided the work can proceed without this answer; record who waived
+- **waived** - the founder has decided the work can proceed without this answer; record who waived
   it and why. Only the founder waives a gap that is `required_for` a consequential action.
 
-- **stale** — the parent or the question no longer applies; closed without an answer.
+- **stale** - the parent or the question no longer applies; closed without an answer.
 
 ## The blocking rule (the gate)
 
@@ -87,4 +87,4 @@ until its `status` is `answered` or `waived`. The blocked step is listed in
 - [Knowledge gaps register](../20_memory/knowledge-gaps.md)
 - [Decision Packet schema](decision-packet.md)
 - [Memory card (atom) schema](memory-card.md)
-- [Autonomy & gates — the single decision gate](../10_doctrine/autonomy-and-gates.md)
+- [Autonomy & gates - the single decision gate](../10_doctrine/autonomy-and-gates.md)

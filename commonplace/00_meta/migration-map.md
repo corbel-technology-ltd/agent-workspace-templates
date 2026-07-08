@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.meta.migration-map
-name: Migration map — bringing prior assets into this workspace
+name: Migration map - bringing prior assets into this workspace
 type: plan
 layer: C1
 status: placeholder

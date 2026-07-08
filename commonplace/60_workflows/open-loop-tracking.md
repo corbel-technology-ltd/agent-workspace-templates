@@ -20,7 +20,7 @@ related:
 
 Run by hand. Keeps each project's loops true: open a loop when a promise or dependency appears, close
 it when it resolves, surface overdue loops in the daily brief. Loops live per project under
-[`../80_projects/`](../80_projects/index.md) — each `80_projects/<slug>/loops.md` (and
+[`../80_projects/`](../80_projects/index.md) - each `80_projects/<slug>/loops.md` (and
 `_general/loops.md` for loops tied to no project), per the contract in
 [`../30_schemas/project.md`](../30_schemas/project.md). The loops file is the live view; the journal
 is the truth. This is **capture-back** for commitments and **anti-noise batching** for the chase.
@@ -31,11 +31,11 @@ owner to chase). Sources are the journal, the decision log, email (the email loo
 
 ## When to run
 
-- Inside the daily brief ([`daily-brief.md`](daily-brief.md)) — the overdue sweep below.
+- Inside the daily brief ([`daily-brief.md`](daily-brief.md)) - the overdue sweep below.
 - The moment a promise or dependency surfaces (an email reply expected, a date committed, a
-  third-party process started) — open the loop then, not later.
+  third-party process started) - open the loop then, not later.
 
-- When something resolves — close the loop then.
+- When something resolves - close the loop then.
 
 ## Plan -> Validate -> Execute
 
@@ -54,14 +54,14 @@ owner to chase). Sources are the journal, the decision log, email (the email loo
    [`../30_schemas/project.md`](../30_schemas/project.md).
 
 3. **Execute.** Add one row to that project's `loops.md` `## Open` table:
-   - **item** — the commitment, in one line.
-   - **ball** — `mine` / `theirs` / `external`.
-   - **who** — the counterparty, the owner's name when the ball is `mine`, or the external thing.
-   - **since** — today (YYYY-MM-DD).
-   - **due** — the date a response or event is expected, or `none` if open-ended. A `ball: mine` loop
+   - **item** - the commitment, in one line.
+   - **ball** - `mine` / `theirs` / `external`.
+   - **who** - the counterparty, the owner's name when the ball is `mine`, or the external thing.
+   - **since** - today (YYYY-MM-DD).
+   - **due** - the date a response or event is expected, or `none` if open-ended. A `ball: mine` loop
      with no hard date still wants a review date so the brief surfaces it.
-   - **status** — `open`.
-   - **source** — the journal entry the loop traces to.
+   - **status** - `open`.
+   - **source** - the journal entry the loop traces to.
 
 ### B. Surface overdue loops (the daily-brief sweep)
 
@@ -118,5 +118,5 @@ owner to chase). Sources are the journal, the decision log, email (the email loo
 - [Active projects](../80_projects/index.md)
 - [Project schema](../30_schemas/project.md)
 - [Journal event schema](../30_schemas/event.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)

@@ -1,5 +1,10 @@
 # Harbour
 
+> **Never used a terminal?** Follow **[START-HERE.md](START-HERE.md)**: every step spelled out,
+> nothing assumed, about 15 minutes.
+>
+> **Comfortable with git and Python?** The quick start below is for you.
+
 The **Filesystem Agent Workspace** template family: three clone-ready, agent-agnostic templates
 for running your work as plain Markdown + git that an AI agent operates and you stay in front of.
 
@@ -12,7 +17,7 @@ for running your work as plain Markdown + git that an AI agent operates and you 
 
 Each stands alone; together they click. The whole story, the composition diagram, and the
 take-just-one-part paths: **[FAMILY.md](FAMILY.md)**. Agents start at
-**[AGENTS.md](AGENTS.md)** — the family-root constitution.
+**[AGENTS.md](AGENTS.md)** - the family-root constitution.
 
 ## Quick start
 

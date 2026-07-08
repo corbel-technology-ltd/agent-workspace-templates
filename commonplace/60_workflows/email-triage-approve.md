@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.workflow.email-triage-approve
-name: Email triage and approve — thin wrapper over the email loop
+name: Email triage and approve - thin wrapper over the email loop
 type: workflow
 layer: C2
 status: current
@@ -35,11 +35,11 @@ agent runs the steps by hand; the founder commits.
 
 The instance wires two tools in [`../70_integrations/README.md`](../70_integrations/README.md):
 
-- **Poller** — opens the mailbox read-only (never sets `\Seen`), matches the relevant mail, dedupes
+- **Poller** - opens the mailbox read-only (never sets `\Seen`), matches the relevant mail, dedupes
   via a local UID watermark. A `--commit` mode advances the watermark past what it printed; without
   it the run is non-destructive and re-pollable.
 
-- **Sender** — the single send path (e.g. SMTP via the workspace mailbox). The **only** way mail
+- **Sender** - the single send path (e.g. SMTP via the workspace mailbox). The **only** way mail
   leaves; nothing else sends.
 
 If those tools live outside the workspace, running them is the `Run a tool from outside the
@@ -61,11 +61,11 @@ Steps 1-5 are **Plan** (deterministic plumbing + summarise + draft, no side effe
    - obvious categories first: `auto-handled` (notification/receipt/no action),
      `fyi` (read, no reply), `needs-reply`, `needs-decision` (commitment, money, scheduling, legal).
    Only mail that no rule resolves is handed to the LLM for a judgement call. The LLM classifies;
-   it never sends. **signpost, don't advise** — it proposes a category and reason, it does not act.
+   it never sends. **signpost, don't advise** - it proposes a category and reason, it does not act.
 
 3. **Summarise the thread.** For each `needs-reply` / `needs-decision` item, write a one-paragraph
    thread summary: who, what they are asking, any deadline, and what (if anything) we owe them.
-   Keep claims **source-or-abstain** — quote the mail; if a fact is asserted that we cannot verify
+   Keep claims **source-or-abstain** - quote the mail; if a fact is asserted that we cannot verify
    from the thread or an atom, say so rather than guessing.
 
 4. **Decide if a reply is needed.** `auto-handled` and `fyi` items are batched into the daily brief
@@ -118,9 +118,9 @@ consistently costs >20 minutes or the mail volume exceeds a stated threshold.
 ## Related
 
 - [Decision Packet schema](../30_schemas/decision-packet.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
 - [Decision log (append-only)](../50_registers/decision-log.md)
 - [Blocked actions register](../50_registers/blocked-actions.md)
 - [Journal event schema](../30_schemas/event.md)
 - [Decision packet (blank instance)](../40_templates/decision-packet.md)
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)

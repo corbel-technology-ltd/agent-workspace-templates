@@ -107,8 +107,8 @@ review.
 
 ## Related
 
-- [Weekly review — the once-a-week scan, reap, and re-prioritise](../60_workflows/weekly-review.md)
+- [Weekly review - the once-a-week scan, reap, and re-prioritise](../60_workflows/weekly-review.md)
 - [Decision log (append-only)](../50_registers/decision-log.md)
 - [Active projects](../80_projects/index.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
-- [Memory reaper — the fast consolidation pass](../60_workflows/memory-reaper.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
+- [Memory reaper - the fast consolidation pass](../60_workflows/memory-reaper.md)

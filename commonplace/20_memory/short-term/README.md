@@ -16,7 +16,7 @@ facts that are not yet durable (the "cooling" queue awaiting proof). Decays (def
 30d`); an atom is minted here only on **≥2 journal references** so one-off noise never enters.
 
 An atom leaves short-term by one of two routes: it **promotes** to long-term when it earns it
-(decision-impact, recurrence, reuse, surprise, or an explicit `pivotal` mark — see `../homeostasis.yml`
+(decision-impact, recurrence, reuse, surprise, or an explicit `pivotal` mark - see `../homeostasis.yml`
 and the reaper), or its activation falls below the exit threshold and it **decays to `../archive/`**.
 The journal entry always persists, so "forgotten" here means "no longer surfaced", never "lost".
 

@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.doctrine.session-discipline
-name: Session discipline — context budget, degradation, handoff
+name: Session discipline - context budget, degradation, handoff
 type: doctrine
 layer: C3
 status: current
@@ -59,5 +59,5 @@ fallback and the authority if it does not.
 
 ## Related
 
-- [Operating principles — the one vocabulary](principles.md)
-- [Journal — the append-only event log](../20_memory/journal/README.md)
+- [Operating principles - the one vocabulary](principles.md)
+- [Journal - the append-only event log](../20_memory/journal/README.md)

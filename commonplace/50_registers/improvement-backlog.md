@@ -16,12 +16,12 @@ related:
 # Improvement backlog
 
 Where proactivity lands so it does not become noise. When the agent notices something worth
-improving — a recurring manual sequence, an unused signal, a friction, a missed opportunity — it goes
+improving - a recurring manual sequence, an unused signal, a friction, a missed opportunity - it goes
 here with a **priority tag**, not into the founder's attention. The daily brief may surface the top
 `do-now` / `suggest` item; everything else waits here.
 
 Priority hierarchy: **blocking** → **strategic** → **opportunistic**. Action gate per item:
-`do-now` (high-impact, low-risk, reversible — just do it and log) · `suggest` (worth a Decision
+`do-now` (high-impact, low-risk, reversible - just do it and log) · `suggest` (worth a Decision
 Packet) · `log` (capture, revisit at the weekly review) · `ignore` (recorded then closed).
 
 | id | date | observation | rank | action | status | note |

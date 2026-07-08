@@ -8,11 +8,27 @@ runtime and its onboarding gate takes over.
 Usage:
     python3 instantiate.py <commonplace|lodestar|chandlery> <destination>
 
+Example:
+    python3 instantiate.py commonplace ~/my-workspace
+
+The destination must be a folder that does not exist yet (or is empty).
+Never used a terminal? Start with START-HERE.md instead.
+
 Deterministic, stdlib only. Refuses a non-empty destination.
 """
+from __future__ import print_function
+
+import sys
+
+if sys.version_info < (3, 6):
+    sys.stderr.write(
+        "instantiate: this script needs Python 3, but you ran it with Python %d.%d.\n"
+        "Try again with:  python3 instantiate.py %s\n"
+        % (sys.version_info[0], sys.version_info[1], " ".join(sys.argv[1:])))
+    sys.exit(1)
+
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -26,7 +42,7 @@ MEMBERS = {
 
 
 def fail(msg):
-    print(f"instantiate: {msg}", file=sys.stderr)
+    print("instantiate: " + msg, file=sys.stderr)
     sys.exit(1)
 
 
@@ -36,7 +52,7 @@ def find_member(name):
             p = base / candidate
             if (p / "AGENTS.md").is_file():
                 return p
-    fail(f"member folder for {name!r} not found beside this script")
+    fail("member folder for %r not found beside this script" % name)
 
 
 def main():
@@ -44,20 +60,29 @@ def main():
         print(__doc__)
         return 1
     name, dest = sys.argv[1], Path(sys.argv[2]).expanduser()
+    if shutil.which("git") is None:
+        fail("git is not installed (or not on your PATH). Install it and run this again.\n"
+             "  Windows: https://git-scm.com  |  Mac: type `git` in Terminal and accept the "
+             "install prompt  |  Linux: `sudo apt install git`")
     src = find_member(name)
-    if dest.exists() and any(dest.iterdir()):
-        fail(f"destination {dest} exists and is not empty")
+    if dest.is_file():
+        fail("destination %s already exists and is a file, not a folder.\n"
+             "Pick a folder name that does not exist yet, e.g. ~/my-workspace" % dest)
+    if dest.is_dir() and any(dest.iterdir()):
+        fail("destination %s already exists and is not empty.\n"
+             "Pick a folder that does not exist yet (nothing is ever overwritten), "
+             "e.g. ~/my-workspace" % dest)
     shutil.copytree(src, dest, dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns(".git", "__pycache__", ".pytest_cache"))
     subprocess.run(["git", "init", "-q"], cwd=dest, check=True)
     subprocess.run(["git", "add", "-A"], cwd=dest, check=True)
     r = subprocess.run(["git", "commit", "-q", "-m",
-                        f"chore: instantiate {name} from the Harbour template"],
+                        "chore: instantiate %s from the Harbour template" % name],
                        cwd=dest, capture_output=True, text=True)
     if r.returncode != 0:
-        print(f"instantiate: copied, but the first commit needs git identity set - run:\n"
-              f"  git -C {dest} commit -m 'chore: instantiate {name}'")
-    print(f"instantiate: {name} -> {dest}")
+        print("instantiate: copied, but the first commit needs git identity set - run:\n"
+              "  git -C %s commit -m 'chore: instantiate %s'" % (dest, name))
+    print("instantiate: %s -> %s" % (name, dest))
     print("Next: open it in your agent runtime; the onboarding gate takes over "
           "(or follow INSTALL.md by hand).")
     return 0

@@ -36,4 +36,4 @@ risk. Severity: HIGH / MED / LOW.
 ## Related
 
 - [Open loops register (moved)](open-loops.md)
-- [Decision queue — open founder decisions](decision-queue.md)
+- [Decision queue - open founder decisions](decision-queue.md)

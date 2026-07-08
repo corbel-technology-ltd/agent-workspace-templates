@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.workflow.daily-brief
-name: Daily brief — the run-by-hand morning assembly
+name: Daily brief - the run-by-hand morning assembly
 type: workflow
 layer: C2
 status: current
@@ -25,7 +25,7 @@ until the manual pass earns it (design-spec §9). The brief is the only thing th
 founder's attention: everything non-urgent batches here rather than interrupting (anti-noise
 batching).
 
-The work is **mostly deterministic gathering** — reading register rows and dates, applying fixed
+The work is **mostly deterministic gathering** - reading register rows and dates, applying fixed
 filters. An LLM is used **only** to summarise the gathered rows into tight prose; it never decides
 what is urgent, never approves a packet, and never sends. AI is a reasoning layer, never an
 authority layer (AI-minimisation; signpost, don't advise).
@@ -45,7 +45,7 @@ same `--as-of` → same gathered set. Only the section summaries vary.
    `status: open` (and `snoozed` rows whose `Review` date is `<= as-of`). Sort by `risk`
    descending, then by `date` ascending. For each, carry through its `summary`, `risk`, packet
    link, and queue `id`. Read the packet's `recommendation` field straight from
-   `30_schemas/decision-packet.md` shape — do not re-derive it. These fill **§2 Immediate
+   `30_schemas/decision-packet.md` shape - do not re-derive it. These fill **§2 Immediate
    decisions**. Less reversible means more explicit approval (autonomy-by-reversibility).
 
 3. **Gather open loops due (deterministic).** Read the `## Open` table of every project's loops file
@@ -71,7 +71,7 @@ same `--as-of` → same gathered set. Only the section summaries vary.
    This is not a to-do list.
 
 6. **Pick the top founder actions (judgement).** From the §2 decisions wanting a call today and the
-   §1-candidate due `ball: mine` loops, select the highest-leverage items only — what *only* the
+   §1-candidate due `ball: mine` loops, select the highest-leverage items only - what *only* the
    founder can move. This is the one genuinely judgement-laden step; keep it short. Empty is a valid
    answer, do not pad.
 
@@ -117,8 +117,8 @@ for >=4 weeks and consistently costs >20 minutes to assemble (the value-gate, de
 
 ## Related
 
-- [Daily founder brief — fill-in template](../40_templates/daily-brief.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Daily founder brief - fill-in template](../40_templates/daily-brief.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
 - [Active projects](../80_projects/index.md)
-- [Email triage and approve — thin wrapper over the email loop](email-triage-approve.md)
+- [Email triage and approve - thin wrapper over the email loop](email-triage-approve.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)

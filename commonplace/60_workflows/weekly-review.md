@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.workflow.weekly-review
-name: Weekly review — the once-a-week scan, reap, and re-prioritise
+name: Weekly review - the once-a-week scan, reap, and re-prioritise
 type: workflow
 layer: C2
 status: current
@@ -49,11 +49,11 @@ what each section holds; this says how to gather it and in what order.
 
 3. **Reconcile the registers for drift and stale items.** Read the live decision registers and the
    per-project loops, and check them against the run folders and against each other:
-   - [`../50_registers/decision-log.md`](../50_registers/decision-log.md) — pull this week's decisions
+   - [`../50_registers/decision-log.md`](../50_registers/decision-log.md) - pull this week's decisions
      and their reversibility tier into section 2. Append-only; do not re-litigate.
-   - [`../50_registers/decision-queue.md`](../50_registers/decision-queue.md) — list items still open
+   - [`../50_registers/decision-queue.md`](../50_registers/decision-queue.md) - list items still open
      (carried, not decided); the queue stays the live truth.
-   - [`../80_projects/`](../80_projects/index.md) — read each project's `loops.md` `## Open` table;
+   - [`../80_projects/`](../80_projects/index.md) - read each project's `loops.md` `## Open` table;
      list loops still open into section 3 and flag any past its `due` (`overdue`) or older than
      expected. A loop that now needs a founder decision moves to the queue with a Decision Packet and
      is marked `blocked` there, not guessed at here.
@@ -73,7 +73,7 @@ what each section holds; this says how to gather it and in what order.
 5. **Surface staleness the reaper cannot decide.** The reaper handles atom decay and budgets. The
    review handles the rest: doctrine or schemas (C3) that a week's events have contradicted, and
    atoms marked `stale` or past `last_verified + valid_for` that need a human re-verify. Record
-   these in section 4. **Do not silently rewrite C3 reference or doctrine** — propose a diff for
+   these in section 4. **Do not silently rewrite C3 reference or doctrine** - propose a diff for
    review per the safety gate. **signpost, don't advise**: surface what diverged and the options;
    the founder decides whether to change it.
 
@@ -84,7 +84,7 @@ what each section holds; this says how to gather it and in what order.
    in section 5, or "none".
 
 7. **Re-prioritise.** Fill section 6 with three to five ranked priorities for the coming week. Each
-   one is an existing open loop, a queued decision, or a new journal-backed intent — nothing here is
+   one is an existing open loop, a queued decision, or a new journal-backed intent - nothing here is
    a fresh commitment invented in the review. This is the **signpost** into next week, not a plan
    committed on the founder's behalf.
 
@@ -116,7 +116,7 @@ more than the threshold to assemble (design-spec §9).
 ## Related
 
 - [Weekly review template](../40_templates/weekly-review.md)
-- [Memory reaper — the fast consolidation pass](memory-reaper.md)
+- [Memory reaper - the fast consolidation pass](memory-reaper.md)
 - [Decision log (append-only)](../50_registers/decision-log.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
 - [Active projects](../80_projects/index.md)

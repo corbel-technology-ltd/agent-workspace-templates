@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.doctrine.non-goals
-name: Non-goals — the safety rails
+name: Non-goals - the safety rails
 type: doctrine
 layer: C3
 status: current
@@ -40,4 +40,4 @@ memory layer is event-sourced with a reaper rather than an append-everything sto
 
 ## Related
 
-- [Autonomy & gates — the single decision gate](autonomy-and-gates.md)
+- [Autonomy & gates - the single decision gate](autonomy-and-gates.md)

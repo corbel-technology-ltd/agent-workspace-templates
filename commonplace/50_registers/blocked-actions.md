@@ -34,11 +34,11 @@ precedence order:
    - delete or overwrite a `journal/` entry (immutable; a retraction is a NEW entry)
    - the agent attempting to upgrade its own permissions
    - a statutory/legal/factual claim with no primary source (**source-or-abstain**)
-2. **Confirm tier reached but not granted** — editing C3 doctrine/schemas/`AGENTS.md`, running a
+2. **Confirm tier reached but not granted** - editing C3 doctrine/schemas/`AGENTS.md`, running a
    tool from outside the workspace, a git commit or push, where confirmation was withheld or not
    yet given.
 
-3. **Escalated as ambiguous** — the action's reversibility could not be assessed, so it was held
+3. **Escalated as ambiguous** - the action's reversibility could not be assessed, so it was held
    for the founder (**escalate-with-context**) rather than guessed.
 
 Logging is itself the cheap, reversible side: record the block, do not perform the action.
@@ -58,13 +58,13 @@ Logging is itself the cheap, reversible side: record the block, do not perform t
 
 ## Status vocabulary
 
-- `pending` — awaiting the founder's decision.
-- `approved-then-executed` — founder authorised; the action was carried out, with the approval
+- `pending` - awaiting the founder's decision.
+- `approved-then-executed` - founder authorised; the action was carried out, with the approval
   recorded.
 
-- `rejected` — founder declined; the action will not be taken.
-- `revised` — a safer, more reversible variant was substituted and proceeded.
-- `withdrawn` — the agent abandoned the action; no founder decision needed.
+- `rejected` - founder declined; the action will not be taken.
+- `revised` - a safer, more reversible variant was substituted and proceeded.
+- `withdrawn` - the agent abandoned the action; no founder decision needed.
 
 ## Register
 
@@ -87,6 +87,6 @@ gate does its work.
 
 ## Related
 
-- [Autonomy & gates — the single decision gate](../10_doctrine/autonomy-and-gates.md)
+- [Autonomy & gates - the single decision gate](../10_doctrine/autonomy-and-gates.md)
 - [Decision log (append-only)](decision-log.md)
 - [Journal event schema](../30_schemas/event.md)

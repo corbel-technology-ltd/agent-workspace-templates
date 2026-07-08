@@ -16,7 +16,7 @@ tags: [identity, manifest, faw, control-plane, template]
 # <<WORKSPACE_NAME>> Agent Manifest
 
 The canonical root manifest for the <<WORKSPACE_NAME>> workspace: <<ENTITY>>'s dedicated home for
-operations and IP. A **Filesystem Agent Workspace (FAW)** run as a **founder control plane** — a
+operations and IP. A **Filesystem Agent Workspace (FAW)** run as a **founder control plane** - a
 stateful business routing system, not an autonomous AI CEO.
 
 > **Built from Commonplace, a Filesystem Agent Workspace (FAW).** This workspace is an instance of the
@@ -42,13 +42,13 @@ On a fresh session, before anything else:
    that is blank, no store is wired yet - skip this step until one is. When present, load
    `identity/` and `operating-rules/` at minimum; it outranks this workspace's local notes on the
    owner. See [Shared context](#shared-context).
-3. **Read [`00_meta/staging.md`](00_meta/staging.md)** — the `Now / In flight` block — for current
+3. **Read [`00_meta/staging.md`](00_meta/staging.md)** - the `Now / In flight` block - for current
    focus and what is already underway.
 4. **Read the handover named in [`00_meta/staging.md`](00_meta/staging.md)'s `Latest handover`
    pointer** (the newest run note; its filename is not always `*handover*`), and re-verify its
    live-state claims before trusting them (a handover is a claim, not ground truth).
 5. **Then route:** match the task to a row in the [Routing map](#routing-map). If no task is queued,
-   stay oriented and **stand by for the owner — do not act unprompted**.
+   stay oriented and **stand by for the owner - do not act unprompted**.
 
 The session-brief reflex (`core/hooks/session-brief.py`, wired at session start by the runtime
 adapter) injects this orientation automatically; these steps are the fallback and the authority if
@@ -76,24 +76,24 @@ only to summarise, draft, classify, or judge. Anything consequential stops at th
 Packet. The optimisation target: **maximise founder decisions made from prepared packets; minimise
 founder attention spent on what didn't need them.**
 
-## Doctrine (one vocabulary — full text in `10_doctrine/`)
+## Doctrine (one vocabulary - full text in `10_doctrine/`)
 
-- **AI-minimisation (60/20/20)** — deterministic plumbing first; an LLM only for genuine ambiguity,
+- **AI-minimisation (60/20/20)** - deterministic plumbing first; an LLM only for genuine ambiguity,
   summarisation, or judgement. AI is a reasoning layer, never an authority layer.
 
-- **source-or-abstain** — no statutory/legal/factual claim without a primary source. Absence of a
+- **source-or-abstain** - no statutory/legal/factual claim without a primary source. Absence of a
   source is an explicit "I don't know", not a low-confidence guess.
 
-- **signpost, don't advise** — surface options, evidence, and a recommendation; the human decides.
-- **Plan → Validate → Execute** — any side-effecting action is planned, validated against the gate,
+- **signpost, don't advise** - surface options, evidence, and a recommendation; the human decides.
+- **Plan → Validate → Execute** - any side-effecting action is planned, validated against the gate,
   then executed. Two attempts, then escalate.
 
-- **autonomy-by-reversibility** — the more reversible an action, the more autonomy; the less
+- **autonomy-by-reversibility** - the more reversible an action, the more autonomy; the less
   reversible, the more explicit approval. The gate is `10_doctrine/autonomy-and-gates.md`.
 
-- **capture-back** — durable learning is written back as memory atoms; nothing evaporates.
-- **anti-noise batching** — non-urgent items batch into the daily brief / weekly review.
-- **escalate-with-context** — ambiguity that clears the gate's bar is escalated with options,
+- **capture-back** - durable learning is written back as memory atoms; nothing evaporates.
+- **anti-noise batching** - non-urgent items batch into the daily brief / weekly review.
+- **escalate-with-context** - ambiguity that clears the gate's bar is escalated with options,
   evidence, and a recommendation, never guessed through.
 
 **Hard invariants** (outrank every soft default): human authority over consequential actions;
@@ -110,19 +110,19 @@ the single highest-value improvement per turn; the rest go to the backlog.
 
 ## Sensors (data-stream doctrine)
 
-Notice what the environment is telling you. When you see a signal that is not being captured — a
+Notice what the environment is telling you. When you see a signal that is not being captured - a
 recurring manual sequence, an unlogged metric, a report nobody reads, a repeated correction, a new
-data source — note it (log to the backlog; the inward coverage-gap and the subconscious `trends/`
+data source - note it (log to the backlog; the inward coverage-gap and the subconscious `trends/`
 are where this compounds). Sensing is cheap; acting on a sensed signal is gated like anything else.
 
 ## Non-negotiable rules
 
 1. Start here at `AGENTS.md`; load only the context the task needs.
-2. `journal/` is append-only and immutable — never edit or delete a journal entry; a retraction is a
+2. `journal/` is append-only and immutable - never edit or delete a journal entry; a retraction is a
    NEW entry. It is the only source of truth; git is its tamper-evidence.
 
 3. The depth-layer projection (`working/`, `short-term/`, `long-term/`, `subconscious/`) is derived
-   and rebuildable — the reaper may rewrite it; humans edit atoms only deliberately. Every atom must
+   and rebuildable - the reaper may rewrite it; humans edit atoms only deliberately. Every atom must
    cite its `sources:`; an atom with none is quarantined.
 
 4. Do not silently rewrite C3 reference/doctrine. Propose diffs for review.
@@ -131,7 +131,7 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 6. Write durable outputs as Markdown with an **OKF-compatible body** (one concept per file, `type`
    required, `index.md`/`log.md` reserved, untyped links in body) **plus** a typed-edge +
    lifecycle-key frontmatter extension. The extension keys (`id`, `status`, `owner`, `layer`,
-   `created`, and the typed 5W1H `related:` edges) are a permitted producer superset — an OKF
+   `created`, and the typed 5W1H `related:` edges) are a permitted producer superset - an OKF
    consumer preserves unknown keys and reads relationships from body links. **Mirroring convention:**
    every `related[].ref` must also appear as an inline markdown link in the body, so an OKF consumer
    sees the (untyped) edge. `index.md` carries no frontmatter and lists `* [Title](rel) - desc`;
@@ -169,7 +169,7 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 
 ## Safety gate (default by action class)
 
-The gate's **intent** is judgment (below); its **enforcement** is partly a reflex now — the
+The gate's **intent** is judgment (below); its **enforcement** is partly a reflex now - the
 journal-guard reflex (`core/hooks/journal-guard.py`, wired before every file/shell operation, with
 an optional commit-time backstop in `core/git-hooks/`) enforces journal immutability. The rest of
 the gate (external send/publish/pay/sign, confirms) is self-enforced until a broader guard is added.
@@ -206,7 +206,7 @@ human is needed. Installing hooks edits system settings → requires the operato
 A turn is complete when: what changed is stated; it was validated (or the gap is named); anything
 durable was recorded (journal/register); any **ops** component added or changed (script,
 automation, alert, API, hook) has its row in [`50_registers/component-registry.md`](50_registers/component-registry.md)
-updated (self-contained projects/apps are out of scope — they carry their own internal catalogue);
+updated (self-contained projects/apps are out of scope - they carry their own internal catalogue);
 at most one high-value improvement was surfaced or logged; no unnecessary artefact was created; and
 anything consequential was gated, not assumed.
 
@@ -218,11 +218,11 @@ boot; it outranks this workspace's local notes on the owner's identity. The **Lo
 (this template's family sibling) ships exactly such a store, with a link-in contract that registers
 this workspace in its roster. A typical store holds:
 
-- `identity/` — the owner's canonical profile, voice, personality, and availability.
-- `operating-rules/` — cross-workspace rules (proactivity, coding-discipline, archive-discipline,
+- `identity/` - the owner's canonical profile, voice, personality, and availability.
+- `operating-rules/` - cross-workspace rules (proactivity, coding-discipline, archive-discipline,
   progressive-disclosure, rule-plumbing-discipline, and similar).
-- `people/`, `tech-stack/` — shared people and the machines + software SSOT.
-- `coordination-state.md`, `CHANGES.md` — cross-workspace coordination and a change log siblings read.
+- `people/`, `tech-stack/` - shared people and the machines + software SSOT.
+- `coordination-state.md`, `CHANGES.md` - cross-workspace coordination and a change log siblings read.
 
 This workspace's `15_canon/` and `20_memory/` carry only the **deltas** over that shared base. When
 a store path is set, reach for it via the [Routing map](#routing-map) "Load shared context" row.

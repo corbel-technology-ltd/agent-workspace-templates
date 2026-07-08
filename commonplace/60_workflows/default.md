@@ -33,12 +33,12 @@ Handle ordinary workspace tasks when no specialised workflow applies.
 
 | Stage | Action | Output | Check |
 |---|---|---|---|
-| 1 | **Discover** — read `AGENTS.md` | Task routing understood | Manifest read |
-| 2 | **Route** — read `00_meta/staging.md` (`Now / In flight`) and the handover named in its `Latest handover` pointer | Current state understood | Active focus identified |
-| 3 | **Load** — load only relevant context | Minimal context loaded | Context budget under 50% |
-| 4 | **Execute** — create or update artefact under `90_runs/YYYY-MM-DD-<slug>.md` (or a folder for multi-file runs) | Work is durable | Artefact exists, has frontmatter |
-| 5 | **Verify** — check against constraints in `15_canon/` (and `10_doctrine/` for hard rules) | Obvious drift caught | Constraints respected |
-| 6 | **Closeout** — write a handover under `90_runs/` and update `00_meta/staging.md` if meaningful | Future session can resume | Closeout written |
+| 1 | **Discover** - read `AGENTS.md` | Task routing understood | Manifest read |
+| 2 | **Route** - read `00_meta/staging.md` (`Now / In flight`) and the handover named in its `Latest handover` pointer | Current state understood | Active focus identified |
+| 3 | **Load** - load only relevant context | Minimal context loaded | Context budget under 50% |
+| 4 | **Execute** - create or update artefact under `90_runs/YYYY-MM-DD-<slug>.md` (or a folder for multi-file runs) | Work is durable | Artefact exists, has frontmatter |
+| 5 | **Verify** - check against constraints in `15_canon/` (and `10_doctrine/` for hard rules) | Obvious drift caught | Constraints respected |
+| 6 | **Closeout** - write a handover under `90_runs/` and update `00_meta/staging.md` if meaningful | Future session can resume | Closeout written |
 
 ## Output contract
 
@@ -51,7 +51,7 @@ A completed run of this workflow produces:
 
 ## Workflow expansion rule
 
-Do not create a new workflow file unless the same task pattern has repeated several times. If you find yourself extending this default workflow inline, that is the signal to propose a new workflow — log it to `50_registers/improvement-backlog.md` rather than spawning a speculative workflow file.
+Do not create a new workflow file unless the same task pattern has repeated several times. If you find yourself extending this default workflow inline, that is the signal to propose a new workflow - log it to `50_registers/improvement-backlog.md` rather than spawning a speculative workflow file.
 
 ## Reasoning
 

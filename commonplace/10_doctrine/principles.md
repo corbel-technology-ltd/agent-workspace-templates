@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.doctrine.principles
-name: Operating principles — the one vocabulary
+name: Operating principles - the one vocabulary
 type: doctrine
 layer: C3
 status: current
@@ -77,6 +77,6 @@ governance.
 
 ## Related
 
-- [Autonomy & gates — the single decision gate](autonomy-and-gates.md)
-- [Non-goals — the safety rails](non-goals.md)
-- [Memory homeostasis — why the store will not bloat](memory-homeostasis.md)
+- [Autonomy & gates - the single decision gate](autonomy-and-gates.md)
+- [Non-goals - the safety rails](non-goals.md)
+- [Memory homeostasis - why the store will not bloat](memory-homeostasis.md)

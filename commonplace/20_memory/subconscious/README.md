@@ -14,7 +14,7 @@ related:
 
 # Subconscious layer (depth 4)
 
-A **derived prior over interpretation and retrieval — never a second hidden truth.** It shapes what
+A **derived prior over interpretation and retrieval - never a second hidden truth.** It shapes what
 the agent notices and how it reads new input (priming), and it builds a world model and spots trends.
 It does **not** assert facts: every item here is `assertable: false` by default. It can supply
 evidence and bias ranking; it can never create authority.
@@ -48,10 +48,10 @@ evidence.
 
 A prior is **not** validated just because an action was taken on it. Log two SEPARATE journal events:
 `prior.used` (the prior shaped a choice) and `prior.outcome` (what actually happened). Only a real
-outcome moves confidence — a caught regression or a confirmed signal, not mere use. Without this
+outcome moves confidence - a caught regression or a confirmed signal, not mere use. Without this
 split the system reinforces its own hunches ("agent superstition").
 
 ## Related
 
-- [Memory sleep — the deep consolidation & synthesis pass](../../60_workflows/memory-sleep.md)
+- [Memory sleep - the deep consolidation & synthesis pass](../../60_workflows/memory-sleep.md)
 - [Memory architecture (research-backed, v2)](../../00_meta/memory-architecture.md)

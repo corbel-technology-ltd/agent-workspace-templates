@@ -23,7 +23,7 @@ reversibility judgement, checked against the gate. Authority is always gated; an
 the artefact that gets gated.
 
 **Used for CONSEQUENTIAL actions only.** Reading files and creating or editing Markdown in
-`40_/50_/90_/journal` are routine — they proceed and are logged, no intent needed. Write an intent
+`40_/50_/90_/journal` are routine - they proceed and are logged, no intent needed. Write an intent
 when the action touches the outside world or is hard to undo: an external send, a publish, a
 deploy, a payment, a pricing change, a signature, anything that mutates a live system, or any
 delete/overwrite. When in doubt, treat it as consequential and write the intent.
@@ -54,14 +54,14 @@ sources: [journal/YYYY-MM-DD-HHMM-x.md#L4-12, ...]   # where the trigger/why com
 The reversibility judgement drives autonomy-by-reversibility: more reversible, more autonomy; less
 reversible, more explicit approval.
 
-- **reversible** — fully undoable with no residue (a local file edit, a draft saved but not sent).
-- **partially** — undoable but with cost or visible trace (a labelled email moved, a register row
+- **reversible** - fully undoable with no residue (a local file edit, a draft saved but not sent).
+- **partially** - undoable but with cost or visible trace (a labelled email moved, a register row
   that was acted on, a reversible config change).
 
-- **hard** — technically undoable only with significant effort or external help (a published page,
+- **hard** - technically undoable only with significant effort or external help (a published page,
   a sent-then-recalled message, a deployment rollback).
 
-- **irreversible** — cannot be taken back once done (a payment, a signed agreement, a sent external
+- **irreversible** - cannot be taken back once done (a payment, a signed agreement, a sent external
   email, a public statement, a permanent delete).
 
 ## Baseline rules (hard invariants)
@@ -91,30 +91,30 @@ These outrank every soft default. They are not advisory.
 
 ## How it flows
 
-1. **Plan** — fill the intent. State who/what/where/when/why/how and judge reversibility honestly.
-2. **Validate** — check against [`../10_doctrine/autonomy-and-gates.md`](../10_doctrine/autonomy-and-gates.md).
+1. **Plan** - fill the intent. State who/what/where/when/why/how and judge reversibility honestly.
+2. **Validate** - check against [`../10_doctrine/autonomy-and-gates.md`](../10_doctrine/autonomy-and-gates.md).
    Set `gate`. If the action is founder-approved or `blocked`, it does not execute here: a
    consequential decision becomes a [`decision-packet.md`](decision-packet.md) for the founder, and a
    blocked action is recorded in [`../50_registers/blocked-actions.md`](../50_registers/blocked-actions.md).
 
-3. **Execute** — only when `gate: auto`, or after explicit founder approval. The mechanism is the
+3. **Execute** - only when `gate: auto`, or after explicit founder approval. The mechanism is the
    exact `how`, run deterministically.
 
-4. **Capture-back** — write the outcome as a journal entry ([`event.md`](event.md)); set
+4. **Capture-back** - write the outcome as a journal entry ([`event.md`](event.md)); set
    `status: executed`. The journal is the record; the intent itself is a working artefact.
 
 ## Deferred (runtime ABAC engine)
 
 This template is run **by hand** over the filesystem now. The runtime attribute-based access
-control (ABAC) engine that would evaluate these intents automatically — `action_intent` and
-`validation` tables, policy attributes resolved at execution time, programmatic gate enforcement —
+control (ABAC) engine that would evaluate these intents automatically - `action_intent` and
+`validation` tables, policy attributes resolved at execution time, programmatic gate enforcement -
 is **deferred software** behind the value-gate (design-spec §9). It is built only after the manual
 practice has earned it. Until then, the gate is a person reading this file against the doctrine, not
 code.
 
 ## Related
 
-- [Autonomy & gates — the single decision gate](../10_doctrine/autonomy-and-gates.md)
+- [Autonomy & gates - the single decision gate](../10_doctrine/autonomy-and-gates.md)
 - [Decision Packet schema](decision-packet.md)
 - [Journal event schema](event.md)
 - [Blocked actions register](../50_registers/blocked-actions.md)

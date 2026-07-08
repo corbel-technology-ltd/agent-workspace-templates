@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.register.records
-name: Records index — stored documents (evidence plane)
+name: Records index - stored documents (evidence plane)
 type: register
 layer: C1
 status: current
@@ -50,5 +50,5 @@ history) and context cheap (read a row, not a PDF).
 ## Related
 
 - [Open loops register (moved)](open-loops.md)
-- [Journal — the append-only event log](../20_memory/journal/README.md)
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Journal - the append-only event log](../20_memory/journal/README.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)

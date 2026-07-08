@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.memory.model
-name: Memory structure — the model
+name: Memory structure - the model
 type: reference
 layer: C3
 status: current
@@ -33,7 +33,7 @@ subconscious/   depth 4   associations + priors + world-model + trends          
 ```
 
 Each layer is a **rebuildable fold** over the journal. Because the journal is permanent, the upper
-layers can decay, dedup, merge, and forget aggressively without ever losing anything — "forgotten"
+layers can decay, dedup, merge, and forget aggressively without ever losing anything - "forgotten"
 means "no longer surfaced", not "deleted". This is the model that keeps memory sharp.
 
 ## The unit: a memory card (atom)
@@ -53,10 +53,10 @@ entirely.** Set-points: [`homeostasis.yml`](homeostasis.yml).
 
 ## Two passes
 
-- **Reaper (fast, deterministic)** — every session / N events: membership, decay, supersession.
+- **Reaper (fast, deterministic)** - every session / N events: membership, decay, supersession.
   [`../60_workflows/memory-reaper.md`](../60_workflows/memory-reaper.md).
 
-- **Sleep (deep, bounded LLM)** — nightly/weekly: schema abstraction, subconscious synthesis, trend
+- **Sleep (deep, bounded LLM)** - nightly/weekly: schema abstraction, subconscious synthesis, trend
   detection; strict source-linked JSON + a deterministic validator.
   [`../60_workflows/memory-sleep.md`](../60_workflows/memory-sleep.md).
 
@@ -83,6 +83,6 @@ directories held in git by a `.gitkeep`.
 ## Related
 
 - [Memory architecture (research-backed, v2)](../00_meta/memory-architecture.md)
-- [Memory homeostasis — why the store will not bloat](../10_doctrine/memory-homeostasis.md)
+- [Memory homeostasis - why the store will not bloat](../10_doctrine/memory-homeostasis.md)
 - [Memory card (atom) schema](../30_schemas/memory-card.md)
-- [Memory reaper — the fast consolidation pass](../60_workflows/memory-reaper.md)
+- [Memory reaper - the fast consolidation pass](../60_workflows/memory-reaper.md)

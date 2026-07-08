@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.templates.index
-name: Templates — copy-and-complete authoring scaffolds
+name: Templates - copy-and-complete authoring scaffolds
 type: reference
 layer: C2
 status: current
@@ -16,7 +16,7 @@ related:
 # Templates
 
 **Fill-in authoring starting points** (C2): copy-and-complete scaffolds for the recurring artefacts a
-workspace produces — a daily brief, a decision packet, a memory atom, a design system. A template is
+workspace produces - a daily brief, a decision packet, a memory atom, a design system. A template is
 the **blank instance** you copy and fill by hand; a schema is the **shape** that instance must
 satisfy. Templates carry the prose, headings, and `{{...}}` runtime markers so the founder (or the
 agent) fills fields rather than reinventing structure each time. Where each kind of thing lives in the OS:
@@ -36,19 +36,19 @@ agent) fills fields rather than reinventing structure each time. Where each kind
 
 ## What lives here
 
-- [`daily-brief.md`](daily-brief.md) — the start-of-day founder brief; renders open loops + the
+- [`daily-brief.md`](daily-brief.md) - the start-of-day founder brief; renders open loops + the
   decision queue. Pairs with [`../60_workflows/daily-brief.md`](../60_workflows/daily-brief.md).
-- [`weekly-review.md`](weekly-review.md) — the weekly fold over registers and run folders; feeds the
+- [`weekly-review.md`](weekly-review.md) - the weekly fold over registers and run folders; feeds the
   reaper. Pairs with [`../60_workflows/weekly-review.md`](../60_workflows/weekly-review.md).
-- [`decision-packet.md`](decision-packet.md) — a blank Decision Packet: options, evidence, a
+- [`decision-packet.md`](decision-packet.md) - a blank Decision Packet: options, evidence, a
   recommendation for the founder to decide. Schema: [`../30_schemas/decision-packet.md`](../30_schemas/decision-packet.md).
-- [`memory-card.md`](memory-card.md) — a memory atom (5W1H + provenance) to drop into a depth layer.
+- [`memory-card.md`](memory-card.md) - a memory atom (5W1H + provenance) to drop into a depth layer.
   Schema: [`../30_schemas/memory-card.md`](../30_schemas/memory-card.md).
-- [`opportunity.md`](opportunity.md) — a wedge/validation worksheet. Schema:
+- [`opportunity.md`](opportunity.md) - a wedge/validation worksheet. Schema:
   [`../30_schemas/opportunity.md`](../30_schemas/opportunity.md).
-- [`research-signal.md`](research-signal.md) — one captured external signal (source-or-abstain),
+- [`research-signal.md`](research-signal.md) - one captured external signal (source-or-abstain),
   feeding atoms and opportunities.
-- [`design-system.md`](design-system.md) — a blank **DESIGN.md** (AI-readable design tokens + brand
+- [`design-system.md`](design-system.md) - a blank **DESIGN.md** (AI-readable design tokens + brand
   rationale), copied into a client/project repo as `DESIGN.md`.
 
 Each carries its own frontmatter, `{{...}}` runtime markers, and a destination note. Start from the
@@ -57,5 +57,5 @@ Each carries its own frontmatter, `{{...}}` runtime markers, and a destination n
 ## Related
 
 - [<<WORKSPACE_NAME>>](../AGENTS.md)
-- [Schemas — the shape contracts for structured artefacts](../30_schemas/README.md)
+- [Schemas - the shape contracts for structured artefacts](../30_schemas/README.md)
 - [Runs](../90_runs/README.md)

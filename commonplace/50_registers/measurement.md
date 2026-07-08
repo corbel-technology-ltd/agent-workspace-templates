@@ -96,5 +96,5 @@ crossing its recurrence bar (`20_memory/homeostasis.yml`) becomes a candidate pr
 ## Related
 
 - [Decision log (append-only)](decision-log.md)
-- [Weekly review — the once-a-week scan, reap, and re-prioritise](../60_workflows/weekly-review.md)
+- [Weekly review - the once-a-week scan, reap, and re-prioritise](../60_workflows/weekly-review.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)

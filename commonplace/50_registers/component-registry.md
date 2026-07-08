@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.register.component-registry
-name: Component registry — scripts, automations, alerts, APIs
+name: Component registry - scripts, automations, alerts, APIs
 type: register
 layer: C1
 status: current
@@ -14,13 +14,13 @@ related:
 
 # Component registry
 
-Every durable **ops** moving part — script, automation/timer, alert, API/integration, hook — in one
+Every durable **ops** moving part - script, automation/timer, alert, API/integration, hook - in one
 catalogue, so we know **what it is, where it is, what triggers it, what it's for, and what it
 touches**. This is a map over the existing layout (files are NOT moved; paths stay stable); on any
 conflict the source file wins.
 
 **Scope: the control plane that runs the workspace, not what the entity builds.** Self-contained
-projects and apps are out of scope — they keep their own internal catalogue and are excluded from
+projects and apps are out of scope - they keep their own internal catalogue and are excluded from
 this registry and the drift sensor. What belongs here: the ops dirs (`70_integrations/`,
 `core/hooks/`, the runtime-adapter shims) and any future ops automation. If a project/app ever
 needs cataloguing, it gets its own registry, not a row here.
@@ -28,7 +28,7 @@ needs cataloguing, it gets its own registry, not a row here.
 ## How to use it (splash-zone before you change anything)
 
 1. **Changing component X?** Read its row's **touches** to see what your change will hit downstream.
-2. **Reverse blast radius?** Grep this file for `X`'s path/name — any row that lists it under
+2. **Reverse blast radius?** Grep this file for `X`'s path/name - any row that lists it under
    **triggered by** or **touches** depends on it, so it's in the splash zone.
 3. **Auditing for improvement?** Scan a section; `dormant`/`deprecated` rows are removal candidates,
    repeated **touches** reveal coupling worth simplifying.
@@ -64,9 +64,9 @@ The per-runtime shims (each wired runtime's config dir routes its hook events to
 are catalogued with their adapters in `core/RUNTIMES.md`, not here - this registry stays neutral.
 
 <!-- Add a section per component cluster as it is wired (e.g. "## Executor", "## Email pipeline",
-     "## Automations — timers & services", "## CRM store"). Row shape as above. -->
+     "## Automations - timers & services", "## CRM store"). Row shape as above. -->
 
 ## Related
 
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)
 - [<<WORKSPACE_NAME>>](../AGENTS.md)

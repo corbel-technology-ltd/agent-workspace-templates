@@ -38,7 +38,7 @@ when: YYYY-MM-DD
 why: [cause | justification | goal, ...]
 how: [tool | process | policy, ...]
 
-# provenance (MANDATORY — empty sources => quarantined)
+# provenance (MANDATORY - empty sources => quarantined)
 sources: [journal/YYYY-MM-DD-HHMM-x.md#L4-12, ...]
 
 # typed relationships (the 5W1H graph)
@@ -81,7 +81,7 @@ jurisdiction: [...]      # legislation atoms only
 ## Rules
 
 1. **Evidence chain:** `sources` non-empty, pointing at `journal/` entries; else quarantined.
-2. **Source-or-abstain:** an unsourced legal/factual claim is not stated as fact — `aspirational`/`[VERIFY]`.
+2. **Source-or-abstain:** an unsourced legal/factual claim is not stated as fact - `aspirational`/`[VERIFY]`.
 3. **One claim per atom** (one canonical card per fact-family; repeated evidence strengthens, it does not duplicate).
 4. **Non-drop invariant:** `pivotal`/`do_not_drop` atoms bypass decay; they can only be superseded, never demoted out.
 5. **Supersession, not deletion:** a newer atom with the same `(entity, relation)` key supersedes; the old one gets `superseded_by` and archives.
@@ -98,5 +98,5 @@ jurisdiction: [...]      # legislation atoms only
 ## Related
 
 - [Memory architecture (research-backed, v2)](../00_meta/memory-architecture.md)
-- [Memory structure — the model](../20_memory/README.md)
+- [Memory structure - the model](../20_memory/README.md)
 - [Journal event schema](event.md)

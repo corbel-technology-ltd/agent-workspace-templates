@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.memory.journal
-name: Journal — the append-only event log
+name: Journal - the append-only event log
 type: reference
 layer: C3
 status: current

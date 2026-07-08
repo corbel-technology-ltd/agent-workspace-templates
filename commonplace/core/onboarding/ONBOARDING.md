@@ -174,5 +174,5 @@ Print a short "you're live, here's how to use it" summary:
 
 ## Related
 
-- [Journal — the append-only event log](../../20_memory/journal/README.md)
+- [Journal - the append-only event log](../../20_memory/journal/README.md)
 - [Journal event schema](../../30_schemas/event.md)

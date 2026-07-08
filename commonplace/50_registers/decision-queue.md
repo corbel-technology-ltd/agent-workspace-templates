@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.register.decision-queue
-name: Decision queue — open founder decisions
+name: Decision queue - open founder decisions
 type: register
 layer: C1
 status: current
@@ -40,10 +40,10 @@ packets, and never sends, publishes, pays, or signs without an explicit `approve
 
 ## Action vocabulary (the only four)
 
-- **approve** — sanction the packet's `if_approved` deterministic action. Log it; execute it.
-- **reject** — decline. Log the reason; run the packet's `if_rejected`.
-- **snooze** — defer to a stated date; the brief re-surfaces it then (anti-noise batching).
-- **ask** — not yet decidable. Name the missing evidence or 5W1H dimension; the packet goes back
+- **approve** - sanction the packet's `if_approved` deterministic action. Log it; execute it.
+- **reject** - decline. Log the reason; run the packet's `if_rejected`.
+- **snooze** - defer to a stated date; the brief re-surfaces it then (anti-noise batching).
+- **ask** - not yet decidable. Name the missing evidence or 5W1H dimension; the packet goes back
   for that input rather than being decided on a guess (source-or-abstain).
 
 Mapped status: `approve`→`approved`, `reject`→`rejected`, `snooze`→`snoozed`,
@@ -75,4 +75,4 @@ Mapped status: `approve`→`approved`, `reject`→`rejected`, `snooze`→`snooze
 
 - [Decision Packet schema](../30_schemas/decision-packet.md)
 - [Decision log (append-only)](decision-log.md)
-- [Daily brief — the run-by-hand morning assembly](../60_workflows/daily-brief.md)
+- [Daily brief - the run-by-hand morning assembly](../60_workflows/daily-brief.md)

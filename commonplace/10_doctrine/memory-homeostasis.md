@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.doctrine.memory-homeostasis
-name: Memory homeostasis — why the store will not bloat
+name: Memory homeostasis - why the store will not bloat
 type: doctrine
 layer: C3
 status: current
@@ -41,7 +41,7 @@ summaries" (non-goal 15). The store is event-sourced with deterministic projecti
 6. **Keep a diverse insured minimum.** Never prune a live entity below the redundancy floor; when
    merging duplicates, keep the most distinct/clearest, not the newest.
 
-7. **Quarantine untrusted by default; earn promotion.** `trust` is monotonic — it only escalates via
+7. **Quarantine untrusted by default; earn promotion.** `trust` is monotonic - it only escalates via
    review and can never auto-launder. `untrusted` atoms are excluded from assembled context.
 
 8. **Dedup on a content-hash, first-writer-wins.** Identical re-derivation is a no-op; two atoms
@@ -72,8 +72,8 @@ All tunable in [`../20_memory/homeostasis.yml`](../20_memory/homeostasis.yml): b
 
 We do not adopt a hash-chained ledger (git is the coarse analogue), conductance/PageRank/Kalman
 graph maths, semantic-vector reaping, FFT churn analysis, or a Bayesian re-estimation organ. At solo
-volume the crude analogues — inbound links for centrality, validity windows for decay, a
-churn-percentage abort for the slowing-down alarm — are enough. These richer organs are reconsidered
+volume the crude analogues - inbound links for centrality, validity windows for decay, a
+churn-percentage abort for the slowing-down alarm - are enough. These richer organs are reconsidered
 only if/when the store graduates to the deferred database software.
 
 ## The same anti-sprawl logic applies to the skill library
@@ -89,6 +89,6 @@ big enough to need one (spine-not-leaves).
 
 ## Related
 
-- [Memory structure — the model](../20_memory/README.md)
-- [Memory reaper — the fast consolidation pass](../60_workflows/memory-reaper.md)
-- [Memory homeostasis — the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)
+- [Memory structure - the model](../20_memory/README.md)
+- [Memory reaper - the fast consolidation pass](../60_workflows/memory-reaper.md)
+- [Memory homeostasis - the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)

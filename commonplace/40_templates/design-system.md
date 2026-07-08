@@ -14,7 +14,7 @@ related:
 # DESIGN.md template
 
 A blank fill-in instance of the **DESIGN.md** format (the google-labs AI-readable design-system spec:
-`github.com/google-labs-code/design.md`) — machine-readable design **tokens** in YAML front matter
+`github.com/google-labs-code/design.md`) - machine-readable design **tokens** in YAML front matter
 plus human-readable **rationale** in the body, so an agent applies the identity consistently instead
 of inventing styling.
 
@@ -23,7 +23,7 @@ a client/project repo) as `DESIGN.md`, then fill every token. The filled file is
 **source of truth**; the workspace **references** it (reference, don't absorb) and the canon
 ([`../15_canon/index.md`](../15_canon/index.md)) links to it. Adopt the **format**, not any alpha CLI.
 
-**Filling rules.** The token groups and variable names below are a neutral starting set — rename them
+**Filling rules.** The token groups and variable names below are a neutral starting set - rename them
 to match the system you are dressing. Every value is a placeholder marked for replacement. Any
 accessibility claim (contrast ratios) must be **measured**, never guessed (source-or-abstain): point a
 WCAG-contrast lint at the colours source. Delete bracketed guidance once filled; leave nothing as
@@ -34,7 +34,7 @@ WCAG-contrast lint at the colours source. Delete bracketed guidance once filled;
 ```yaml
 ---
 name: <System name>
-# every value below is a placeholder — replace before shipping.
+# every value below is a placeholder - replace before shipping.
 colors:
   surfaces:   { bg: "<hex>", panel: "<hex>" }
   ink:        { fg: "<hex>", muted: "<hex>", faint: "<hex>" }   # note measured contrast vs bg
@@ -56,14 +56,14 @@ components:   {}   # fill per component (see ## Components)
 ---
 ```
 
-Keep the front-matter tokens and any CSS variables in sync. One source of truth — when a value
+Keep the front-matter tokens and any CSS variables in sync. One source of truth - when a value
 changes, change it in both, or generate one from the other.
 
 ## 1. Overview
 
 <!-- One paragraph: what this system is and the single feeling it serves. Cite the brand soul. -->
 
-- **Name / what it dresses:**  <!-- e.g. <System name> — the site + flagship surface -->
+- **Name / what it dresses:**  <!-- e.g. <System name> - the site + flagship surface -->
 - **The feeling (one line):**  <!-- the one emotion every choice serves -->
 - **North star + anti-references:**  <!-- what to move toward; what to never look like -->
 
@@ -73,9 +73,9 @@ changes, change it in both, or generate one from the other.
      Keep the discipline: a small, role-bound palette. -->
 
 - **Surfaces** (`bg`, `panel`):
-- **Ink** (`fg`, `muted`, `faint`) — with **measured** contrast vs `bg`:
+- **Ink** (`fg`, `muted`, `faint`) - with **measured** contrast vs `bg`:
 - **Structure lines** (`rule`, `rule-2`):
-- **The one signal** (`signal` + glow/wash/on-signal) — what it is allowed to mean:
+- **The one signal** (`signal` + glow/wash/on-signal) - what it is allowed to mean:
 - **Forbidden:**  <!-- the colour moves this system never makes -->
 
 ## 3. Typography

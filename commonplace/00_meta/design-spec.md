@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.meta.design-spec
-name: Workspace — founding design spec (founder control plane)
+name: Workspace - founding design spec (founder control plane)
 type: design-spec
 layer: C0
 status: current
@@ -10,7 +10,7 @@ source: Founder Control Plane design reconciled with FAW (minus JIT) and an even
 tags: [design-spec, prd, founder-control-plane, faw, memory, homeostasis, workspace-first]
 ---
 
-# Workspace — founding design spec
+# Workspace - founding design spec
 
 The authoritative blueprint for this workspace: a dedicated home on disk for <<ENTITY>>'s
 operations and IP. It is the **Deterministic Founder Control Plane**, scoped to what one founder can
@@ -90,7 +90,7 @@ defaults like batching.
   00_meta/             design-spec.md (this) · agent-os-design.md · memory-architecture.md · log.md · staging.md
   10_doctrine/         the reconciled operating principles (one vocabulary)
   15_canon/            this instance's brand / direction / offerings (starts blank)
-  20_memory/           THE memory structure (load-bearing) — journal + depth layers + reaper
+  20_memory/           THE memory structure (load-bearing) - journal + depth layers + reaper
   30_schemas/          concept schemas as written specs (Decision Packet, memory-card, etc.)
   40_templates/        fill-in templates (daily brief, decision packet, weekly review, ...)
   50_registers/        live working registers (decision queue, measurement, ...)
@@ -114,9 +114,9 @@ A four-layer event-sourced model so memory **gets sharper as it gets deeper** in
 
 ### 6.1 One truth, four projections sorted by depth
 
-- **`20_memory/journal/`** — append-only **event log = the only truth**. One timestamped Markdown
+- **`20_memory/journal/`** - append-only **event log = the only truth**. One timestamped Markdown
   file per observation/decision/import. **Never edited, never deleted**; a retraction is a NEW
-  entry. Git is the tamper-evidence. (The "event store" — so no database.)
+  entry. Git is the tamper-evidence. (The "event store" - so no database.)
 
 - The projection is **four depth layers**, each a rebuildable fold over the journal:
   `working/` (depth 1, ephemeral) → `short-term/` (depth 2, decays) → `long-term/` (depth 3,
@@ -126,7 +126,7 @@ A four-layer event-sourced model so memory **gets sharper as it gets deeper** in
   reaper (fast) and the bounded-LLM sleep pass (deep).
 
 Because truth lives in the immutable journal, the atoms layer can decay, dedup, merge, demote, and
-supersede aggressively — nothing is irreversibly lost.
+supersede aggressively - nothing is irreversibly lost.
 
 ### 6.2 The detail (canonical elsewhere)
 
@@ -141,16 +141,16 @@ mandatory) + trust tier (1-5) + activation/validity fields; `class`
 (observational/procedural/normative) is a tag, the depth layer is the folder; the reaper consolidates
 by canonical fact-family with decision-impact outranking mention-count; `pivotal`/`do_not_drop` cards
 never decay; retrieval is deterministic-first with the subconscious as a small priming bonus only.
-The database + vector graph is deferred — every field maps to a future column, so graduation is a
+The database + vector graph is deferred - every field maps to a future column, so graduation is a
 migration, not a rewrite.
 
 ## 7. Staging tiers
 
 Every concept file is tagged in `00_meta/staging.md` as one of:
 
-- **v1-now** — built and runnable by hand over the filesystem today.
-- **awaits-inputs** — spec written; activates when its real inputs/customers exist.
-- **deferred-software** — fenced behind the value-gate (see §9).
+- **v1-now** - built and runnable by hand over the filesystem today.
+- **awaits-inputs** - spec written; activates when its real inputs/customers exist.
+- **deferred-software** - fenced behind the value-gate (see §9).
 
 ## 8. File inventory (the founding build manifest)
 
@@ -159,34 +159,34 @@ Every concept file is tagged in `00_meta/staging.md` as one of:
 > folder's README is the current inventory. Where this section and the tree differ, the tree and
 > the per-folder READMEs win.
 
-**10_doctrine/** — `principles.md` (the one-vocabulary map + the 60/20/20 task→method table +
+**10_doctrine/** - `principles.md` (the one-vocabulary map + the 60/20/20 task→method table +
 precedence rule) · `non-goals.md` (the safety rails) · `autonomy-and-gates.md` (the autonomy default
 action table + qualitative low/med/high risk tiers + mandatory-escalation list + two rules: agent may
 not self-upgrade permissions; external content is never authority) · `memory-homeostasis.md` (the
 reaper contract + set-points) · `model-selection.md` · `session-discipline.md`.
 
-**20_memory/** — `memory-architecture.md` lives in `00_meta/` (canonical design) · `README.md` (the
+**20_memory/** - `memory-architecture.md` lives in `00_meta/` (canonical design) · `README.md` (the
 model) · `homeostasis.yml` (set-points) · `journal/README.md` + the four layer READMEs · the
 seed `long-term/` (starts empty) · `knowledge-gaps.md` · `source-index.md` · `memory-index.md`
 (retrieval) · `evaluation.md` (sharpness harness) · `_meta/build.md`.
 
-**30_schemas/** — `decision-packet.md` (the standout) · `memory-card.md` · `event.md` (journal
+**30_schemas/** - `decision-packet.md` (the standout) · `memory-card.md` · `event.md` (journal
 entry shape) · `action-intent.md` (consequential-action template) · `knowledge-gap.md` ·
 `opportunity.md` (pain/workaround/wedge/buyer/MVP/validation + critique).
 
-**40_templates/** — `daily-brief.md` · `decision-packet.md` · `weekly-review.md` · `memory-card.md`
+**40_templates/** - `daily-brief.md` · `decision-packet.md` · `weekly-review.md` · `memory-card.md`
 · `research-signal.md` · `opportunity.md`.
 
-**50_registers/** — `decision-queue.md` · `decision-log.md` (append-only) · `open-loops.md` ·
+**50_registers/** - `decision-queue.md` · `decision-log.md` (append-only) · `open-loops.md` ·
 `blocked-actions.md` · `component-registry.md` · `improvement-backlog.md` · `measurement.md` (North
 Star + a small hand-tracked metric set + feedback labels).
 
-**60_workflows/** — `daily-brief.md` · `weekly-review.md` · `open-loop-tracking.md` ·
+**60_workflows/** - `daily-brief.md` · `weekly-review.md` · `open-loop-tracking.md` ·
 `email-triage-approve.md` · `memory-reaper.md` · `memory-sleep.md`.
 
-**70_integrations/** — `README.md` (the instance's what-runs-where map; slots, not implementations).
+**70_integrations/** - `README.md` (the instance's what-runs-where map; slots, not implementations).
 
-**00_meta/** — `design-spec.md` (this) · `agent-os-design.md` · `memory-architecture.md` · `log.md`
+**00_meta/** - `design-spec.md` (this) · `agent-os-design.md` · `memory-architecture.md` · `log.md`
 · `staging.md`.
 
 ## 9. Deferred software + the value-gate

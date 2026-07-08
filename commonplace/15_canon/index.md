@@ -1,7 +1,7 @@
 # Canon
 
 This folder holds **this instance's canon**: its business direction, brand, offerings, voice, and
-its references library. It is entirely instance-specific and **starts blank** — the template carries
+its references library. It is entirely instance-specific and **starts blank** - the template carries
 none of it, because no two instances share a brand or a direction. See [the README](README.md) for
 what canon is and how it is used.
 
@@ -10,12 +10,12 @@ what canon is and how it is used.
 
 ## What belongs here
 
-- **direction** — the locked business direction / identity (what the entity is, the wedge, the
+- **direction** - the locked business direction / identity (what the entity is, the wedge, the
   sector posture).
-- **brand** — the brand spine, soul, codes, and any two-brand firewall.
-- **voice** — the canonical external-prose voice rules for the agent's outward writing.
-- **offerings/** — the offering ladder, capability map, delivery model, and SOPs.
-- **references/** — the instance's curated reference library (research, exemplars). Instance-specific;
+- **brand** - the brand spine, soul, codes, and any two-brand firewall.
+- **voice** - the canonical external-prose voice rules for the agent's outward writing.
+- **offerings/** - the offering ladder, capability map, delivery model, and SOPs.
+- **references/** - the instance's curated reference library (research, exemplars). Instance-specific;
   not carried by the template.
 
 ## How canon works (the discipline)

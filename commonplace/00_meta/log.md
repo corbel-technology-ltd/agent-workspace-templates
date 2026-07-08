@@ -16,7 +16,7 @@ additions, hook installs, migrations. One dated section per change set, newest a
 OS improvements should also flow upstream to the Workspace-Template (see the upstreaming rule in the
 template `README.md`).
 
-## <<CREATED_DATE>> — Instantiated from the Workspace-Template
+## <<CREATED_DATE>> - Instantiated from the Workspace-Template
 
 - Created this workspace from the canonical blank template. Filled the identity placeholders and
   set the shared-context path (blank if no store is wired). Wiring the instance's live systems

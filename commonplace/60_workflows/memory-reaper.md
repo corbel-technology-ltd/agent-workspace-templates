@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.workflow.memory-reaper
-name: Memory reaper — the fast consolidation pass
+name: Memory reaper - the fast consolidation pass
 type: workflow
 layer: C2
 status: current
@@ -14,13 +14,13 @@ related:
   - {ref: 00_meta/memory-architecture.md, dimension: why, polarity: derived_from}
 ---
 
-# Memory reaper — fast pass
+# Memory reaper - fast pass
 
 The **fast, fully deterministic** consolidation pass. Runs after each session or every N journal
 events. No LLM. Folds the journal into the depth-layer projections and keeps activation/membership
 correct. Idempotent; takes an explicit `--as-of <date>`. Set-points: `20_memory/homeostasis.yml`.
 
-(The deep, LLM-assisted restructuring — schema/world-model/trend synthesis — is the separate
+(The deep, LLM-assisted restructuring - schema/world-model/trend synthesis - is the separate
 `memory-sleep.md` pass. Keep them separate: fast = deterministic membership; deep = bounded synthesis.)
 
 ## Steps
@@ -43,7 +43,7 @@ correct. Idempotent; takes an explicit `--as-of <date>`. Set-points: `20_memory/
    - Decision-impact outranks mention-count throughout.
 5. **Decay & validity.** Recompute `status` from `last_verified` + `valid_for` vs `--as-of`. Long-term
    non-pivotal cards below `long_term_exit` for ≥3 months → `archive/`. **`pivotal`/`do_not_drop`
-   atoms bypass this loop entirely** (the non-drop invariant — structurally cannot be demoted).
+   atoms bypass this loop entirely** (the non-drop invariant - structurally cannot be demoted).
 
 6. **Supersession.** Per `(entity, relation)` key the freshest valid non-superseded atom wins; mark
    the prior `status: superseded`, set `superseded_by`. Never overwrite.
@@ -63,7 +63,7 @@ correct. Idempotent; takes an explicit `--as-of <date>`. Set-points: `20_memory/
 Every promoted atom cites non-empty `sources:` (else `_quarantine/`). The journal is never mutated.
 `untrusted` atoms are never promoted and never enter assembled context. Trust only escalates.
 `pivotal`/`do_not_drop` atoms never demote. A contrary journal entry (`corrects:`/`retracts:`)
-overrides its atom at the next pass — fold-driven, survives re-import.
+overrides its atom at the next pass - fold-driven, survives re-import.
 
 ## Implementation
 
@@ -75,6 +75,6 @@ Run by hand: `python3 core/hooks/reaper.py --as-of YYYY-MM-DD [--dry-run]`.
 
 ## Related
 
-- [Memory homeostasis — the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)
-- [Memory sleep — the deep consolidation & synthesis pass](memory-sleep.md)
+- [Memory homeostasis - the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)
+- [Memory sleep - the deep consolidation & synthesis pass](memory-sleep.md)
 - [Memory architecture (research-backed, v2)](../00_meta/memory-architecture.md)

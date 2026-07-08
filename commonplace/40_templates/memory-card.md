@@ -34,7 +34,7 @@ when: YYYY-MM-DD                        # when it occurred / became true
 why: []                                 # cause/justification/goal
 how: []                                 # tool/process/policy
 
-# provenance (MANDATORY — empty sources => quarantined)
+# provenance (MANDATORY - empty sources => quarantined)
 sources: []                             # journal/YYYY-MM-DD-HHMM-<slug>.md#L4-12
 
 # typed relationships (the 5W1H graph, expressed as edges)
@@ -64,4 +64,4 @@ the confidence. Mark unverified factual claims [VERIFY].
 ## Related
 
 - [Memory card (atom) schema](../30_schemas/memory-card.md)
-- [Memory structure — the model](../20_memory/README.md)
+- [Memory structure - the model](../20_memory/README.md)

@@ -22,7 +22,7 @@ the worksheet, then either kill it or raise a Decision Packet (`30_schemas/decis
 pursue it. **source-or-abstain:** any market/legal/factual claim cites a journal entry or a primary
 source; absence of a source is an explicit "I don't know", not a guess.
 
-Replace the prompts below. Delete bracketed guidance once filled. Leave nothing as "TBD" — an empty
+Replace the prompts below. Delete bracketed guidance once filled. Leave nothing as "TBD" - an empty
 field is a knowledge gap; log it in `20_memory/knowledge-gaps.md` rather than inventing an answer.
 
 ## Frontmatter for the filled instance
@@ -124,9 +124,9 @@ Weighted total = sum of the right-hand column (max 100, since max weighted = sum
 
 ### Reading the score (signpost, not a rule)
 
-- **>= 70** — strong: raise a Decision Packet to commit a validation experiment.
-- **45-69** — promising: cheapest validation test first; re-score after the signal lands.
-- **< 45** — kill: fold the reasoning into `20_memory/journal/` as a decision, mint the lesson.
+- **>= 70** - strong: raise a Decision Packet to commit a validation experiment.
+- **45-69** - promising: cheapest validation test first; re-score after the signal lands.
+- **< 45** - kill: fold the reasoning into `20_memory/journal/` as a decision, mint the lesson.
 
 ## Disposition
 
@@ -141,5 +141,5 @@ Weighted total = sum of the right-hand column (max 100, since max weighted = sum
 ## Related
 
 - [Opportunity object schema](../30_schemas/opportunity.md)
-- [Research signal — fill-in template](research-signal.md)
+- [Research signal - fill-in template](research-signal.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)

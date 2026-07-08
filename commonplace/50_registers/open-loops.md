@@ -14,7 +14,7 @@ related:
   - {ref: 30_schemas/project.md, dimension: what, polarity: explains}
 ---
 
-# Open loops — moved to per-project files
+# Open loops - moved to per-project files
 
 Outstanding loops no longer live in a single flat register. Each loop now lives with its project
 under [`../80_projects/`](../80_projects/index.md): `80_projects/<slug>/loops.md` (and
@@ -26,7 +26,7 @@ under [`../80_projects/`](../80_projects/index.md): `80_projects/<slug>/loops.md
 
 The doctrine is unchanged: a loop derives from a journal event (source-or-abstain), the journal is
 the truth, and the loops file is the rebuildable view. The daily brief and the SessionStart brief
-read the per-project `## Open` tables. This stub remains only so existing links resolve — **do not
+read the per-project `## Open` tables. This stub remains only so existing links resolve - **do not
 re-populate it as a live register**: loops live per project, and a second table here would split the
 source of truth.
 

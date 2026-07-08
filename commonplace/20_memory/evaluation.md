@@ -21,7 +21,7 @@ FAMA/Memora). `awaits-inputs`: build the gold set once the journal has real volu
 ## The gold set (built from the journal)
 
 - ~150 **gold facts** (durable, each with its exact support journal events).
-- ~40 **invalidated facts** (later corrected/superseded — tests forgetting-awareness).
+- ~40 **invalidated facts** (later corrected/superseded - tests forgetting-awareness).
 - ~40 **open-loop tasks** whose success depends on prior commitments/preferences.
 - ~20 **trend questions** with known change-points.
 - a **noise set** of decoy/irrelevant events from the same periods (tests sharpness).

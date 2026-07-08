@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.template.daily-brief
-name: Daily founder brief — fill-in template
+name: Daily founder brief - fill-in template
 type: template
 layer: C2
 status: current
@@ -15,7 +15,7 @@ related:
   - {ref: 30_schemas/decision-packet.md, dimension: what, polarity: explains}
 ---
 
-# Daily brief — {{YYYY-MM-DD}}
+# Daily brief - {{YYYY-MM-DD}}
 
 Copy this into `90_runs/{{YYYY-MM-DD}}-brief.md` and fill it. The brief renders open items from
 [`../50_registers/decision-queue.md`](../50_registers/decision-queue.md) and the per-project loops
@@ -29,7 +29,7 @@ decides (signpost, don't advise).
 What only the founder can move today, highest-leverage first. Each line names the action and why
 it matters. Empty is a valid answer; do not pad.
 
-- [ ] <action> — <one-line why> · <ref to loop/packet if any>
+- [ ] <action> - <one-line why> · <ref to loop/packet if any>
 
 ## 2. Immediate decisions
 
@@ -63,7 +63,7 @@ project `80_projects/<slug>/loops.md`.*
 
 ## Related
 
-- [Daily brief — the run-by-hand morning assembly](../60_workflows/daily-brief.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Daily brief - the run-by-hand morning assembly](../60_workflows/daily-brief.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)
 - [Active projects](../80_projects/index.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)

@@ -49,28 +49,28 @@ related:
 Each field is a heading in the file. Keep entries tight; a field you cannot answer from a source
 is left explicitly as **"unknown"** (source-or-abstain), never guessed.
 
-1. **pain** — the specific problem a real buyer has. One sentence. Whose pain, and in what moment.
-2. **current_workaround** — what they do today instead (spreadsheet, admin, ignoring it, a rival
+1. **pain** - the specific problem a real buyer has. One sentence. Whose pain, and in what moment.
+2. **current_workaround** - what they do today instead (spreadsheet, admin, ignoring it, a rival
    tool). If there is no workaround, the pain may not be real; say so.
 
-3. **wedge** — the narrow first cut that earns trust before anything wider. State the instance's
+3. **wedge** - the narrow first cut that earns trust before anything wider. State the instance's
    locked wedge (if it has one) and how this fits, or why it deviates. The wedge is the entity's
    sharpest first angle, defined in the instance's canon.
 
-4. **buyer** — who pays, by name of role, and from which budget. Distinguish the **buyer** from the
+4. **buyer** - who pays, by name of role, and from which budget. Distinguish the **buyer** from the
    user if they differ. No buyer = no opportunity.
 
-5. **pain_frequency** — how often the pain bites: per-job, weekly, monthly, annual, one-off
+5. **pain_frequency** - how often the pain bites: per-job, weekly, monthly, annual, one-off
    regulatory deadline. Drives willingness to pay and retention.
 
-6. **MVP** — the smallest thing that relieves the pain enough to charge for, deliverable by hand
+6. **MVP** - the smallest thing that relieves the pain enough to charge for, deliverable by hand
    first. State what is explicitly out.
 
-7. **validation_experiment** — one falsifiable test with a stated pass/fail line before any build:
+7. **validation_experiment** - one falsifiable test with a stated pass/fail line before any build:
    the smallest move (a conversation, a paid pilot, a landing-page check) that would prove or kill
    the assumption. Name the assumption it tests.
 
-8. **critique** — an adversarial pass on this opportunity's own case. List the strongest reasons it
+8. **critique** - an adversarial pass on this opportunity's own case. List the strongest reasons it
    fails: who already serves this, why the buyer would not pay, what makes the wedge non-defensible,
    which claim rests on no source. **signpost, don't advise**: surface the case both ways; the
    founder decides. An opportunity with no honest critique is not ready to score.
@@ -96,17 +96,17 @@ one-line justification in the file so the total is auditable.
 
 `score = (s1*5) + (s2*3) + (s3*4) + (s4*3) + (s5*2) + (s6*1) + (s7*2)`
 
-Reversibility is scored here as well as gating the action later — a cheap, reversible bet is
+Reversibility is scored here as well as gating the action later - a cheap, reversible bet is
 worth more under **autonomy-by-reversibility** because it can be tried without a heavy approval.
 
 ### Bands → recommendation
 
-- **70-100 → pursue** — strong case; proceed to a Decision Packet to commit a first move.
-- **45-69 → validate-first** — promising but assumption-heavy; run `validation_experiment` before
+- **70-100 → pursue** - strong case; proceed to a Decision Packet to commit a first move.
+- **45-69 → validate-first** - promising but assumption-heavy; run `validation_experiment` before
   committing spend, then re-score.
 
-- **20-44 → park** — keep the file; revisit if a new signal raises a sub-score.
-- **0-19 → kill** — record why in `critique`; do not silently delete (capture-back).
+- **20-44 → park** - keep the file; revisit if a new signal raises a sub-score.
+- **0-19 → kill** - record why in `critique`; do not silently delete (capture-back).
 
 ### Hard floors (override the band)
 
@@ -187,4 +187,4 @@ Total = 81  -> pursue, but evidence is thin: run the experiment before committin
 - [Decision Packet schema](decision-packet.md)
 - [Memory card (atom) schema](memory-card.md)
 - [Journal event schema](event.md)
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)

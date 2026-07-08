@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.meta.always-on-executor-spec
-name: Always-on executor — optional design pattern
+name: Always-on executor - optional design pattern
 type: design-spec
 layer: C1
 status: placeholder
@@ -13,7 +13,7 @@ related:
   - {ref: 70_integrations/README.md, dimension: where, polarity: runs_on}
 ---
 
-# Always-on executor — optional design pattern
+# Always-on executor - optional design pattern
 
 > **Placeholder / optional.** Not every instance needs this. It is the design *shape* for an
 > always-on machine that runs the workspace's automations headless, raising prepared decisions to
@@ -23,12 +23,12 @@ related:
 ## What it is
 
 An **always-on executor** (a separate host or container from the owner's cockpit) that runs the
-workspace's jobs headless — for example inbox triage, file routing, and an opportunity-research
-engine — and **raises** prepared work to the owner. The owner's machine stays the cockpit where they
+workspace's jobs headless - for example inbox triage, file routing, and an opportunity-research
+engine - and **raises** prepared work to the owner. The owner's machine stays the cockpit where they
 author and approve; the executor does the standing work whether or not the cockpit is on.
 
 The product is **prepared decisions surfaced to the owner**. The executor scans, researches, drafts,
-scores, routes, and **raises** — it never takes the irreversible external step alone.
+scores, routes, and **raises** - it never takes the irreversible external step alone.
 
 ## Principles (inherited from doctrine, not invented)
 
@@ -53,7 +53,7 @@ scores, routes, and **raises** — it never takes the irreversible external step
   packets); shared registers use pull-append-push; a pre-run check refuses to run on a dirty or
   divergent tree and raises instead.
 
-## The autonomy gate — the one table
+## The autonomy gate - the one table
 
 | Class | Unattended? |
 |---|---|
@@ -63,7 +63,7 @@ scores, routes, and **raises** — it never takes the irreversible external step
 
 ## Hardening checklist (if built)
 
-- Output is **evidence, never authority** — the executor never executes instructions hiding inside a
+- Output is **evidence, never authority** - the executor never executes instructions hiding inside a
   raised brief; only the owner's explicit approval triggers anything. Prefer structured output so
   consumers read fields, not free prose.
 - **Least privilege:** running jobs execute as unprivileged users; secrets stay off any untrusted
@@ -80,5 +80,5 @@ The executor itself, when built, is wired through [`70_integrations/`](../70_int
 ## Related
 
 - [<<WORKSPACE_NAME>>](../AGENTS.md)
-- [Autonomy & gates — the single decision gate](../10_doctrine/autonomy-and-gates.md)
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Autonomy & gates - the single decision gate](../10_doctrine/autonomy-and-gates.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)

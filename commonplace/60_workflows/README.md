@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.workflows.index
-name: Workflows — the operating playbooks
+name: Workflows - the operating playbooks
 type: reference
 layer: C2
 status: current
@@ -15,17 +15,17 @@ related:
   - {ref: 70_integrations/README.md, dimension: where, polarity: requires}
 ---
 
-# Workflows — the operating playbooks
+# Workflows - the operating playbooks
 
 The repeatable, multi-step routines the workspace runs by hand: the named procedures the
-[Routing map](../AGENTS.md#routing-map) points at. Each file is **one contract** — what it is for,
+[Routing map](../AGENTS.md#routing-map) points at. Each file is **one contract** - what it is for,
 when to use it, the ordered steps, the gates it respects, and the artefact it produces. They are C2
 contracts (see the [context layers](../AGENTS.md#context-layers)): stable, reviewed, and cited, not
 working notes.
 
 ## The contract
 
-A workflow is **run by hand** — the agent executes the steps, the founder settles anything gated.
+A workflow is **run by hand** - the agent executes the steps, the founder settles anything gated.
 None of them is a cron job or a service; promotion to software is fenced behind the value-gate
 (design-spec §9) and only fires once a pass has run by hand long enough to earn it. Until then a
 workflow is a written procedure, deterministic-first: an LLM enters only to summarise, draft, or
@@ -38,33 +38,33 @@ graduates from.
 
 ## What lives here
 
-- [`default.md`](default.md) — the fallback. The irreducible six-stage skeleton (discover → route →
+- [`default.md`](default.md) - the fallback. The irreducible six-stage skeleton (discover → route →
   load → execute → verify → closeout) for any task no specialised workflow covers. Its expansion
   rule is what tells you when to propose a new workflow rather than extend it inline.
-- [`daily-brief.md`](daily-brief.md) — the morning assembly. Gathers open decisions, due loops, and
+- [`daily-brief.md`](daily-brief.md) - the morning assembly. Gathers open decisions, due loops, and
   parked email drafts into `90_runs/<as-of>-brief.md`; the single thing that competes for the
   founder's attention (**anti-noise batching**).
-- [`weekly-review.md`](weekly-review.md) — the once-a-week scan, reconcile, reap, and
+- [`weekly-review.md`](weekly-review.md) - the once-a-week scan, reconcile, reap, and
   re-prioritise over the week's run folders and the registers; runs the reaper as a step and emits
   `90_runs/YYYY-Www-review.md`.
-- [`open-loop-tracking.md`](open-loop-tracking.md) — opens, surfaces, and closes the open
+- [`open-loop-tracking.md`](open-loop-tracking.md) - opens, surfaces, and closes the open
   commitments in each project's `loops.md` (**capture-back** for promises, **anti-noise batching**
   for the chase).
-- [`email-triage-approve.md`](email-triage-approve.md) — a thin wrapper over the instance's email
+- [`email-triage-approve.md`](email-triage-approve.md) - a thin wrapper over the instance's email
   loop (poller + sender, wired in [`../70_integrations/README.md`](../70_integrations/README.md)).
   Reads, classifies, drafts; every outbound reply routes through a
   [Decision Packet](../30_schemas/decision-packet.md). **Hard
   invariant:** no external send without explicit founder approval.
-- [`memory-reaper.md`](memory-reaper.md) — the fast, fully deterministic consolidation pass. Folds
+- [`memory-reaper.md`](memory-reaper.md) - the fast, fully deterministic consolidation pass. Folds
   the journal into the depth-layer projections and keeps activation and membership correct; no LLM.
-- [`memory-sleep.md`](memory-sleep.md) — the deep, bounded-LLM synthesis pass (schema abstraction,
+- [`memory-sleep.md`](memory-sleep.md) - the deep, bounded-LLM synthesis pass (schema abstraction,
   subconscious world-model, trend detection). `awaits-inputs`: the reaper suffices until there is
   real journal volume to synthesise.
 
 ## How they connect
 
 The [Routing map](../AGENTS.md#routing-map) is the entry point: a task type names the workflow to
-load. From there they compose — the daily brief drives the open-loop sweep and reads the parked
+load. From there they compose - the daily brief drives the open-loop sweep and reads the parked
 email drafts; the weekly review runs the reaper and feeds capture-back into the journal. Each
 workflow names its own schema ([`../30_schemas/`](../30_schemas/)) and template
 ([`../40_templates/`](../40_templates/)) where it needs one, and writes its working output to
@@ -75,5 +75,5 @@ workflow names its own schema ([`../30_schemas/`](../30_schemas/)) and template
 - [<<WORKSPACE_NAME>>](../AGENTS.md)
 - [Default workflow](default.md)
 - [Decision Packet schema](../30_schemas/decision-packet.md)
-- [Daily founder brief — fill-in template](../40_templates/daily-brief.md)
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Daily founder brief - fill-in template](../40_templates/daily-brief.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)

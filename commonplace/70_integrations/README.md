@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.integrations.map
-name: Integrations — what-runs-where map (instance-specific slots)
+name: Integrations - what-runs-where map (instance-specific slots)
 type: reference
 layer: C3
 status: placeholder
@@ -13,10 +13,10 @@ related:
   - {ref: 60_workflows/email-triage-approve.md, dimension: how, polarity: requires}
 ---
 
-# Integrations — what-runs-where
+# Integrations - what-runs-where
 
 > **Placeholder.** This control plane **folds in** an instance's live systems rather than rebuilding
-> them. The template carries **no** integration code or config — no executor, no email tooling, no
+> them. The template carries **no** integration code or config - no executor, no email tooling, no
 > CRM, no feeds. This file lists the **slots** to fill per instance, mirroring the shape of a fully
 > wired control plane. Replace each slot with the instance's real system (what it is, where it lives,
 > which workspace concept it satisfies), and add a `component-registry.md` row for each moving part.
@@ -106,7 +106,7 @@ software *would* run if a workflow ever earns automation.
 ### 10. Where deferred software would run (reserved, not active)
 
 When the value-gate fires (a workflow has run by hand ≥4 weeks and consistently costs >20 minutes to
-assemble, or signal volume exceeds a stated threshold — design-spec §9), the software reuses the
+assemble, or signal volume exceeds a stated threshold - design-spec §9), the software reuses the
 instance's **existing** infrastructure rather than provisioning anything new: an automation hub for
 the deferred event pipeline; a host/VPS for any database or vector store; a git remote for the
 event store; monitoring for any stood-up service. Until the gate fires, this is reserved capacity,
@@ -115,6 +115,6 @@ deferred control plane as if it exists.
 
 ## Related
 
-- [Workspace — founding design spec (founder control plane)](../00_meta/design-spec.md)
-- [Memory structure — the model](../20_memory/README.md)
-- [Email triage and approve — thin wrapper over the email loop](../60_workflows/email-triage-approve.md)
+- [Workspace - founding design spec (founder control plane)](../00_meta/design-spec.md)
+- [Memory structure - the model](../20_memory/README.md)
+- [Email triage and approve - thin wrapper over the email loop](../60_workflows/email-triage-approve.md)

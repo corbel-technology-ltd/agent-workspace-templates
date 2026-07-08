@@ -15,7 +15,7 @@ related:
 # Journal event schema
 
 A journal entry is one **immutable** Markdown file in `20_memory/journal/`. It is the only source
-of truth; atoms are folded from it. Never edit or delete an entry — a correction is a new entry.
+of truth; atoms are folded from it. Never edit or delete an entry - a correction is a new entry.
 
 Filename: `YYYY-MM-DD-HHMM-<slug>.md`.
 
@@ -41,7 +41,7 @@ retracts: <journal-ref>                 # for type: retraction
 
 The verbatim or near-verbatim content: the email excerpt, the decision and its rationale, the
 research finding with its source link, the meeting note. Keep enough that an atom folded from it
-is traceable. This is the "verbatim fallback" — atoms point back here.
+is traceable. This is the "verbatim fallback" - atoms point back here.
 
 ## Rules
 
@@ -53,5 +53,5 @@ is traceable. This is the "verbatim fallback" — atoms point back here.
 
 ## Related
 
-- [Journal — the append-only event log](../20_memory/journal/README.md)
+- [Journal - the append-only event log](../20_memory/journal/README.md)
 - [Memory card (atom) schema](memory-card.md)

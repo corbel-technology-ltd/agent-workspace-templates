@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.template.research-signal
-name: Research signal — fill-in template
+name: Research signal - fill-in template
 type: template
 layer: C2
 status: current
@@ -15,7 +15,7 @@ related:
   - {ref: 70_integrations/README.md, dimension: where, polarity: explains}
 ---
 
-# Research signal — fill-in template
+# Research signal - fill-in template
 
 One captured signal: something observed outside the workspace (a statute change, a market move,
 a customer pain, a sentiment shift) that might matter to the entity. This is the **capture-back**
@@ -27,7 +27,7 @@ never dressed up as fact. Capture is cheap; promotion is gated.
 
 **Where it goes next:**
 
-- File the signal as a journal entry (`30_schemas/event.md`) — that is the durable, immutable record.
+- File the signal as a journal entry (`30_schemas/event.md`) - that is the durable, immutable record.
 - A signal seen **twice or more** in the journal is eligible to mint an **observational atom**
   (`30_schemas/memory-card.md`); the reaper does this, you do not hand-promote one-offs.
 
@@ -47,7 +47,7 @@ This is **signpost, don't advise**: record the implication and a suggested actio
 - **Date of the event itself:** YYYY-MM-DD   <!-- if different from observed; else "same" -->
 - **Signal:** <one sentence. The single thing that is now true or has moved. One claim only.>
 
-- **Source:** <title> — <url>
+- **Source:** <title> - <url>
   <!-- A primary source where one exists (the statute, the official guidance, the standards body,
        the company's own page). A commentary or news piece is secondary; name it as such. -->
 - **Source-tier:**  A primary | B official-secondary | C reputable-press | D forum/anecdote/unverified
@@ -80,7 +80,7 @@ This is **signpost, don't advise**: record the implication and a suggested actio
 - **Signal:** The new amendment's no-grandfather deadline applies to NEW categories only, not to
   every existing record.
 
-- **Source:** the standard's publication — the standards body's page (primary)
+- **Source:** the standard's publication - the standards body's page (primary)
 - **Source-tier:** A primary
 
 - **Sector tags:** [<sector>]
@@ -91,7 +91,7 @@ This is **signpost, don't advise**: record the implication and a suggested actio
   not a separate offering.
 
 - **Confidence:** high
-- **What is NOT yet verified:** none — claim checked against the primary publication.
+- **What is NOT yet verified:** none - claim checked against the primary publication.
 
 - **Suggested action:** feed-opportunity-worksheet
 - **Why that action:** An A-tier source plus a clear dated buyer trigger clears the strong-signal bar.
@@ -112,4 +112,4 @@ This is **signpost, don't advise**: record the implication and a suggested actio
 - [Memory card (atom) schema](../30_schemas/memory-card.md)
 - [Opportunity object schema](../30_schemas/opportunity.md)
 - [Journal event schema](../30_schemas/event.md)
-- [Integrations — what-runs-where map (instance-specific slots)](../70_integrations/README.md)
+- [Integrations - what-runs-where map (instance-specific slots)](../70_integrations/README.md)

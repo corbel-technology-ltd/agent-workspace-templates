@@ -18,17 +18,17 @@ onboard once and run. This file covers requirements, the first run, and the hone
 
 ## Requirements
 
-- **Python 3** — the `core/hooks/` reflexes and the onboarding `apply.py` run on the system
+- **Python 3** - the `core/hooks/` reflexes and the onboarding `apply.py` run on the system
   `python3` (no virtualenv assumed).
-- **PyYAML** — `pip install -r requirements.txt`. Used by the memory reaper hook and by the onboarding
+- **PyYAML** - `pip install -r requirements.txt`. Used by the memory reaper hook and by the onboarding
   engine (which reads `placeholders.yml`).
-- **git** — the workspace is a git repo; onboarding discovers and snapshots files via `git ls-files`,
+- **git** - the workspace is a git repo; onboarding discovers and snapshots files via `git ls-files`,
   and the per-folder loop/journal discipline assumes version control.
 
 ## Runtime / agent scope (honest)
 
-**Neutral core, thin adapters.** All the IP — the constitution, doctrine, schemas, templates,
-registers, AND every executable (reflex hooks, onboarding engine, gates) — lives in neutral
+**Neutral core, thin adapters.** All the IP - the constitution, doctrine, schemas, templates,
+registers, AND every executable (reflex hooks, onboarding engine, gates) - lives in neutral
 locations (`AGENTS.md`, the numbered folders, `core/`, `tools/`). A runtime attaches through a
 thin adapter: a pinned pointer file at the root plus that runtime's config dir, translation and
 wiring only. Two adapters ship (one fully hook-wired, one a pointer); [`core/RUNTIMES.md`](core/RUNTIMES.md)
@@ -52,11 +52,11 @@ build if an adapter grows content or a vendor name leaks into the neutral core.
    deterministically (with a pre-flight snapshot, validation, and a `--dry-run` preview), seeds the
    registers, writes the first journal entry, and removes the sentinel.
 4. You're live. The runtime `{{...}}` markers (e.g. `{{YYYY-MM-DD}}`) are intentional and are filled
-   per-artefact as you work — they are not onboarding tokens.
+   per-artefact as you work - they are not onboarding tokens.
 
 ## Before distributing your own copy
 
-Run the pre-distribution gates ([`tools/README.md`](tools/README.md)) — all three must exit `0`:
+Run the pre-distribution gates ([`tools/README.md`](tools/README.md)) - all three must exit `0`:
 
 ```bash
 python3 tools/scrub-check.py      # zero in-house terms across contents, ids, filenames

@@ -68,11 +68,11 @@ Carries OKF-compatible frontmatter like any durable file (`AGENTS.md` rule 6): `
 | (none yet) | | | | | | |
 ```
 
-- **ball** — who the loop hangs on: `mine` (the owner to act), `theirs` (a counterparty owes),
+- **ball** - who the loop hangs on: `mine` (the owner to act), `theirs` (a counterparty owes),
   `external` (awaiting a dated external event with no single owner to chase). The daily brief
   promotes due `ball: mine` loops to §1 Top founder actions.
-- **status** — `open` | `nudged` | `overdue` | `blocked`.
-- **source** — the journal entry the loop traces to (source-or-abstain). A loop with no journal
+- **status** - `open` | `nudged` | `overdue` | `blocked`.
+- **source** - the journal entry the loop traces to (source-or-abstain). A loop with no journal
   source is unverified. The journal is the truth; `loops.md` is the rebuildable view.
 - `item` is column 0 so the SessionStart brief parser reads it directly.
 - One `## Open` table per file (the brief parser handles a single open table per file).
@@ -91,12 +91,12 @@ Cross-cutting loops with no project home live in `80_projects/_general/loops.md`
 
 A workspace whose live tracker is product- or client-centric rather than project-centric may name
 this folder and schema to match its domain (for example a `product_loops` framing over the same
-`80_projects/<slug>/loops.md` shape). The contract — folder per item, `index.md` + `loops.md`, the
-`## Open`/`## Closed` tables, `ball`/`status`/`source` columns, `item` in column 0 — is unchanged;
+`80_projects/<slug>/loops.md` shape). The contract - folder per item, `index.md` + `loops.md`, the
+`## Open`/`## Closed` tables, `ball`/`status`/`source` columns, `item` in column 0 - is unchanged;
 only the label differs. The brief aggregation globs `80_projects/*/loops.md` regardless of label.
 
 ## Related
 
 - [Active projects](../80_projects/index.md)
 - [Journal event schema](event.md)
-- [Decision queue — open founder decisions](../50_registers/decision-queue.md)
+- [Decision queue - open founder decisions](../50_registers/decision-queue.md)

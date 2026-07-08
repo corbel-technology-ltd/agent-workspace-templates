@@ -1,6 +1,6 @@
 ---
 id: <<workspace_slug>>.doctrine.autonomy-and-gates
-name: Autonomy & gates — the single decision gate
+name: Autonomy & gates - the single decision gate
 type: doctrine
 layer: C3
 status: current
@@ -17,7 +17,7 @@ related:
 
 ONE gate for "may the agent do this unattended, or does it need a yes?". A solo founder cannot hold
 three dictionaries (autonomy levels, a risk score, an ABAC route) for one decision. This is the
-single canonical gate. There is no `founder_attention_score` formula — an unauditable guessed number
+single canonical gate. There is no `founder_attention_score` formula - an unauditable guessed number
 violates source-or-abstain. Qualitative tiers plus a mandatory-escalation list do the real work.
 
 ## The autonomy default table
@@ -48,13 +48,13 @@ file stays automatic.
 
 ## Risk tiers (qualitative)
 
-- **Low** — newsletter summary, internal label, non-sensitive filing, signal creation, calendar
+- **Low** - newsletter summary, internal label, non-sensitive filing, signal creation, calendar
   prep. → auto-handle or batch.
 
-- **Medium** — reply draft to a known contact, customer concern, opportunity recommendation,
+- **Medium** - reply draft to a known contact, customer concern, opportunity recommendation,
   invoice reminder, meeting follow-up. → decision packet or approval queue.
 
-- **High** — contract, investor/partner comms, public statement, customer escalation, money
+- **High** - contract, investor/partner comms, public statement, customer escalation, money
   movement, pricing change, production change, sensitive-data sharing, external commitment. →
   immediate escalation, approval required.
 
@@ -80,6 +80,6 @@ approval surface; the [blocked-actions register](../50_registers/blocked-actions
 
 ## Related
 
-- [Operating principles — the one vocabulary](principles.md)
-- [Non-goals — the safety rails](non-goals.md)
+- [Operating principles - the one vocabulary](principles.md)
+- [Non-goals - the safety rails](non-goals.md)
 - [Action intent schema](../30_schemas/action-intent.md)

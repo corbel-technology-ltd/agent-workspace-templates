@@ -16,7 +16,7 @@ related:
 
 The simplified "ignorance graph": missing or low-confidence 5W1H dimensions that must be filled
 before a decision or action can be trusted. A forcing function against acting on under-specified
-context — not an autonomous research engine. One row per gap; close or waive only with a reason.
+context - not an autonomous research engine. One row per gap; close or waive only with a reason.
 
 Required dimensions by object type (block a high-risk action until its required gaps are closed):
 
