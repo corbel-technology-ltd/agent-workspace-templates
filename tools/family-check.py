@@ -27,16 +27,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 MEMBERS = {
-    "commonplace": ["commonplace", "Workspace-Template"],
-    "lodestar": ["lodestar", "Shared-Context-Template"],
-    "chandlery": ["chandlery", "Chandlery-Template"],
+    "folder-agent-workspace": ["folder-agent-workspace", "Folder-Agent-Workspace-Template"],
+    "shared-context": ["shared-context", "Shared-Context-Template"],
+    "capability-registry": ["capability-registry", "Capability-Registry-Template"],
 }
 
 GATES = {
-    "commonplace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
-    "lodestar": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
+    "folder-agent-workspace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
+    "shared-context": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
                  "tools/shared-lint.py"],
-    "chandlery": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
+    "capability-registry": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
 }
 
 
@@ -85,16 +85,16 @@ def main():
                 problems.append(f"{name}: gate failed: {gate}\n"
                                 + "\n".join("    " + ln for ln in
                                             (r.stdout + r.stderr).splitlines()[:6]))
-        if name == "chandlery":
+        if name == "capability-registry":
             r = subprocess.run([sys.executable, str(p / "core/chandler.py"), "verify"],
                                cwd=p, capture_output=True, text=True)
             if r.returncode != 0:
-                problems.append(f"chandlery: `chandler.py verify` failed\n"
+                problems.append(f"capability-registry: `chandler.py verify` failed\n"
                                 + (r.stdout + r.stderr)[:400])
 
     # (2) vendored parity via the registry's manifests
-    if "chandlery" in paths:
-        registry = paths["chandlery"] / "registry"
+    if "capability-registry" in paths:
+        registry = paths["capability-registry"] / "registry"
         for manifest in sorted(registry.glob("*/manifest.yml")):
             cap = manifest.parent.name
             for target, want in manifest_entries(manifest):

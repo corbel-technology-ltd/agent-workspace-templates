@@ -1,0 +1,11 @@
+name: okf-check
+version: 1
+description: Structural gate - OKF-compatible frontmatter + body-link mirroring of
+  typed related edges.
+provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace workspace
+  template
+requires: []
+files:
+- src: files/okf-check.py
+  target: tools/okf-check.py
+  sha256: 0010282748a38ef0fd856b3647850c21a15d9207eb92fcf3a077a1f6078142b1

@@ -1,6 +1,0 @@
-# fleet.yml - the workspaces this chandlery outfits.
-# `chandler.py enrol` adds rows; `chandler.py fleet` reports drift across all of them.
-# `shared_context` may name a Lodestar shared-context store root; `fleet` then cross-checks
-# its roster so a workspace plugged into the shared brain cannot be quietly missing here.
-workspaces: []
-shared_context: ""
