@@ -1,0 +1,11 @@
+name: scrub-check
+version: 2
+description: Confidentiality gate - zero private terms across contents, ids, filenames
+  (whole-word, case-insensitive).
+provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace workspace
+  template
+requires: []
+files:
+- src: files/scrub-check.py
+  target: tools/scrub-check.py
+  sha256: c59e76e46b3065555a19ecaf3f91f01c72af85050b788722d807dcbdce537d4a

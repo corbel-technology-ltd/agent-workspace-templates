@@ -5,7 +5,7 @@ exactly the right place. Follow the steps in order and you will be done in about
 
 ## What this is
 
-Harbour is a filing cabinet that your AI assistant keeps tidy for you. Your notes, decisions, and
+Agent-Workspace-Templates is a filing cabinet that your AI assistant keeps tidy for you. Your notes, decisions, and
 plans live in ordinary files on your own computer, and an AI assistant (such as Claude) reads
 them, updates them, and asks you before doing anything important. No app to subscribe to, no
 account to create, and everything stays yours.
@@ -60,25 +60,25 @@ If not: on **Windows**, download it from [git-scm.com](https://git-scm.com) and 
 default in the installer. On **Mac**, a pop-up will offer to install "command line developer
 tools"; click Install and wait. On **Linux**, run `sudo apt install git`.
 
-**4. Download Harbour.** Two ways; pick one.
+**4. Download Agent-Workspace-Templates.** Two ways; pick one.
 
 - **No git knowledge needed:** open
-  [github.com/CORBEL-Technology/Harbour](https://github.com/CORBEL-Technology/Harbour) in your
+  [github.com/CORBEL-Technology/Agent-Workspace-Templates](https://github.com/CORBEL-Technology/Agent-Workspace-Templates) in your
   browser, click the green **Code** button, click **Download ZIP**, then unzip it into your home
   folder (double-click the ZIP on Mac, right-click and "Extract All" on Windows). You get a folder
-  called `Harbour-main`.
+  called `Agent-Workspace-Templates-main`.
 - **With git:** in your terminal, type:
 
 ```text
-git clone https://github.com/CORBEL-Technology/Harbour.git
+git clone https://github.com/CORBEL-Technology/Agent-Workspace-Templates.git
 ```
 
-You should see lines ending in `done.`, and a new `Harbour` folder appears.
+You should see lines ending in `done.`, and a new `Agent-Workspace-Templates` folder appears.
 
-**5. Go into the folder.** Type (use `Harbour-main` if you downloaded the ZIP):
+**5. Go into the folder.** Type (use `Agent-Workspace-Templates-main` if you downloaded the ZIP):
 
 ```text
-cd Harbour
+cd Agent-Workspace-Templates
 ```
 
 Nothing dramatic happens; the text before your cursor now ends in the folder name. That means you
@@ -88,10 +88,10 @@ are "inside" it. If you get "No such file or directory", the folder is somewhere
 **6. Create your workspace.** Type:
 
 ```text
-python3 instantiate.py commonplace my-workspace
+python3 instantiate.py folder-agent-workspace my-workspace
 ```
 
-You should see `instantiate: commonplace -> my-workspace` and a "Next:" line. That is success:
+You should see `instantiate: folder-agent-workspace -> my-workspace` and a "Next:" line. That is success:
 you now have your own workspace folder, completely separate from the template.
 
 If you see an error instead, check the table below.
@@ -121,17 +121,17 @@ just talk to it about your work.
 | --- | --- |
 | `python3: command not found` or `not recognised` | Python is missing or hidden. Redo step 2; on Windows remember the "Add Python to PATH" tick box, then reopen the terminal. |
 | `git: command not found` or `not recognised` | Git is missing. Redo step 3, then reopen the terminal. |
-| `Permission denied` | The Harbour folder is somewhere protected. Move it to your home folder or Downloads, then start again from step 5 (no `sudo` needed, ever). |
-| `can't open file 'instantiate.py'` | You are in the wrong folder. Type `cd` then redo step 5, checking the folder name (`Harbour` or `Harbour-main`). |
-| Step 5 works but the folder looks empty | The ZIP unpacked a folder inside a folder. Type `cd Harbour-main` a second time, then redo step 6. |
+| `Permission denied` | The Agent-Workspace-Templates folder is somewhere protected. Move it to your home folder or Downloads, then start again from step 5 (no `sudo` needed, ever). |
+| `can't open file 'instantiate.py'` | You are in the wrong folder. Type `cd` then redo step 5, checking the folder name (`Agent-Workspace-Templates` or `Agent-Workspace-Templates-main`). |
+| Step 5 works but the folder looks empty | The ZIP unpacked a folder inside a folder. Type `cd Agent-Workspace-Templates-main` a second time, then redo step 6. |
 | The agent says it cannot see any files | It was opened in the wrong folder. Close it, make sure you are inside `my-workspace` (step 7), and start it again. |
 
 Still stuck? Open an issue at
-[github.com/CORBEL-Technology/Harbour/issues](https://github.com/CORBEL-Technology/Harbour/issues)
+[github.com/CORBEL-Technology/Agent-Workspace-Templates/issues](https://github.com/CORBEL-Technology/Agent-Workspace-Templates/issues)
 and paste in exactly what you typed and what the screen said. No question is too basic.
 
 ## What next
 
-Your workspace is the **Commonplace** member of the Harbour family. When you are curious about
+Your workspace is the **Folder-Agent-Workspace** member of the Agent-Workspace-Templates family. When you are curious about
 the other two (a shared brain across several workspaces, and a registry that keeps their tooling
 in sync), read [FAMILY.md](FAMILY.md). No rush; the workspace stands alone.

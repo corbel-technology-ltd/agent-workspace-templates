@@ -7,47 +7,47 @@ agent estate grows: the workspace, the shared brain, and the supply chain betwee
 
 | Member | Is | One-liner |
 |---|---|---|
-| **Commonplace** (`commonplace/`) | the workspace | A folder-based agent workspace: constitution, doctrine, append-only journal + decaying memory, registers, workflows, and a safety gate that keeps authority human. |
-| **Lodestar** (`lodestar/`) | the shared context | The store above every workspace: who the principal is, how their agents behave, the environment they share - governed by ledger + objection windows, and outranking anything local. |
-| **Chandlery** (`chandlery/`) | the capability registry | The outfitter for the fleet: versioned, checksummed capabilities (gates, hooks, engines) that install into workspaces, flow improvements back, and make drift visible. |
+| **Folder-Agent-Workspace** (`folder-agent-workspace/`) | the workspace | A folder-based agent workspace: constitution, doctrine, append-only journal + decaying memory, registers, workflows, and a safety gate that keeps authority human. |
+| **Shared-Context** (`shared-context/`) | the shared context | The store above every workspace: who the principal is, how their agents behave, the environment they share - governed by ledger + objection windows, and outranking anything local. |
+| **Capability-Registry** (`capability-registry/`) | the capability registry | The outfitter for the fleet: versioned, checksummed capabilities (gates, hooks, engines) that install into workspaces, flow improvements back, and make drift visible. |
 
 ## How they compose
 
-One principal, one Lodestar, many Commonplace workspaces, one Chandlery:
+One principal, one Shared-Context, many Folder-Agent-Workspace workspaces, one Capability-Registry:
 
 ```text
-                       Lodestar  (the star they steer by)
+                       Shared-Context  (the star they steer by)
                       /    |    \        identity · rules · calibration · boundaries
         link-in      /     |     \       CHANGES ledger · objection windows · roster
                     /      |      \
-         Commonplace  Commonplace  Commonplace     (the vessels)
+         Folder-Agent-Workspace  Folder-Agent-Workspace  Folder-Agent-Workspace     (the vessels)
                     \      |      /
         install/pack \     |     /       capabilities · versions · checksums
                       \    |    /        fleet drift report · append-only ledger
-                       Chandlery  (where they fit out)
+                       Capability-Registry  (where they fit out)
 ```
 
-- A workspace **links into** Lodestar at onboarding (`SHARED_CONTEXT_PATH`); the store's roster
+- A workspace **links into** Shared-Context at onboarding (`SHARED_CONTEXT_PATH`); the store's roster
   records it, its session brief loads the shared brain first, and "shared outranks local" keeps
   every sibling calibrated identically.
-- A workspace **fits out from** the Chandlery: `install` adopts a capability (operator-gated),
+- A workspace **fits out from** the Capability-Registry: `install` adopts a capability (operator-gated),
   `pack` flows a local improvement back (version bump + ledger), `fleet` shows who has drifted.
-- Lodestar and Chandlery **compose without coupling**: point the Chandlery's `fleet.yml` at the
+- Shared-Context and Capability-Registry **compose without coupling**: point the Capability-Registry's `fleet.yml` at the
   store and the fleet report cross-checks the roster; adoption *rules* live in the store's
-  `operating-rules/`, the *mechanism* they govern lives in the Chandlery.
+  `operating-rules/`, the *mechanism* they govern lives in the Capability-Registry.
 
 ## Take just one part
 
 Each member folder is self-contained (own LICENSE, gates, install guide, onboarding). From this
-repo: `python3 instantiate.py <commonplace|lodestar|chandlery> <dest>` copies one out and
+repo: `python3 instantiate.py <folder-agent-workspace|shared-context|capability-registry> <dest>` copies one out and
 `git init`s it - or copy the folder by hand and `git init` yourself. Nothing in a member reaches
 into a sibling by relative path.
 
-- **Only a workspace?** Take Commonplace. Leave `SHARED_CONTEXT_PATH` blank at onboarding; wire a
-  Lodestar later without re-onboarding.
-- **Only the shared brain?** Take Lodestar. Its link-in contract speaks plain files; any workspace
-  layout can consume it, not just Commonplace.
-- **Only the registry?** Take Chandlery. Any folder-shaped tooling can be stocked and synced;
+- **Only a workspace?** Take Folder-Agent-Workspace. Leave `SHARED_CONTEXT_PATH` blank at onboarding; wire a
+  Shared-Context later without re-onboarding.
+- **Only the shared brain?** Take Shared-Context. Its link-in contract speaks plain files; any workspace
+  layout can consume it, not just Folder-Agent-Workspace.
+- **Only the registry?** Take Capability-Registry. Any folder-shaped tooling can be stocked and synced;
   nothing assumes the siblings exist.
 
 ## One law across all three (agent-agnostic, zero lock-in)
@@ -65,12 +65,12 @@ build where a vendor name leaks into the neutral core or an adapter grows beyond
   onboarding's.
 - OKF-compatible frontmatter with typed `related:` edges mirrored as body links
   (`okf-check` + `gen-related`).
-- Confidentiality scrub before distribution (`scrub-check`); in Lodestar the denylist derives
+- Confidentiality scrub before distribution (`scrub-check`); in Shared-Context the denylist derives
   mechanically from `boundaries/`.
-- Append-only history with a mutable counterpart: journal + registers (Commonplace), CHANGES +
-  dashboard (Lodestar), ledger + fleet report (Chandlery).
+- Append-only history with a mutable counterpart: journal + registers (Folder-Agent-Workspace), CHANGES +
+  dashboard (Shared-Context), ledger + fleet report (Capability-Registry).
 
-The five shared tools are vendored byte-identical into each member, stocked as the Chandlery's
+The five shared tools are vendored byte-identical into each member, stocked as the Capability-Registry's
 seed capabilities, and `tools/family-check.py` (repo root) fails if any vendored copy drifts from
 the registry checksums - the family runs on its own supply chain.
 

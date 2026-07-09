@@ -1,4 +1,4 @@
-# Harbour
+# Agent-Workspace-Templates
 
 > **Never used a terminal?** Follow **[START-HERE.md](START-HERE.md)**: every step spelled out,
 > nothing assumed, about 15 minutes.
@@ -8,11 +8,11 @@
 The **Filesystem Agent Workspace** template family: three clone-ready, agent-agnostic templates
 for running your work as plain Markdown + git that an AI agent operates and you stay in front of.
 
-- [`commonplace/`](commonplace/README.md) - the **workspace**: a folder-based agent control plane
+- [`folder-agent-workspace/`](folder-agent-workspace/README.md) - the **workspace**: a folder-based agent control plane
   (constitution, memory, registers, workflows, safety gate).
-- [`lodestar/`](lodestar/README.md) - the **shared context**: one governed store above every
+- [`shared-context/`](shared-context/README.md) - the **shared context**: one governed store above every
   workspace for identity, rules, calibration, and boundaries; shared outranks local.
-- [`chandlery/`](chandlery/README.md) - the **capability registry**: versioned, checksummed
+- [`capability-registry/`](capability-registry/README.md) - the **capability registry**: versioned, checksummed
   tooling that installs into workspaces, flows improvements back, and makes drift visible.
 
 Each stands alone; together they click. The whole story, the composition diagram, and the
@@ -22,7 +22,7 @@ take-just-one-part paths: **[FAMILY.md](FAMILY.md)**. Agents start at
 ## Quick start
 
 ```bash
-python3 instantiate.py commonplace ~/my-workspace   # copy a member out into a fresh git repo
+python3 instantiate.py folder-agent-workspace ~/my-workspace   # copy a member out into a fresh git repo
 cd ~/my-workspace                                   # open it in your agent runtime;
                                                     # onboarding runs on first session
 ```

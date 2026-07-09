@@ -6,10 +6,10 @@ plus `git init` plus a first commit. Nothing is filled in here - open the new re
 runtime and its onboarding gate takes over.
 
 Usage:
-    python3 instantiate.py <commonplace|lodestar|chandlery> <destination>
+    python3 instantiate.py <folder-agent-workspace|shared-context|capability-registry> <destination>
 
 Example:
-    python3 instantiate.py commonplace ~/my-workspace
+    python3 instantiate.py folder-agent-workspace ~/my-workspace
 
 The destination must be a folder that does not exist yet (or is empty).
 Never used a terminal? Start with START-HERE.md instead.
@@ -35,9 +35,9 @@ HERE = Path(__file__).resolve().parent
 
 # Assembled-repo folder names first, local build names second.
 MEMBERS = {
-    "commonplace": ["commonplace", "Workspace-Template"],
-    "lodestar": ["lodestar", "Shared-Context-Template"],
-    "chandlery": ["chandlery", "Chandlery-Template"],
+    "folder-agent-workspace": ["folder-agent-workspace", "Folder-Agent-Workspace-Template"],
+    "shared-context": ["shared-context", "Shared-Context-Template"],
+    "capability-registry": ["capability-registry", "Capability-Registry-Template"],
 }
 
 
@@ -77,7 +77,7 @@ def main():
     subprocess.run(["git", "init", "-q"], cwd=dest, check=True)
     subprocess.run(["git", "add", "-A"], cwd=dest, check=True)
     r = subprocess.run(["git", "commit", "-q", "-m",
-                        "chore: instantiate %s from the Harbour template" % name],
+                        "chore: instantiate %s from the Agent-Workspace-Templates template" % name],
                        cwd=dest, capture_output=True, text=True)
     if r.returncode != 0:
         print("instantiate: copied, but the first commit needs git identity set - run:\n"

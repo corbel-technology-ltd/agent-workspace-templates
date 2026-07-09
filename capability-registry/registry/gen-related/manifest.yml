@@ -1,0 +1,11 @@
+name: gen-related
+version: 2
+description: Maintenance tool - regenerate the '## Related' body mirrors from frontmatter
+  related edges (idempotent, --check for CI).
+provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace workspace
+  template
+requires: []
+files:
+- src: files/gen-related.py
+  target: tools/gen-related.py
+  sha256: 907475fc09f1237860b1f18055dde0e6796a9e259a31728047380f840c14be1e
