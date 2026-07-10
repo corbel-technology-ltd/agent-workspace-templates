@@ -1,0 +1,10 @@
+# Relation-type registry (OKF core edges). Richer edge form: 30_schemas/taxonomy.md.
+okf_version: "0.1"
+
+structural: [part_of, contains, owned_by, maintained_by, applies_to]
+dependency: [depends_on, uses, imports, calls, consumes, produces, emits, subscribes_to]
+data:       [derived_from, joins_to, maps_to, validates, defines_metric, has_column]
+lifecycle:  [supersedes, superseded_by, deprecates, replaces, version_of]
+evidence:   [cites, sourced_from, generated_from, verified_by]
+governance: [governed_by, controlled_by, mitigates, requires_approval_from, violates]
+semantic:   [related_to, duplicates, conflicts_with, see_also]

@@ -75,6 +75,10 @@ Read the schema **before** you write the artefact, not after. The flow:
   not yet know but needs to, a row in `20_memory/knowledge-gaps.md`. The hand-run ignorance graph
   that makes **source-or-abstain** legible.
 
+- [`taxonomy.md`](taxonomy.md) - the **taxonomy**: the living glossary of concept types and
+  relation types every durable artefact draws its `type:` and edges from. Stamped into project
+  repos via [`../40_templates/knowledge-pack/`](../40_templates/knowledge-pack/README.md).
+
 ## Instance state
 
 The schemas ship **carried** - the contracts above are part of the operating system and travel with

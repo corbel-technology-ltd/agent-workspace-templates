@@ -2,6 +2,21 @@
 
 Template-level history (what changed in Folder-Agent-Workspace itself, not in any instance). Newest first.
 
+## 0.5 - 2026-07-10 - taxonomy glossary + knowledge-pack template
+
+- **`30_schemas/taxonomy.md`** (new): the living glossary of concept types (10 families) and
+  relation types (7 groups) every durable artefact draws its `type:` and edges from, plus the
+  native-files rule (native files own their facts; the corpus references, mirrors, or generates -
+  never overwrites). Adapted from the Penchant knowledge-pack proposal, genericised.
+- **`40_templates/knowledge-pack/`** (new): a stampable knowledge corpus for project repos -
+  `manifest.yaml` (native-file inventory, generated adapters, validation switches),
+  `registry/{types,relations}.yaml` (stamped from the taxonomy), `index.md`, `log.md`, and two
+  example concepts. Copied into a target repo as `knowledge/`.
+- `AGENTS.md`: rule 6 now names the taxonomy as the type/relation vocabulary and carries the
+  native-files precedence rule; two routing rows added (structure a repo's knowledge; define a
+  term/type).
+- `30_schemas/README.md` + `40_templates/README.md`: listings updated.
+
 ## 0.4 - 2026-07-02 - agent-agnostic hardening + audit fixes
 
 A fresh-context adversarial critic pass followed the work below; its findings were fixed in the

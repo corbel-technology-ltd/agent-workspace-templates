@@ -135,7 +135,10 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
    consumer preserves unknown keys and reads relationships from body links. **Mirroring convention:**
    every `related[].ref` must also appear as an inline markdown link in the body, so an OKF consumer
    sees the (untyped) edge. `index.md` carries no frontmatter and lists `* [Title](rel) - desc`;
-   `log.md` is date-grouped, newest-first.
+   `log.md` is date-grouped, newest-first. Draw `type` and relation names from the taxonomy
+   glossary (`30_schemas/taxonomy.md`) where one fits; prefer an existing type or profile over
+   inventing a new one. Native files own their facts (taxonomy, "native-files rule"): reference,
+   mirror, or regenerate them - never overwrite a file that owns its own schema.
 
 7. The graph/index is a map, not the terrain. On conflict, the source file wins.
 8. **Design the spine up front; add leaves only when their inputs exist.** No JIT dormant-mechanism
@@ -164,6 +167,8 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 | Weekly review | `60_workflows/weekly-review.md` | registers + run folders | `90_runs/YYYY-Www-review.md` |
 | A claim needs trusting | `20_memory/memory-index.md` | the retrieval loader | cross-checked answer |
 | Reach an existing system | `70_integrations/README.md` | the named system | (varies) |
+| Structure a repo/product's knowledge (new or retrofit) | `40_templates/knowledge-pack/README.md` | `30_schemas/taxonomy.md` (the vocabulary); stamp the pack into the target repo as `knowledge/` | a stamped knowledge pack (manifest, registries, concepts) |
+| Name a concept type / relation, or define a term | `30_schemas/taxonomy.md` | the family table; extend by proposed diff only | a `type`/relation drawn from (or added to) the glossary |
 | Load shared context (if a store path is set) | `<<SHARED_CONTEXT_PATH>>` (`identity/`, `operating-rules/`); blank means none wired | the relevant shared file (see [Shared context](#shared-context)) | shared SSOT in context, outranking local notes |
 | Need current external / library docs | the live-docs integration wired for this instance (see `70_integrations/README.md`) | the source it returns | up-to-date docs in context, never memory |
 

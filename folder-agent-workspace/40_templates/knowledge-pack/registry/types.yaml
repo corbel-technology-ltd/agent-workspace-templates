@@ -1,0 +1,13 @@
+# Concept-type registry. Compact by design - add detail with `profile`, not new types.
+# Canonical glossary: the workspace taxonomy (30_schemas/taxonomy.md).
+okf_version: "0.1"
+
+foundation: [Concept, Project, Repository, Product, Person, Team, Organization, GlossaryTerm]
+software:   [System, Service, Module, Package, Library, Component, CLI, Job, Workflow, Environment, Dependency]
+api:        [Api, Endpoint, Operation, Event, Topic, Queue, Webhook, Schema, Contract]
+data:       [Dataset, Database, Table, View, Column, Metric, Dimension, Dashboard, Lineage]
+product:    [Requirement, Feature, UserStory, Persona, Journey, DesignDecision, UIComponent, AccessibilityRequirement]
+operations: [Runbook, Playbook, Incident, Postmortem, SLO, SLA, Release, Migration, RollbackPlan]
+governance: [Policy, Control, Risk, Threat, DecisionRecord, SecurityPolicy]
+ai:         [Agent, AgentInstructions, Skill, Prompt, Tool, Model, Eval, ModelCard, DatasetCard, Guardrail]
+legal:      [License, CitationMetadata, Attribution, SBOM]     # stay native; concept references only

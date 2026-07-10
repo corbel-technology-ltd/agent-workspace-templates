@@ -1,0 +1,52 @@
+# Knowledge-pack manifest (the control plane for tools). CHANGE_ME placeholders.
+# Stamped from 40_templates/knowledge-pack/; vocabulary: 30_schemas/taxonomy.md.
+okf_version: "0.1"
+
+corpus:
+  id: "CHANGE_ME.repo"
+  title: "CHANGE_ME Knowledge Corpus"
+  description: "Human- and agent-readable knowledge for CHANGE_ME."
+  language: "en-GB"
+  profile: "repo-pack"          # file-first corpus stamped into a repo
+  default_visibility: "internal"
+
+registries:
+  types: "./registry/types.yaml"
+  relations: "./registry/relations.yaml"
+
+entrypoints:
+  human: "./index.md"
+  agent: "./concepts/EXAMPLE-agent.md"
+
+# Native files: kept in place. mode = native | generated | companion (see README.md).
+native_files:
+  - path: "../README.md"
+    type: "ProjectOverview"
+    mode: "generated"
+    source: "./concepts/EXAMPLE-service.md"
+  - path: "../AGENTS.md"
+    type: "AgentInstructions"
+    mode: "generated"
+    source: "./concepts/EXAMPLE-agent.md"
+  - path: "../openapi.yaml"
+    type: "Api"
+    mode: "native"
+    companion: "./concepts/EXAMPLE-service.md"
+  - path: "../LICENSE"
+    type: "License"
+    mode: "native"
+
+# Generated adapters carry a do-not-edit header; a stale checked-in copy fails validation.
+compatibility_outputs:
+  - path: "../AGENTS.md"
+    generator: "agent-instructions"
+    source: "./concepts/EXAMPLE-agent.md"
+  - path: "../CLAUDE.md"
+    generator: "claude-instructions"
+    source: "./concepts/EXAMPLE-agent.md"
+
+validation:
+  require_schema: true
+  require_relation_targets: true
+  require_generated_files_clean: true
+  require_review_after: false     # true = strict profile
