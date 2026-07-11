@@ -12,7 +12,7 @@ account to create, and everything stays yours.
 
 ## What you need
 
-- A computer running Windows, Mac, or Linux.
+- A computer running Mac, Linux, or Windows (Windows needs a one-time WSL setup - covered below).
 - About 15 minutes.
 - An AI coding assistant. We use **Claude Code** below. Two ways to get it:
   - **Easiest:** download the Claude desktop app from [claude.ai/download](https://claude.ai/download),
@@ -33,21 +33,38 @@ curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-t
 
 It checks you have git and Python (telling you exactly what to install if not), downloads the
 templates, installs the one dependency, creates `my-workspace` in your home folder, and prints
-what to do next. Then jump to step 7. Windows users: follow the full steps below instead.
+what to do next. Then jump to step 7.
+
+## On Windows: two extra minutes first
+
+The workspace's automatic guards (the "hooks") are built for Linux/Mac shells, so on Windows
+the right way to run it is **WSL** - a real Linux that Microsoft ships inside Windows. One-time
+setup:
+
+1. Press the Windows key, type `powershell`, right-click **Windows PowerShell**, choose
+   **Run as administrator**.
+2. Type `wsl --install` and press Enter, then restart the computer when it asks.
+3. After the restart a window called **Ubuntu** opens (find it in the Start menu if not) and
+   asks you to pick a username and password - anything you like.
+
+That Ubuntu window IS your terminal from here on: paste the shortcut command above into it and
+continue exactly as a Linux user. (Claude Code installed on Windows detects and works with WSL;
+install Node/Claude inside Ubuntu if you prefer everything in one place.) Running natively on
+Windows without WSL is not currently supported - the workspace will create fine but its guard
+hooks will not fire.
 
 ## The steps
 
 **1. Open a terminal.** This is the window where you type commands.
 
-- **Windows:** press the Windows key, type `cmd`, press Enter.
+- **Windows:** use the Ubuntu (WSL) window from the Windows section above - not `cmd`.
 - **Mac:** press Cmd + Space, type `terminal`, press Enter.
 - **Linux:** press Ctrl + Alt + T, or find "Terminal" in your applications.
 
 You should see a mostly empty window with some text and a blinking cursor. That is it. You type a
 command, press Enter, and the computer replies.
 
-**2. Check you have Python 3.** Type this and press Enter (on Windows, type `python` instead of
-`python3` here and everywhere below):
+**2. Check you have Python 3.** Type this and press Enter:
 
 ```text
 python3 --version
@@ -55,11 +72,9 @@ python3 --version
 
 You should see something like `Python 3.12.4`. Any number starting with 3 is fine.
 
-If you get "not found" or "not recognised" instead: on **Windows**, download Python from
-[python.org/downloads](https://www.python.org/downloads/), run the installer, and **tick the box
-that says "Add Python to PATH"** before clicking Install, then close and reopen your terminal.
-On **Mac**, download it from the same page and run the installer. On **Linux**, run
-`sudo apt install python3` (Ubuntu) or use your usual package manager.
+If you get "not found" instead: on **Mac**, download it from
+[python.org/downloads](https://www.python.org/downloads/) and run the installer. On **Linux or
+WSL**, run `sudo apt install python3` (Ubuntu) or use your usual package manager.
 
 **3. Check you have git.** Type:
 
@@ -69,8 +84,7 @@ git --version
 
 You should see something like `git version 2.45.0`.
 
-If not: on **Windows**, download it from [git-scm.com](https://git-scm.com) and accept every
-default in the installer. On **Mac**, a pop-up will offer to install "command line developer
+On **Mac**, a pop-up will offer to install "command line developer
 tools"; click Install and wait. On **Linux**, run `sudo apt install git`.
 
 **4. Download Agent-Workspace-Templates.** Two ways; pick one.
@@ -185,7 +199,7 @@ so every present and future workspace knows your world.
 
 | What you see | What to do |
 | --- | --- |
-| `python3: command not found` or `not recognised` | Python is missing or hidden. Redo step 2; on Windows remember the "Add Python to PATH" tick box, then reopen the terminal. |
+| `python3: command not found` | Python is missing. Redo step 2. On Windows, make sure you are typing into the Ubuntu (WSL) window, not `cmd` or PowerShell. |
 | `git: command not found` or `not recognised` | Git is missing. Redo step 3, then reopen the terminal. |
 | `Permission denied` | The Agent-Workspace-Templates folder is somewhere protected. Move it to your home folder or Downloads, then start again from step 5 (no `sudo` needed, ever). |
 | `can't open file 'instantiate.py'` | You are in the wrong folder. Type `cd` then redo step 5, checking the folder name (`Agent-Workspace-Templates` or `Agent-Workspace-Templates-main`). |

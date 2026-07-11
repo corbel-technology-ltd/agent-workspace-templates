@@ -32,8 +32,8 @@ dependency, and creates your workspace:
 curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh
 ```
 
-(Pick your own path with `... | sh -s -- ~/another-name`. Windows: follow
-[START-HERE.md](START-HERE.md).)
+(Pick your own path with `... | sh -s -- ~/another-name`. Windows: one-time `wsl --install`
+first, then the same command inside Ubuntu - see [START-HERE.md](START-HERE.md).)
 
 Or by hand:
 
