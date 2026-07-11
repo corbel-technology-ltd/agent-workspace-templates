@@ -23,6 +23,27 @@ WORKSPACE_NAME = os.environ.get("<<WORKSPACE_ROOT_ENV>>_NAME") or "<<WORKSPACE_N
 SHARED = os.environ.get("<<WORKSPACE_ROOT_ENV>>_SHARED") or "<<SHARED_CONTEXT_PATH>>"
 
 
+def unconsolidated_entries():
+    """Journal entries newer than the last sleep run (0 on any failure — brief stays quiet)."""
+    try:
+        state = ROOT / "20_memory" / "_meta" / "sleep-state.json"
+        last = json.loads(state.read_text()).get("last_processed", "") if state.exists() else ""
+        return sum(1 for p in (ROOT / "20_memory" / "journal").glob("*.md") if p.name > last)
+    except Exception:
+        return 0
+
+
+def sleep_nudge_threshold():
+    """sleep_pass.nudge_after_entries from homeostasis.yml, read with a regex so this hook
+    keeps its zero-dependency contract (no yaml import)."""
+    try:
+        text = (ROOT / "20_memory" / "homeostasis.yml").read_text()
+        m = re.search(r"nudge_after_entries:\s*(\d+)", text)
+        return int(m.group(1)) if m else 10
+    except Exception:
+        return 10
+
+
 def parse_table_lines(lines):
     """Return data rows (lists of cells) from Markdown pipe-table lines, skipping headers,
     separators, comment blocks, and placeholder rows."""
@@ -155,6 +176,11 @@ def main():
     if ol:
         lines.append(f"Open loops ({len(ol)}): "
                      + "; ".join(f"{proj}: {item}" for proj, item in ol[:5]))
+
+    n = unconsolidated_entries()
+    if n >= sleep_nudge_threshold():
+        lines.append(f"Memory: {n} journal entries await consolidation - a memory-sleep run is due "
+                     "(the memory-sleep skill folds them into the depth layers).")
 
     print("\n".join(lines))
     sys.exit(0)

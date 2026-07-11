@@ -4,7 +4,7 @@ id: "CHANGE_ME.repo#agents/repo"
 type: "AgentInstructions"
 profile: "full"
 title: "Repo agent instructions (EXAMPLE - delete once real concepts exist)"
-description: "Instructions (not facts) for coding agents in this repo. Generates AGENTS.md / CLAUDE.md."
+description: "Instructions (not facts) for coding agents in this repo. Generates AGENTS.md and the runtime adapter pointer files."
 status: "active"
 owners:
   - id: "CHANGE_ME.repo#teams/platform"
@@ -20,7 +20,7 @@ lifecycle:
 # Repo agent instructions
 
 Instructions belong here; facts belong in Service/System/Dataset concepts. Never inline secrets.
-Generated `AGENTS.md`/`CLAUDE.md` carry a do-not-edit header and are projections of this concept.
+Generated `AGENTS.md` and runtime pointer files carry a do-not-edit header and are projections of this concept.
 
 ## Constraints
 

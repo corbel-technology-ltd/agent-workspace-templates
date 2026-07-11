@@ -115,6 +115,59 @@ The agent reads its instructions, then walks you through a short onboarding: you
 for the workspace, a name for the agent. Answer the questions and you are live. From then on,
 just talk to it about your work.
 
+## How your workspace remembers (nothing for you to manage)
+
+Your agent keeps a diary and a memory, and both run themselves:
+
+- **The journal** (`20_memory/journal/`) records what happened, every session, append-only.
+  Nothing can edit or delete an entry - a guard blocks it, so the history is trustworthy.
+- **Sleep** happens when enough diary has piled up: the workspace tells the agent "a memory-sleep
+  run is due" at the start of a session. Say "go ahead" and it distils the recurring facts into
+  small memory cards - who does what, preferences you stated, procedures that worked - each one
+  traceable back to the diary entries that support it. The agent cannot invent memories: a
+  validator rejects any card that lacks evidence or names something the store has never seen.
+- **The reaper** runs at the end of every session and keeps the memory healthy on its own:
+  facts you keep touching climb into long-term memory, facts that go cold sink and eventually
+  archive (never delete), duplicates merge, and anything unsourced is quarantined. Preferences
+  and anything marked pivotal never decay.
+
+So: talk to your agent, approve a sleep run when it asks, and the memory takes care of itself.
+If you are curious, `python3 tools/memory-selftest.py` inside your workspace proves the whole
+loop in about two seconds.
+
+## Level up: a second workspace and the shared brain
+
+One workspace is plenty to start. The moment you want a second (say, one for work and one for
+personal), add the **shared context store** so both know who you are without repeating yourself:
+
+**1. Create the store and a second workspace** (from the `Agent-Workspace-Templates` folder):
+
+```text
+python3 instantiate.py shared-context my-shared
+python3 instantiate.py folder-agent-workspace my-workspace-two
+```
+
+**2. Onboard the store.** Open `my-shared` in your agent runtime (`cd my-shared` then `claude`)
+and say "Read AGENTS.md and introduce yourself" - it fills in who you are once: your identity,
+how agents should behave, the people, places, and tech that every workspace shares.
+
+**3. Link each workspace in.** From inside `my-shared`:
+
+```text
+python3 core/link-workspace.py --name my-workspace --path /full/path/to/my-workspace --agent <its agent name>
+```
+
+That registers the workspace on the store's roster and prints a one-line boot rule; paste it
+where the tool tells you. Repeat for `my-workspace-two`. (A Folder-Agent-Workspace workspace asks for the
+shared store's path during onboarding - if you gave it then, this is already wired.)
+
+From then on every workspace loads the shared brain at session start, corrections land once and
+reach all of them, and the store's ledger (`CHANGES.md`) records every change with an objection
+window - your agents co-own the brain without being able to quietly rewrite it. Fill
+`people/`, `places/`, `concepts/`, `automations/`, and `tech-stack/` from their `_*-template.md`
+files as real entries come up - your machines, your software, the people your agents deal with -
+so every present and future workspace knows your world.
+
 ## Something went wrong
 
 | What you see | What to do |

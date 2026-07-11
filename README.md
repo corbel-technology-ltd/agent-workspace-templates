@@ -9,7 +9,9 @@ The **Filesystem Agent Workspace** template family: three clone-ready, agent-agn
 for running your work as plain Markdown + git that an AI agent operates and you stay in front of.
 
 - [`folder-agent-workspace/`](folder-agent-workspace/README.md) - the **workspace**: a folder-based agent control plane
-  (constitution, memory, registers, workflows, safety gate).
+  (constitution, memory, registers, workflows, safety gate). Its four-layer memory - journal ->
+  sleep synthesis -> activation-based tiering with hysteresis - is fully implemented and proven
+  by a self-test that runs as a family gate.
 - [`shared-context/`](shared-context/README.md) - the **shared context**: one governed store above every
   workspace for identity, rules, calibration, and boundaries; shared outranks local.
 - [`capability-registry/`](capability-registry/README.md) - the **capability registry**: versioned, checksummed

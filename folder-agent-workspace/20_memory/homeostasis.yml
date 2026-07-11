@@ -93,6 +93,7 @@ sleep_pass:
   max_changed_items_per_run: 50   # bounded LLM input
   output: strict_json_only        # {claim, support_event_ids, confidence, changed_entities, proposed_edges}
   validator_rejects: [unsupported_claim, new_named_entity, untraceable_contradiction]
+  nudge_after_entries: 10         # session brief flags a due sleep run past this many unconsolidated entries
 
 # --- stability circuit-breaker ---
 stability:

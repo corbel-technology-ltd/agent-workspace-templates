@@ -3,7 +3,7 @@ id: <<workspace_slug>>.workflow.memory-sleep
 name: Memory sleep - the deep consolidation & synthesis pass
 type: workflow
 layer: C2
-status: awaits-inputs
+status: current
 created: <<CREATED_DATE>>
 owner: shared
 tags: [workflow, memory, sleep, dream, consolidation, world-model, trends, bounded-llm]
@@ -63,12 +63,32 @@ disposes.
 4. **Reconsolidation** - when new evidence updates a durable card, append a correction journal event
    and create a supersession chain; never overwrite.
 
+## Implementation (v1, shipped)
+
+The pass is implemented and self-tested; run it via the **memory-sleep skill** (or by hand):
+
+1. `python3 core/hooks/sleep-prep.py` — deterministic: stages unconsolidated journal entries
+   (bounded by `max_changed_items_per_run`), extracts entity recurrence + co-occurrence, and
+   builds the known-entity universe into `20_memory/_meta/sleep-candidates.json`.
+2. The model synthesises `20_memory/_meta/sleep-claims.json` — strict JSON, one claim per durable
+   fact-family. v1 extends the contract with `kind`, `importance`, and optional 5W1H fields; the
+   core shape above is unchanged.
+3. `python3 core/hooks/sleep-apply.py` — the deterministic validator + writer: rejects
+   unsupported claims, invented entities, untraceable contradictions, assertable edges, and
+   duplicates; writes accepted claims as schema-valid atoms (`short-term/`), association edges
+   (`subconscious/associations/`, `assertable: false`), the monthly world-model snapshot, the
+   sleep marker and log — then runs the reaper so new atoms tier immediately.
+
+The session brief nudges when `sleep_pass.nudge_after_entries` unconsolidated entries pile up.
+Proof: `python3 tools/memory-selftest.py` exercises the full loop (synthesis, every rejection
+class, promotion, working projection, hysteresis, expiry, quarantine, idempotency) and runs as
+a member gate in the family check.
+
 ## Cadence & staging
 
-`awaits-inputs`: the deterministic reaper is enough until there is real volume to synthesise. Turn
-this on once the journal has weeks of entries. Minimal mode now (co-occurrence + deterministic trend
-stats); the ambitious mode (temporal KG, PageRank priming, community summaries) stays behind the
-graduation trigger in `homeostasis.yml`.
+Run on the brief's nudge, after journal-heavy stretches, or weekly. Minimal mode is live (entity
+recurrence + co-occurrence into candidates); the ambitious mode (temporal KG, PageRank priming,
+community summaries) stays behind the graduation trigger in `homeostasis.yml`.
 
 ## Guardrails (recap)
 

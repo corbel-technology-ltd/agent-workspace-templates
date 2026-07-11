@@ -109,6 +109,9 @@ here, inherit the whole brain.
 | [`identity/`](identity/README.md) | The principal's canonical profile, voice, availability | blank skeletons |
 | [`operating-rules/`](operating-rules/README.md) | Cross-workspace rules - how agents behave, not what they know | seed rules + template |
 | [`people/`](people/README.md) | Shared people (only those 2+ workspaces deal with) | template only |
+| [`places/`](places/README.md) | Shared locations and venues (aliased where sensitive) | template only |
+| [`concepts/`](concepts/README.md) | Shared ideas with depth (glossary points here) | template only |
+| [`automations/`](automations/README.md) | The shared standing machinery (jobs, watchers, crons) | template only |
 | [`tech-stack/`](tech-stack/README.md) | The shared machine/software estate | template only |
 | [`calibration-os/`](calibration-os/README.md) | Living scoped preferences + corrections pipeline | blank by design |
 | [`boundaries/`](boundaries/README.md) | The confidentiality line; scrub lists derive from it | skeleton |

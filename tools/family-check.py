@@ -33,7 +33,8 @@ MEMBERS = {
 }
 
 GATES = {
-    "folder-agent-workspace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
+    "folder-agent-workspace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
+                 "tools/memory-selftest.py"],
     "shared-context": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
                  "tools/shared-lint.py"],
     "capability-registry": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],

@@ -68,8 +68,8 @@ the same idea: when a corpus edge needs evidence, ownership, or freshness, promo
 
 Some files own their own schema because external tooling and communities already know them:
 `LICENSE`, `CITATION.cff`, SBOMs, `openapi.yaml` / `schema.graphql` / `*.proto`, `package.json` /
-`pyproject.toml` / `Cargo.toml` / `go.mod`, `CODEOWNERS`, `AGENTS.md` adapters (`CLAUDE.md`,
-`GEMINI.md`), `llms.txt`. **Native files stay native**: the corpus references, mirrors, explains,
+`pyproject.toml` / `Cargo.toml` / `go.mod`, `CODEOWNERS`, `AGENTS.md` and its runtime adapter
+pointer files (see `core/RUNTIMES.md`), `llms.txt`. **Native files stay native**: the corpus references, mirrors, explains,
 or *generates* them - it never overwrites a file that owns its own schema, and for the fields a
 native file owns, the native file wins. Each native file takes one of three modes:
 

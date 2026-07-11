@@ -53,6 +53,9 @@ AGENTS.md          the store manifest agents read when working inside this repo
 identity/          the principal's canonical profile, voice, availability (blank skeletons)
 operating-rules/   cross-workspace rules - how agents behave, not what they know
 people/            shared people (only those 2+ workspaces deal with)
+places/            shared locations and venues (aliased where sensitive)
+concepts/          shared ideas with depth; the glossary points here
+automations/       the shared standing machinery (jobs, watchers, crons - catalogued before trodden on)
 tech-stack/        the shared machine/software estate
 calibration-os/    living scoped preferences + the corrections pipeline (blank by design)
 boundaries/        the confidentiality line; scrub lists derive from it

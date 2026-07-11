@@ -41,8 +41,8 @@ compatibility_outputs:
   - path: "../AGENTS.md"
     generator: "agent-instructions"
     source: "./concepts/EXAMPLE-agent.md"
-  - path: "../CLAUDE.md"
-    generator: "claude-instructions"
+  - path: "../llms.txt"
+    generator: "llms-txt"
     source: "./concepts/EXAMPLE-agent.md"
 
 validation:

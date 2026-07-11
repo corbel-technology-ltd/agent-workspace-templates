@@ -43,7 +43,7 @@ Each native file declares a `mode` in `manifest.yaml`:
 
 - **native** - hand-owned by its own tooling; the corpus may link a *companion* concept.
 - **generated** - produced from a corpus concept with a do-not-edit header (`README.md`,
-  `AGENTS.md`, `CLAUDE.md`, `llms.txt`); a checked-in copy that drifts from a rebuild fails
+  `AGENTS.md`, the runtime adapter pointer files, `llms.txt`); a checked-in copy that drifts from a rebuild fails
   validation.
 - **companion** - a corpus concept that explains or indexes a native file.
 
