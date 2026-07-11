@@ -23,3 +23,8 @@ A place only one workspace cares about stays in that workspace's own canon.
 
 Addresses and anything a stranger could misuse belong behind the boundaries line: name the place,
 alias the address (`boundaries/boundaries.md` + `tools/scrub-terms.txt`).
+
+## Related
+
+- [<<STORE_NAME>>](../SHARED.md)
+- [Scope test - what earns a place in the store](../operating-rules/scope-test.md)

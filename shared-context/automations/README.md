@@ -27,3 +27,9 @@ it existed. An automation catalogued here is discoverable before it is trodden o
 The entry records *that it exists, where it lives, and who owns it* - the runbook detail stays
 with the owning workspace or in `tech-stack/`. Changing another workspace's automation goes
 through a handoff (ledger entry in `CHANGES.md`), never a direct edit.
+
+## Related
+
+- [<<STORE_NAME>>](../SHARED.md)
+- [Tech stack - the shared estate the automations run on](../tech-stack/README.md)
+- [Scope test - what earns a place in the store](../operating-rules/scope-test.md)

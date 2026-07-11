@@ -22,3 +22,9 @@ from [`_concept-template.md`](_concept-template.md).
 The split with `glossary/`: a term that fits in two sentences goes in the glossary; a concept
 that carries history, rationale, and edge cases gets a file here (and a one-line glossary entry
 pointing at it). Same scope test as everything shared: two or more workspaces must care.
+
+## Related
+
+- [<<STORE_NAME>>](../SHARED.md)
+- [Glossary - terms that fit in two sentences](../glossary/glossary.md)
+- [Scope test - what earns a place in the store](../operating-rules/scope-test.md)

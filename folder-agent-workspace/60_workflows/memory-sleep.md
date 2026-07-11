@@ -84,6 +84,46 @@ Proof: `python3 tools/memory-selftest.py` exercises the full loop (synthesis, ev
 class, promotion, working projection, hysteresis, expiry, quarantine, idempotency) and runs as
 a member gate in the family check.
 
+## Running the pass (the playbook the runtime skills wrap)
+
+1. `python3 core/hooks/sleep-prep.py`, then read `20_memory/_meta/sleep-candidates.json`.
+   If `window.count` is 0, report "nothing to consolidate" and stop.
+2. Study the staged entries, entity recurrence, and co-occurrence pairs, then write
+   `20_memory/_meta/sleep-claims.json` in exactly this shape:
+
+   ```json
+   {"claims": [{
+       "claim": "<one durable, standalone factual sentence>",
+       "kind": "observation | lesson | procedure | preference | decision | tool-recipe",
+       "support_event_ids": ["<journal filename>"],
+       "confidence": 0.85,
+       "changed_entities": ["<entity from known_entities>"],
+       "importance": 0.6,
+       "why": [], "how": [],
+       "pivotal": false, "decision_impact": false, "supersedes": null,
+       "proposed_edges": [{"from": "<entity>", "relation": "<verb>", "to": "<entity>",
+                           "assertable": false}]}]}
+   ```
+
+   Synthesis rules (the validator enforces every one):
+   - One claim per durable fact-family - the gist that recurs, not a diary paraphrase. Skip
+     one-off events with no forward value; the journal keeps them forever anyway.
+   - `support_event_ids` must be real journal filenames from the candidates file.
+   - `changed_entities` must come from `known_entities` - never invent an entity.
+   - A stated user preference or correction is `kind: preference`, high confidence.
+   - A repeated procedure that worked is `kind: procedure` or `tool-recipe`.
+   - Something that drove a commitment gets `decision_impact: true`; only mark `pivotal`
+     when the principal explicitly called it critical.
+   - Edges are sparse and always `assertable: false` (they prime, they never assert).
+   - 5-15 quality claims per run beats exhaustive coverage.
+3. `python3 core/hooks/sleep-apply.py` - validates, writes, logs, advances the marker, and
+   runs the reaper. Report accepted/rejected counts and where atoms landed. A claim rejected
+   for a fixable reason can be corrected in the JSON and re-applied (idempotent: duplicate
+   hashes are skipped).
+
+Never run mid-task on a half-settled story, and never edit journal entries to make a claim
+fit - the journal is append-only.
+
 ## Cadence & staging
 
 Run on the brief's nudge, after journal-heavy stretches, or weekly. Minimal mode is live (entity
