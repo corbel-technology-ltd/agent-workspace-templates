@@ -63,14 +63,14 @@ tools"; click Install and wait. On **Linux**, run `sudo apt install git`.
 **4. Download Agent-Workspace-Templates.** Two ways; pick one.
 
 - **No git knowledge needed:** open
-  [github.com/CORBEL-Technology/Agent-Workspace-Templates](https://github.com/CORBEL-Technology/Agent-Workspace-Templates) in your
+  [github.com/corbel-technology-ltd/agent-workspace-templates](https://github.com/corbel-technology-ltd/agent-workspace-templates) in your
   browser, click the green **Code** button, click **Download ZIP**, then unzip it into your home
   folder (double-click the ZIP on Mac, right-click and "Extract All" on Windows). You get a folder
   called `Agent-Workspace-Templates-main`.
 - **With git:** in your terminal, type:
 
 ```text
-git clone https://github.com/CORBEL-Technology/Agent-Workspace-Templates.git
+git clone https://github.com/corbel-technology-ltd/agent-workspace-templates.git
 ```
 
 You should see lines ending in `done.`, and a new `Agent-Workspace-Templates` folder appears.
@@ -180,7 +180,7 @@ so every present and future workspace knows your world.
 | The agent says it cannot see any files | It was opened in the wrong folder. Close it, make sure you are inside `my-workspace` (step 7), and start it again. |
 
 Still stuck? Open an issue at
-[github.com/CORBEL-Technology/Agent-Workspace-Templates/issues](https://github.com/CORBEL-Technology/Agent-Workspace-Templates/issues)
+[github.com/corbel-technology-ltd/agent-workspace-templates/issues](https://github.com/corbel-technology-ltd/agent-workspace-templates/issues)
 and paste in exactly what you typed and what the screen said. No question is too basic.
 
 ## What next

@@ -86,7 +86,7 @@ config dir - wiring only; `core/RUNTIMES.md` is the registry). Every folder has 
 
 Shared-Context is the **shared-context** member of the FAW template family - three templates that stand
 alone and click together (the whole story lives in `FAMILY.md` at the family repo root,
-`github.com/CORBEL-Technology/Agent-Workspace-Templates`):
+`github.com/corbel-technology-ltd/agent-workspace-templates`):
 
 - **Folder-Agent-Workspace** - the workspace an agent runs; its onboarding asks for this store's path and its
   session brief loads the shared brain first.

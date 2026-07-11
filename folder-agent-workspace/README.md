@@ -106,7 +106,7 @@ purpose: they are filled per artefact as you work, never by onboarding.
 
 Folder-Agent-Workspace is the **workspace** member of the FAW template family - three templates that stand
 alone and click together (the whole story lives in `FAMILY.md` at the family repo root,
-`github.com/CORBEL-Technology/Agent-Workspace-Templates`):
+`github.com/corbel-technology-ltd/agent-workspace-templates`):
 
 - **Folder-Agent-Workspace** (this one) - the workspace an agent runs.
 - **Shared-Context** - the shared-context store above every workspace: the principal's identity, rules,

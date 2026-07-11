@@ -82,7 +82,7 @@ python3 tools/shared-lint.py
 Shared-Context is the shared-context member of the FAW template family (siblings: **Folder-Agent-Workspace**, the
 workspace that links in at onboarding; **Capability-Registry**, the capability registry whose fleet report
 cross-checks this store's roster). Composition and take-just-one-part paths: `FAMILY.md` at the
-family repo root (`github.com/CORBEL-Technology/Agent-Workspace-Templates`).
+family repo root (`github.com/corbel-technology-ltd/agent-workspace-templates`).
 
 ## Related
 

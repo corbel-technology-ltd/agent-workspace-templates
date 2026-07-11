@@ -73,7 +73,7 @@ Plus one thin adapter per wired runtime (`core/RUNTIMES.md`). Start at [`AGENTS.
 
 Capability-Registry is the **registry** member of the FAW template family - three templates that stand alone
 and click together (the whole story lives in `FAMILY.md` at the family repo root,
-`github.com/CORBEL-Technology/Agent-Workspace-Templates`):
+`github.com/corbel-technology-ltd/agent-workspace-templates`):
 
 - **Folder-Agent-Workspace** - the workspace an agent runs; the fleet is made of these.
 - **Shared-Context** - the shared-context store the fleet steers by; `fleet.yml` can point at it for

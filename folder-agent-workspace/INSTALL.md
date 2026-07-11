@@ -69,7 +69,7 @@ python3 tools/agnostic-check.py   # neutral core vendor-free, adapters thin poin
 Folder-Agent-Workspace is the workspace member of the FAW template family (siblings: **Shared-Context**, the
 shared-context store `SHARED_CONTEXT_PATH` points at; **Capability-Registry**, the capability registry this
 template's tools are stocked in). Composition and take-just-one-part paths: `FAMILY.md` at the
-family repo root (`github.com/CORBEL-Technology/Agent-Workspace-Templates`).
+family repo root (`github.com/corbel-technology-ltd/agent-workspace-templates`).
 
 ## Related
 

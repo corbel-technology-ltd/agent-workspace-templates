@@ -68,7 +68,7 @@ python3 core/chandler.py verify
 Capability-Registry is the registry member of the FAW template family (siblings: **Folder-Agent-Workspace**, the
 workspace the fleet is made of; **Shared-Context**, the shared-context store whose roster the fleet
 report cross-checks). Composition and take-just-one-part paths: `FAMILY.md` at the family repo
-root (`github.com/CORBEL-Technology/Agent-Workspace-Templates`).
+root (`github.com/corbel-technology-ltd/agent-workspace-templates`).
 
 ## Related
 
