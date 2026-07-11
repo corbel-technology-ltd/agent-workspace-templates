@@ -30,12 +30,21 @@ import fnmatch
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    sys.stderr.write(
+        "apply.py: PyYAML is missing. If this workspace has a .venv, run:\n"
+        "  . .venv/bin/activate\n"
+        "Then run: python3 core/onboarding/apply.py --root .\n"
+        "If there is no .venv, return to the template repository and use install.sh.\n")
+    sys.exit(2)
 
 
 # Files whose substitutions never need escaping (charset-constrained tokens) vs.
@@ -47,6 +56,7 @@ TEXT_EXTS_SKIP = {
 
 CHECKPOINT_DIRNAME = ".onboarding_apply"
 SNAPSHOT_DIRNAME = ".onboarding_apply_snapshot"
+SNAPSHOT_TMP_DIRNAME = ".onboarding_apply_snapshot.tmp"
 
 
 # --------------------------------------------------------------------------- #
@@ -116,12 +126,19 @@ def validate_values(registry: dict, values: dict):
                 f"{name}: value {val!r} contains a registered token literal "
                 f"({', '.join('<<' + t + '>>' for t in sorted(embedded))}) - "
                 f"remove it; values must not embed placeholders")
-    # also surface any unknown keys (not fatal on their own, but report)
+    # An unknown key is usually a typo. Reject it instead of silently pretending
+    # onboarding used a value that it ignored.
     unknown = [k for k in values if k not in registry["tokens"]]
+    if unknown:
+        problems.append(
+            "unknown key(s): " + ", ".join(sorted(unknown)) + ". Valid keys: "
+            + ", ".join(registry["tokens"]))
     if problems:
         raise AbortError(
-            "value validation failed:\n  - " + "\n  - ".join(problems)
-            + (f"\n  (unknown keys ignored: {unknown})" if unknown else ""))
+            "values.json has invalid values:\n  - " + "\n  - ".join(problems)
+            + "\nFix values.json at the workspace root, then run:\n"
+              "  python3 core/onboarding/apply.py --root .\n"
+              "No workspace files were changed.")
 
 
 # --------------------------------------------------------------------------- #
@@ -333,18 +350,19 @@ def git_tracked_files(root: Path, excludes=()):
 # snapshot (atomicity)                                                          #
 # --------------------------------------------------------------------------- #
 def take_snapshot(root: Path, files):
-    """Copy every tracked file to a sibling staging dir for rollback."""
+    """Copy every tracked file, then atomically publish the rollback snapshot."""
     snap = root / SNAPSHOT_DIRNAME
-    if snap.exists():
-        shutil.rmtree(snap)
-    snap.mkdir()
+    temp = root / SNAPSHOT_TMP_DIRNAME
+    discard_snapshot(temp)
+    temp.mkdir()
     for rel in files:
         src = root / rel
         if not src.exists():
             continue
-        dst = snap / rel
+        dst = temp / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
+    os.replace(temp, snap)
     return snap
 
 
@@ -360,6 +378,26 @@ def restore_snapshot(root: Path, snap: Path, files):
 def discard_snapshot(snap: Path):
     if snap.exists():
         shutil.rmtree(snap, ignore_errors=True)
+
+
+def recover_interrupted_run(root: Path, files):
+    """Restore a published snapshot left by an interrupted earlier process."""
+    snap = root / SNAPSHOT_DIRNAME
+    temp = root / SNAPSHOT_TMP_DIRNAME
+    if snap.exists():
+        restore_snapshot(root, snap, files)
+        clear_checkpoints(root)
+        discard_snapshot(snap)
+        discard_snapshot(temp)
+        print("apply.py: recovered an interrupted earlier run; the original tree was "
+              "restored. Restarting safely.")
+    elif temp.exists():
+        # The process stopped while copying the snapshot, before any workspace
+        # file could be changed.
+        discard_snapshot(temp)
+        clear_checkpoints(root)
+        print("apply.py: removed an incomplete pre-write snapshot from an interrupted "
+              "earlier run. Restarting safely.")
 
 
 # --------------------------------------------------------------------------- #
@@ -393,13 +431,47 @@ def clear_checkpoints(root: Path):
 # --------------------------------------------------------------------------- #
 def run(root: Path, placeholders_path: Path, values_path: Path,
         dry_run: bool = False, excludes=()) -> int:
-    root = root.resolve()
+    root = root.expanduser().resolve()
+    expected_values = root / "values.json"
+
+    try:
+        top = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+            capture_output=True, text=True, check=True).stdout.strip()
+    except subprocess.CalledProcessError:
+        raise AbortError(
+            f"{root} is not a git workspace root. Change into the workspace folder, then run:\n"
+            "  python3 core/onboarding/apply.py --root .")
+    if Path(top).resolve() != root:
+        raise AbortError(
+            f"--root points to {root}, but the workspace root is {Path(top).resolve()}. Run:\n"
+            f"  cd {shlex.quote(str(Path(top).resolve()))}\n"
+            "  python3 core/onboarding/apply.py --root .")
+
+    if values_path.expanduser().resolve() != expected_values:
+        raise AbortError(
+            f"values.json must be at the workspace root: {expected_values}\n"
+            f"Move it there, then run:\n  mv {shlex.quote(str(values_path))} "
+            f"{shlex.quote(str(expected_values))}\n"
+            "  python3 core/onboarding/apply.py --root .")
+
+    registry = load_registry(placeholders_path)
+    files = git_tracked_files(root, excludes)
+    recover_interrupted_run(root, files)
 
     # --- IDEMPOTENCY: if a prior run already completed (no values.json and the
     # tree has no leftovers), a re-run with no values.json is a clean no-op.
-    if not values_path.exists():
-        registry = load_registry(placeholders_path)
-        files = git_tracked_files(root, excludes)
+    if not expected_values.exists():
+        misplaced = [p for p in root.rglob("values.json")
+                     if ".git" not in p.parts and p.resolve() != expected_values]
+        if misplaced:
+            found = misplaced[0]
+            raise AbortError(
+                f"values.json is in the wrong place: {found}\n"
+                f"It must be at the workspace root: {expected_values}\n"
+                "Run:\n"
+                f"  mv {shlex.quote(str(found))} {shlex.quote(str(expected_values))}\n"
+                "  python3 core/onboarding/apply.py --root .")
         leftovers = find_leftovers(root, files, registry)
         if not leftovers:
             print("apply.py: nothing to do — no values.json and no leftover "
@@ -408,23 +480,28 @@ def run(root: Path, placeholders_path: Path, values_path: Path,
             discard_snapshot(root / SNAPSHOT_DIRNAME)
             return 0
         raise AbortError(
-            f"values.json not found at {values_path}, but leftover tokens "
-            f"remain in: {sorted(leftovers)}")
+            f"values.json is missing from the workspace root: {expected_values}\n"
+            "Create it there with all nine confirmed onboarding values, then run:\n"
+            "  python3 core/onboarding/apply.py --root .\n"
+            f"No files were changed. Tokens still remain in: {sorted(leftovers)}")
 
     # --- load registry + values
-    registry = load_registry(placeholders_path)
     try:
-        values = json.loads(values_path.read_text(encoding="utf-8"))
+        values = json.loads(expected_values.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:
-        raise AbortError(f"values.json is not valid JSON: {e}")
+        raise AbortError(
+            f"values.json is not valid JSON: {e}\n"
+            "Fix values.json at the workspace root, then run:\n"
+            "  python3 core/onboarding/apply.py --root .\n"
+            "No workspace files were changed.")
     if not isinstance(values, dict):
-        raise AbortError("values.json must be a JSON object {token: value}")
+        raise AbortError(
+            "values.json must be one JSON object: {\"token\": \"value\"}.\n"
+            "Fix it, then run: python3 core/onboarding/apply.py --root .\n"
+            "No workspace files were changed.")
 
     # --- VALIDATE every value BEFORE touching the tree
     validate_values(registry, values)
-
-    # --- discover tracked files
-    files = git_tracked_files(root, excludes)
 
     # --- DRY RUN: validate + report what would change, write nothing
     if dry_run:
@@ -465,11 +542,17 @@ def run(root: Path, placeholders_path: Path, values_path: Path,
                 f"tokens remain: {json.dumps(leftovers, indent=2)}")
         write_checkpoint(root, "validate")
 
-    except Exception as e:
+    except BaseException as e:
         # restore the tree to its pre-flight state so it stays recoverable
         restore_snapshot(root, snap, files)
         clear_checkpoints(root)
         discard_snapshot(snap)
+        discard_snapshot(root / SNAPSHOT_TMP_DIRNAME)
+        if isinstance(e, KeyboardInterrupt):
+            raise AbortError(
+                "interrupted by the user; the original tree was restored. "
+                "Run again when ready:\n"
+                "  python3 core/onboarding/apply.py --root .")
         if isinstance(e, AbortError):
             raise
         raise AbortError(f"unexpected error during apply (tree restored): {e}")
@@ -484,9 +567,10 @@ def run(root: Path, placeholders_path: Path, values_path: Path,
     print(f"  total files touched: {len(per_file)}")
 
     discard_snapshot(snap)
+    discard_snapshot(root / SNAPSHOT_TMP_DIRNAME)
     clear_checkpoints(root)
     try:
-        values_path.unlink()
+        expected_values.unlink()
     except FileNotFoundError:
         pass
     print("apply.py: cleaned snapshot, checkpoints, and values.json. exit 0.")

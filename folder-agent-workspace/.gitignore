@@ -5,6 +5,7 @@
 # secrets live outside the repo or in an untracked .env
 .env
 .env.*
+.venv/
 __pycache__/
 *.pyc
 # local binaries; unzip in place when needed
@@ -19,3 +20,4 @@ __pycache__/
 values.json
 .onboarding_apply/
 .onboarding_apply_snapshot/
+.onboarding_apply_snapshot.tmp/

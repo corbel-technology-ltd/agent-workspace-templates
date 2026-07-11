@@ -35,10 +35,12 @@ def main():
     print(
         "[onboarding-gate] This workspace is UNINITIALISED (a .uninitialised sentinel is present "
         "at the workspace root).\n"
-        "Before ANY other work, run the onboarding playbook "
-        "(core/onboarding/ONBOARDING.md): it gathers the instance values, confirms them, then "
-        "fills the <<TOKEN>> placeholders deterministically via apply.py and removes the sentinel.\n"
-        "Do not edit placeholders by hand and do not start other tasks until onboarding completes."
+        "Agent: read core/onboarding/ONBOARDING.md now. Start at Step B: ask the six questions, "
+        "show all nine resulting values, and wait for an explicit yes before writing anything.\n"
+        "Then follow Steps D-G exactly: values.json belongs at the workspace root; run "
+        "python3 core/onboarding/apply.py --root . from that root; seed identity, current state, "
+        "and the first journal entry; remove .uninitialised LAST.\n"
+        "Do not edit placeholders by hand or answer another task until onboarding is complete."
     )
     sys.exit(0)
 

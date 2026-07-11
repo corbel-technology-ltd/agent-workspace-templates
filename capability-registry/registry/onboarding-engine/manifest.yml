@@ -1,12 +1,12 @@
 name: onboarding-engine
-version: 4
+version: 6
 description: Deterministic onboarding substitution engine - validates values, fills
   placeholder tokens with context-aware escaping; atomic, idempotent, --dry-run.
-provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace workspace
-  template
+provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace
+  workspace template
 requires:
 - PyYAML
 files:
 - src: files/apply.py
   target: core/onboarding/apply.py
-  sha256: c51e0e6a2ce8cfb263d9f907343676b2f5de91b5e27cfe45594481e4b6e908b3
+  sha256: 70690c0402378f47e69f06b64b0ceb6cf4646836070b6dfa3910df20f4888a84

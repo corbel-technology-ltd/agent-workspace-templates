@@ -21,7 +21,8 @@ for running your work as plain Markdown + git that an AI agent operates and you 
 
 Each stands alone; together they click. The whole story, the composition diagram, and the
 take-just-one-part paths: **[FAMILY.md](FAMILY.md)**. Agents start at
-**[AGENTS.md](AGENTS.md)** - the family-root constitution.
+**[AGENTS.md](AGENTS.md)** - the family-root constitution. Workspace users can keep the
+post-onboarding **[user reference](folder-agent-workspace/REFERENCE.md)** nearby.
 
 ## Install
 
@@ -78,12 +79,15 @@ versioning.
 
 ```bash
 git clone https://github.com/CORBEL-Technology/agent-workspace-templates.git && cd agent-workspace-templates
-python3 -m pip install --user "PyYAML>=6,<7"
-python3 instantiate.py folder-agent-workspace ~/my-workspace   # or shared-context / capability-registry
-cd ~/my-workspace   # open it in your agent runtime; onboarding runs on first session
+sh install.sh folder-agent-workspace ~/my-workspace
 ```
 
+This uses the same checks and PEP 668-safe dependency setup as the one-command installer.
+
 </details>
+
+Every installer and onboarding error prints the next command to run. The exact-message lookup is
+in [START-HERE.md troubleshooting](START-HERE.md#something-went-wrong).
 
 ## Health
 

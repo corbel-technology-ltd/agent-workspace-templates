@@ -1,6 +1,7 @@
 # transient / local-only
 .DS_Store
 *.swp
+.venv/
 __pycache__/
 *.pyc
 # a registry never holds secrets; belt-and-braces ignore anyway
@@ -10,3 +11,4 @@ __pycache__/
 values.json
 .onboarding_apply/
 .onboarding_apply_snapshot/
+.onboarding_apply_snapshot.tmp/

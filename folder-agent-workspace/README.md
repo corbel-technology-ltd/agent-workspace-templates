@@ -31,11 +31,15 @@ depends on a specific vendor.
 
 ## Use it
 
-Folder-Agent-Workspace is a GitHub **template repository**:
+Folder-Agent-Workspace is a GitHub **template repository**. The family-root `install.sh` is the
+easiest path because it handles protected system Python installations automatically. When using
+this member directly:
 
 1. Click **Use this template**, then **Create a new repository** (your own copy).
-2. Clone it. Run `pip install -r requirements.txt` (one dependency: PyYAML).
-3. Open the folder in your agent runtime (two adapters ship wired; see
+2. Clone it. From its root run `python3 -m venv .venv`, then `. .venv/bin/activate`, then
+   `python -m pip install -r requirements.txt` (one dependency: PyYAML). Activate `.venv` whenever
+   you reopen the workspace.
+3. Open the folder in your agent runtime from that activated terminal (two adapters ship wired; see
    [`core/RUNTIMES.md`](core/RUNTIMES.md) for the list and for wiring any other).
 4. On the first session the workspace is uninitialised, so the agent runs the **onboarding**
    playbook: it asks a handful of questions (your workspace name, your agent's name, and so on) and
@@ -71,7 +75,8 @@ tools/            the pre-distribution gates
 
 Plus one thin adapter per wired runtime (a pinned pointer file at the root and that runtime's
 config dir - wiring only, never content; `core/RUNTIMES.md` is the registry). Every numbered folder
-has a README explaining it. Start at [`AGENTS.md`](AGENTS.md).
+has a README explaining it. Start at [`AGENTS.md`](AGENTS.md); after onboarding, keep the
+[`REFERENCE.md`](REFERENCE.md) lookup sheet handy.
 
 ## Onboarding tokens
 

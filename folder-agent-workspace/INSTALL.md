@@ -18,10 +18,11 @@ onboard once and run. This file covers requirements, the first run, and the hone
 
 ## Requirements
 
-- **Python 3** - the `core/hooks/` reflexes and the onboarding `apply.py` run on the system
-  `python3` (no virtualenv assumed).
-- **PyYAML** - `pip install -r requirements.txt`. Used by the memory reaper hook and by the onboarding
-  engine (which reads `placeholders.yml`).
+- **Python 3.8+** - the `core/hooks/` reflexes and onboarding engine run with `python3`.
+- **PyYAML** - used by the memory reaper and onboarding engine. The family-root installer first
+  tries the user package location; if PEP 668 protects system Python, it creates `.venv` inside the
+  workspace and prints the activation command. For a direct template clone, run
+  `python3 -m venv .venv`, `. .venv/bin/activate`, then `python -m pip install -r requirements.txt`.
 - **git** - the workspace is a git repo; onboarding discovers and snapshots files via `git ls-files`,
   and the per-folder loop/journal discipline assumes version control.
 
@@ -39,9 +40,9 @@ build if an adapter grows content or a vendor name leaks into the neutral core.
 
 ## First run (onboarding)
 
-1. On GitHub, click **Use this template** to create your own repository from Folder-Agent-Workspace, then clone it
-   and open the folder in your agent runtime (see [`core/RUNTIMES.md`](core/RUNTIMES.md) for the
-   wired adapters and for attaching any other).
+1. Prefer the family-root `install.sh`. For a direct template copy, create/activate `.venv` as
+   above, then open the folder in your agent runtime (see [`core/RUNTIMES.md`](core/RUNTIMES.md) for
+   the wired adapters and for attaching any other).
 2. The [`.uninitialised`](.uninitialised) sentinel + the session-start gate
    ([`core/hooks/onboarding-gate.py`](core/hooks/onboarding-gate.py)) prompt the agent to run the
    **onboarding** playbook ([`core/onboarding/ONBOARDING.md`](core/onboarding/ONBOARDING.md))

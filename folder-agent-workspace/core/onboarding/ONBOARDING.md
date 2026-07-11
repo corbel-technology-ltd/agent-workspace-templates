@@ -101,7 +101,8 @@ the operator corrects anything, amend and re-show. Do not cross into Step D with
 
 ### Step D - write `values.json`
 
-Write the confirmed map as `values.json` at the workspace root (one JSON object `{token: value}`,
+Write the confirmed map as **`<workspace-root>/values.json`** - not beside `apply.py` and not in a
+runtime config directory (one JSON object `{token: value}`,
 all nine keys, strings). This is the first on-disk write and the first checkpoint: if a later step
 fails, `values.json` is already on disk and the run resumes from here.
 
@@ -114,7 +115,10 @@ root. `apply.py` is atomic and idempotent: it snapshots the tracked tree, substi
 registered token is left over, then on success deletes the snapshot, its checkpoints, and
 `values.json`. On validation failure it **restores the tree from the snapshot** and aborts non-zero
 - fix the offending value (or `values.json`) and re-run; a re-run from a clean tree with no
-`values.json` is a safe no-op. Do not proceed past a non-zero exit.
+`values.json` is a safe no-op. If a process is interrupted after publishing its snapshot, the next
+run restores that snapshot before restarting. Do not proceed past a non-zero exit. If the command
+says `PyYAML is missing` and a root `.venv` exists, run `. .venv/bin/activate` and retry the same
+command.
 
 ### Step F - seed registers + first journal entry
 
@@ -159,8 +163,14 @@ Print a short "you're live, here's how to use it" summary:
 |---|---|---|
 | `.uninitialised` present, no `values.json` | before Step D | re-running from Step B/C |
 | `.uninitialised` + `values.json` present | after Step D, before/at Step E | re-running `apply.py` (Step E) |
+| `.uninitialised` + `.onboarding_apply_snapshot` present | `apply.py` was interrupted | re-running `apply.py`; it restores, reports recovery, and restarts |
 | `.uninitialised` present, no `values.json`, tree has NO leftover `<<TOKEN>>` | apply.py succeeded; Steps F-G pending | doing Steps F, then G |
 | `.uninitialised` absent | fully onboarded | nothing - stop |
+
+Re-running Step E after success prints `nothing to do ... (already applied). exit 0.` and changes
+nothing. Running it from a subfolder, putting `values.json` anywhere but the workspace root, or
+supplying an invalid value exits non-zero with the exact move/fix command and changes no tracked
+workspace file.
 
 ## Guardrails
 

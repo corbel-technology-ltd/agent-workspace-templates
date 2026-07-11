@@ -302,6 +302,76 @@ class TestValidationRejects(unittest.TestCase):
         finally:
             fix.cleanup()
 
+    def test_unknown_key_is_rejected_as_a_likely_typo(self):
+        msg = self._expect_abort(
+            lambda v: v.__setitem__("OWENR", "Alex"))
+        self.assertIn("unknown key", msg)
+        self.assertIn("OWENR", msg)
+
+
+class TestNoviceRecoveryMessages(unittest.TestCase):
+    """Common location and interruption errors say exactly how to recover."""
+
+    def test_values_json_in_wrong_folder_names_workspace_root(self):
+        fix = FixtureTree(standard_files(), GOOD_VALUES)
+        try:
+            wrong = fix.dir / "core" / "onboarding" / "values.json"
+            wrong.parent.mkdir(parents=True, exist_ok=True)
+            (fix.dir / "values.json").replace(wrong)
+            r = subprocess.run(
+                [sys.executable, str(APPLY), "--root", str(fix.dir),
+                 "--placeholders", str(REAL_PLACEHOLDERS)],
+                capture_output=True, text=True)
+            msg = r.stdout + r.stderr
+            self.assertNotEqual(r.returncode, 0)
+            self.assertIn("wrong place", msg)
+            self.assertIn("workspace root", msg)
+            self.assertIn("mv ", msg)
+        finally:
+            fix.cleanup()
+
+    def test_running_from_a_subfolder_names_the_real_root(self):
+        fix = FixtureTree(standard_files(), GOOD_VALUES)
+        try:
+            subfolder = fix.dir / "hooks"
+            r = subprocess.run(
+                [sys.executable, str(APPLY), "--root", str(subfolder),
+                 "--placeholders", str(REAL_PLACEHOLDERS),
+                 "--values", str(fix.dir / "values.json")],
+                capture_output=True, text=True)
+            msg = r.stdout + r.stderr
+            self.assertNotEqual(r.returncode, 0)
+            self.assertIn("workspace root is", msg)
+            self.assertIn(str(fix.dir), msg)
+        finally:
+            fix.cleanup()
+
+    def test_stale_snapshot_restores_then_restarts(self):
+        fix = FixtureTree(standard_files(), GOOD_VALUES)
+        try:
+            snap = fix.dir / ".onboarding_apply_snapshot"
+            tracked = git(fix.dir, "ls-files", "-z").stdout.split("\0")
+            for rel in filter(None, tracked):
+                src = fix.dir / rel
+                dst = snap / rel
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src, dst)
+            # Model a process killed halfway through substitution.
+            partial = fix.read("doc.md").replace("<<OWNER>>", "Alex")
+            (fix.dir / "doc.md").write_text(partial, encoding="utf-8")
+            checkpoint = fix.dir / ".onboarding_apply"
+            checkpoint.mkdir()
+            (checkpoint / "substitute.done").write_text("ok", encoding="utf-8")
+
+            r = run_apply(fix.dir)
+            self.assertEqual(r.returncode, 0, msg=r.stdout + r.stderr)
+            self.assertIn("recovered an interrupted earlier run", r.stdout)
+            self.assertIn("Operated by Alex", fix.read("doc.md"))
+            self.assertFalse(snap.exists())
+            self.assertFalse(checkpoint.exists())
+        finally:
+            fix.cleanup()
+
 
 class TestIdempotency(unittest.TestCase):
     """(4) second run is a no-op with exit 0."""

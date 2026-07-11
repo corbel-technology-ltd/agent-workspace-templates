@@ -28,11 +28,12 @@ that to its runtime's blocking mechanism. Nothing in this folder knows which run
 
 ## Hook runtime
 
-The hooks run under the system `python3` (no venv). Five are standard-library only; `reaper.py`
-additionally imports **PyYAML** (`import yaml`). Install it once with `python3 -m pip install pyyaml`
-(the repo-root [`requirements.txt`](../../requirements.txt) carries it). If PyYAML is missing,
-`reaper.py` raises an `ImportError` at session end and memory consolidation stops until it is
-installed; the other five hooks are unaffected.
+The adapter invokes `python3` from its environment. Most hooks are standard-library only;
+`reaper.py`, `sleep-prep.py`, and `sleep-apply.py` import **PyYAML**. The family installer provides
+it and, when PEP 668 protects system Python, creates a root `.venv`; activate that environment
+before starting the runtime. For a direct template clone, run `python3 -m venv .venv`, then
+`. .venv/bin/activate`, then `python -m pip install -r requirements.txt`. If PyYAML is absent,
+memory consolidation stops but the other hooks remain available.
 
 ## Workspace root resolution
 
