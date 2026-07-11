@@ -22,6 +22,19 @@ account to create, and everything stays yours.
 
 Do not worry if words like "terminal" mean nothing yet. Step 1 covers it.
 
+## The shortcut (if you're happy to trust one command)
+
+If the words "terminal" and "command" don't scare you, steps 1-6 below collapse into one line.
+Open a terminal (step 1 explains how), paste this, press Enter:
+
+```text
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh
+```
+
+It checks you have git and Python (telling you exactly what to install if not), downloads the
+templates, installs the one dependency, creates `my-workspace` in your home folder, and prints
+what to do next. Then jump to step 7. Windows users: follow the full steps below instead.
+
 ## The steps
 
 **1. Open a terminal.** This is the window where you type commands.

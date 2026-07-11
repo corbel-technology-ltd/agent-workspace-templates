@@ -25,7 +25,21 @@ take-just-one-part paths: **[FAMILY.md](FAMILY.md)**. Agents start at
 
 ## Quick start
 
+One command (Linux/Mac) - checks git + Python 3.8+, fetches everything, installs the one
+dependency, and creates your workspace:
+
 ```bash
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh
+```
+
+(Pick your own path with `... | sh -s -- ~/another-name`. Windows: follow
+[START-HERE.md](START-HERE.md).)
+
+Or by hand:
+
+```bash
+git clone https://github.com/CORBEL-Technology/agent-workspace-templates.git && cd agent-workspace-templates
+python3 -m pip install --user "PyYAML>=6,<7"
 python3 instantiate.py folder-agent-workspace ~/my-workspace   # copy a member out into a fresh git repo
 cd ~/my-workspace                                   # open it in your agent runtime;
                                                     # onboarding runs on first session
