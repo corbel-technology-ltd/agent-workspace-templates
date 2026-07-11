@@ -24,11 +24,12 @@ SHARED = os.environ.get("<<WORKSPACE_ROOT_ENV>>_SHARED") or "<<SHARED_CONTEXT_PA
 
 
 def unconsolidated_entries():
-    """Journal entries newer than the last sleep run (0 on any failure — brief stays quiet)."""
+    """Journal entries outside the sleep processed set (0 on failure — brief stays quiet)."""
     try:
         state = ROOT / "20_memory" / "_meta" / "sleep-state.json"
-        last = json.loads(state.read_text()).get("last_processed", "") if state.exists() else ""
-        return sum(1 for p in (ROOT / "20_memory" / "journal").glob("*.md") if p.name > last)
+        processed = set(json.loads(state.read_text()).get("processed") or []) if state.exists() else set()
+        return sum(1 for p in (ROOT / "20_memory" / "journal").glob("*.md")
+                   if p.name.lower() != "readme.md" and p.name not in processed)
     except Exception:
         return 0
 

@@ -8,10 +8,13 @@ ones as schema-valid memory-card atoms, then runs the reaper so the new atoms ar
 immediately.
 
 Validation (homeostasis `sleep_pass.validator_rejects`):
-  unsupported_claim          — no support_event_ids, or an id that is not a real journal file
+  unsupported_claim          — no support_event_ids, or an id outside the current candidate window
   new_named_entity           — a changed_entity not already known to the store
   untraceable_contradiction  — supersedes-ref that matches no existing atom id
-  (plus: bad kind, confidence out of [0,1], assertable edges, empty claim, duplicate hash)
+  (plus: bad kind, confidence out of [0,1], assertable edges, empty claim)
+
+A duplicate hash strengthens the existing card with the new sources and touches. Model-supplied
+`pivotal` is kept only when a supporting event is principal-authored (`source_type: human`).
 
 Writes:
   20_memory/short-term/<date>_<slug>.md            one atom per accepted claim
@@ -19,7 +22,7 @@ Writes:
                                                    (assertable: false — primes, never asserts)
   20_memory/subconscious/world-model/<YYYY-MM>.md  monthly snapshot of what changed
   20_memory/_meta/sleep-log.md                     append-only accept/reject record
-  20_memory/_meta/sleep-state.json                 marker: journal consolidated up to here
+  20_memory/_meta/sleep-state.json                 processed journal filenames + run count
 
 Usage: python3 core/hooks/sleep-apply.py [--root <20_memory>] [--dry-run]
 """
@@ -58,7 +61,7 @@ def existing_hashes(root):
         for p in d.rglob("*.md"):
             meta, _ = R.parse_atom(p.read_text()) if p.name.lower() != "readme.md" else ({}, "")
             if isinstance(meta, dict) and meta.get("content_hash"):
-                seen[meta["content_hash"]] = meta.get("id")
+                seen[meta["content_hash"]] = (meta.get("id"), p)
     return seen
 
 
@@ -116,14 +119,16 @@ def trust_tier(claim, entries_by_file):
     conf = float(claim.get("confidence", 0))
     trusted = all(entries_by_file.get(f, {}).get("trust") == "trusted"
                   for f in claim.get("support_event_ids", []))
-    if conf >= 0.8 and trusted:
+    if not trusted:
+        return 2
+    if conf >= 0.8:
         return 4
     if conf >= 0.6:
         return 3
     return 2
 
 
-def validate(claim, journal_dir, known, atom_ids):
+def validate(claim, entries_by_file, known, atom_ids):
     if not str(claim.get("claim", "")).strip():
         return "empty_claim"
     kind = claim.get("kind", "observation")
@@ -139,7 +144,7 @@ def validate(claim, journal_dir, known, atom_ids):
     if not support:
         return "unsupported_claim"
     for f in support:
-        if not (journal_dir / str(f)).exists():
+        if str(f) not in entries_by_file:
             return f"unsupported_claim:{f}"
     for e in claim.get("changed_entities") or []:
         if str(e).strip() and str(e).strip() not in known:
@@ -151,6 +156,29 @@ def validate(claim, journal_dir, known, atom_ids):
         if edge.get("assertable"):
             return "assertable_edge_without_backing"
     return None
+
+
+def principal_supported(claim, entries_by_file):
+    return any(entries_by_file.get(str(f), {}).get("source_type") == "human"
+               for f in claim.get("support_event_ids") or [])
+
+
+def merge_atom(path, claim, today, entries_by_file):
+    meta, body = R.parse_atom(path.read_text())
+    support = [str(f) for f in claim["support_event_ids"]]
+    sources = list(meta.get("sources") or [])
+    touches = list(meta.get("touches") or [])
+    for f in support:
+        source = f"journal/{f}"
+        if source not in sources:
+            sources.append(source)
+            when = entries_by_file[f].get("when") or today
+            touches.append(f"{when}T00:00:00Z")
+    meta["sources"] = sources
+    meta["touches"] = touches
+    meta["trust_tier"] = min(int(meta.get("trust_tier", 2)), trust_tier(claim, entries_by_file))
+    meta["last_verified"] = today
+    path.write_text(R.dump_atom(meta, body))
 
 
 def atom_frontmatter(claim, today, tier, h, entries_by_file):
@@ -199,11 +227,12 @@ def main():
     base = Path(os.environ.get("<<WORKSPACE_ROOT_ENV>>") or Path(__file__).resolve().parents[2])
     root = Path(a.root) if a.root else base / "20_memory"
     meta_dir = root / "_meta"
-    journal_dir = root / "journal"
     today = datetime.date.today().isoformat()
 
     cands = json.loads((meta_dir / "sleep-candidates.json").read_text())
     claims_doc = json.loads((meta_dir / "sleep-claims.json").read_text())
+    if claims_doc.get("run_id") != cands.get("run_id"):
+        raise ValueError("sleep-claims.json run_id does not match current sleep-candidates.json")
     claims = claims_doc.get("claims") or []
     known = set(cands.get("known_entities") or [])
     entries_by_file = {e["file"]: e for e in cands.get("entries", [])}
@@ -211,17 +240,29 @@ def main():
     seen_hashes = existing_hashes(root)
 
     ent_map = entity_atom_map(root)
-    accepted, rejected = [], []
-    for c in claims:
-        why = validate(c, journal_dir, known, atom_ids)
+    accepted, rejected, merged, pivotal_stripped = [], [], [], []
+    pending = {}
+    for raw in claims:
+        c = dict(raw)
+        why = validate(c, entries_by_file, known, atom_ids)
         if why:
             rejected.append((c, why))
             continue
+        if c.get("pivotal") and not principal_supported(c, entries_by_file):
+            c["pivotal"] = False
+            pivotal_stripped.append(c)
         h = content_hash(c["claim"])
         if h in seen_hashes:
-            rejected.append((c, f"duplicate_of:{seen_hashes[h]}"))
+            target_id, path = seen_hashes[h]
+            if path is None:
+                target = pending[h]
+                for f in c["support_event_ids"]:
+                    if f not in target["support_event_ids"]:
+                        target["support_event_ids"].append(f)
+            merged.append((c, target_id, path))
             continue
-        seen_hashes[h] = None
+        pending[h] = c
+        seen_hashes[h] = (f"{WORKSPACE}.atom.{slugify(c['claim'])}", None)
         accepted.append((c, h))
 
     written, edges_written = [], 0
@@ -282,6 +323,10 @@ def main():
                                "Primes retrieval; never asserted as fact.\n"))
                 edges_written += 1
 
+        for c, target_id, path in merged:
+            if path is not None:
+                merge_atom(path, c, today, entries_by_file)
+
         # monthly world-model snapshot
         wm = root / "subconscious" / "world-model"
         wm.mkdir(parents=True, exist_ok=True)
@@ -291,7 +336,8 @@ def main():
         block = (f"\n## Sleep run {today}\n\n"
                  f"- window: {cands['window'].get('from')} .. {cands['window'].get('to')} "
                  f"({cands['window'].get('count')} entries)\n"
-                 f"- accepted claims: {len(accepted)} | rejected: {len(rejected)} | edges: {edges_written}\n"
+                 f"- accepted claims: {len(accepted)} | rejected: {len(rejected)} | "
+                 f"merged: {len(merged)} | edges: {edges_written}\n"
                  f"- changed entities: {', '.join(ents) if ents else '(none)'}\n"
                  f"- new atoms: {', '.join(written) if written else '(none)'}\n")
         if snap.exists():
@@ -311,19 +357,27 @@ def main():
             snap.write_text(R.dump_atom(head, f"\n\n# World model — {month}\n" + block))
 
         # marker + log
-        state = {"last_processed": cands["window"].get("to") or "",
-                 "last_run": today,
-                 "runs": (json.loads((meta_dir / 'sleep-state.json').read_text()).get('runs', 0) + 1
-                          if (meta_dir / 'sleep-state.json').exists() else 1)}
+        old_state = (json.loads((meta_dir / "sleep-state.json").read_text())
+                     if (meta_dir / "sleep-state.json").exists() else {})
+        processed = set(old_state.get("processed") or [])
+        processed.update(entries_by_file)
+        state = {"processed": sorted(processed), "last_run": today,
+                 "runs": old_state.get("runs", 0) + 1}
         (meta_dir / "sleep-state.json").write_text(json.dumps(state, indent=2))
         log = meta_dir / "sleep-log.md"
         lines = [f"\n## {today}\n",
-                 f"- accepted {len(accepted)}, rejected {len(rejected)}, edges {edges_written}\n"]
+                 f"- accepted {len(accepted)}, rejected {len(rejected)}, merged {len(merged)}, "
+                 f"edges {edges_written}\n"]
+        for c in pivotal_stripped:
+            lines.append("- pivotal stripped (no principal-authored support): "
+                         f"{str(c.get('claim', ''))[:120]}\n")
+        for c, target_id, path in merged:
+            lines.append(f"- MERGED into {target_id}: {str(c.get('claim', ''))[:120]}\n")
         for c, why in rejected:
             lines.append(f"- REJECTED ({why}): {str(c.get('claim',''))[:120]}\n")
         log.write_text((log.read_text() if log.exists() else "# Sleep log\n") + "".join(lines))
 
-    print(f"sleep-apply: accepted {len(accepted)}, rejected {len(rejected)}, "
+    print(f"sleep-apply: accepted {len(accepted)}, rejected {len(rejected)}, merged {len(merged)}, "
           f"edges {edges_written}{' (dry-run: nothing written)' if a.dry_run else ''}")
     for c, why in rejected:
         print(f"  rejected [{why}]: {str(c.get('claim',''))[:100]}")

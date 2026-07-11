@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Sleep pass, stage 1 of 2 — deterministic candidate preparation. No LLM.
 
-Gathers the journal entries not yet consolidated (everything after the last sleep marker),
+Gathers the journal entries not yet consolidated (everything outside the processed set),
 bounded by homeostasis `sleep_pass.max_changed_items_per_run`, and emits a machine-readable
 candidates file the synthesis step works from:
 
@@ -18,6 +18,7 @@ Usage: python3 core/hooks/sleep-prep.py [--root <20_memory>] [--all]  (--all ign
 """
 import argparse
 import datetime
+import hashlib
 import itertools
 import json
 import os
@@ -61,15 +62,14 @@ def main():
     cap = int(cfg.get("sleep_pass", {}).get("max_changed_items_per_run", 50))
 
     marker = {} if a.all else load_marker(meta_dir)
-    last = marker.get("last_processed", "")
+    processed = set(marker.get("processed") or [])
 
-    # Entries only: skip the README and anything without machine frontmatter. Crucial for the
-    # marker too — "README.md" sorts AFTER date-named entries, so staging it would advance
-    # last_processed past every future entry and silently end all future sleeps.
+    # Entries only: skip the README and anything without machine frontmatter.
     journal = [p for p in sorted((root / "journal").glob("*.md"))
                if p.name.lower() != "readme.md" and parse_atom(p.read_text())[0]]
-    fresh = [p for p in journal if p.name > last][:cap]
-    dropped = max(0, len([p for p in journal if p.name > last]) - cap)
+    pending = [p for p in journal if p.name not in processed]
+    fresh = pending[:cap]
+    dropped = max(0, len(pending) - cap)
 
     entries, entity_days, entity_count = [], {}, {}
     known = set()
@@ -115,7 +115,10 @@ def main():
         for x, y in itertools.combinations(ents, 2):
             pair_count[(x, y)] = pair_count.get((x, y), 0) + 1
 
+    run_id = hashlib.sha256(json.dumps(
+        entries, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     out = {
+        "run_id": run_id,
         "generated": datetime.date.today().isoformat(),
         "window": {"from": fresh[0].name if fresh else None,
                    "to": fresh[-1].name if fresh else None,

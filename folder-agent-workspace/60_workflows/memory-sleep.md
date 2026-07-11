@@ -86,13 +86,20 @@ a member gate in the family check.
 
 ## Running the pass (the playbook the runtime skills wrap)
 
+**Delegate by default.** Where the runtime supports subordinate/background agent contexts, run
+this whole pass in one on a small model: the contract is self-contained (candidates file in,
+strict JSON out) and the deterministic validator disposes of slop, so the main session's context
+receives only the one-line result. Run inline only when the consolidation itself is the topic.
+
 1. `python3 core/hooks/sleep-prep.py`, then read `20_memory/_meta/sleep-candidates.json`.
    If `window.count` is 0, report "nothing to consolidate" and stop.
 2. Study the staged entries, entity recurrence, and co-occurrence pairs, then write
-   `20_memory/_meta/sleep-claims.json` in exactly this shape:
+   `20_memory/_meta/sleep-claims.json` in exactly this shape — `run_id` MUST be copied verbatim
+   from the candidates file (apply refuses a mismatch, so stale claims can never land):
 
    ```json
-   {"claims": [{
+   {"run_id": "<copied from sleep-candidates.json>",
+    "claims": [{
        "claim": "<one durable, standalone factual sentence>",
        "kind": "observation | lesson | procedure | preference | decision | tool-recipe",
        "support_event_ids": ["<journal filename>"],
@@ -108,8 +115,12 @@ a member gate in the family check.
    Synthesis rules (the validator enforces every one):
    - One claim per durable fact-family - the gist that recurs, not a diary paraphrase. Skip
      one-off events with no forward value; the journal keeps them forever anyway.
-   - `support_event_ids` must be real journal filenames from the candidates file.
+   - `support_event_ids` must be journal filenames FROM THIS RUN's candidates window - the
+     validator rejects anything outside it.
    - `changed_entities` must come from `known_entities` - never invent an entity.
+   - Source trust is a hard ceiling: any untrusted supporting entry caps the atom at tier 2.
+   - `pivotal: true` survives only when a supporting entry is principal-authored
+     (`source_type: human`); otherwise it is stripped and logged.
    - A stated user preference or correction is `kind: preference`, high confidence.
    - A repeated procedure that worked is `kind: procedure` or `tool-recipe`.
    - Something that drove a commitment gets `decision_impact: true`; only mark `pivotal`

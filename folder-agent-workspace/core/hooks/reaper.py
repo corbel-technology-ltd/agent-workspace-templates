@@ -107,10 +107,10 @@ def is_expired(meta, as_of, cfg):
 def promotion_ready(meta, as_of, cfg):
     """Short-term -> long-term needs a promotion SIGNAL on top of raw activation."""
     prom = cfg.get("promotion", {})
-    if meta.get("pivotal") and prom.get("explicit_pivotal", True):
-        return True
     if int(meta.get("trust_tier", 0) or 0) < int(prom.get("min_trust_for_long", 3)):
         return False
+    if meta.get("pivotal") and prom.get("explicit_pivotal", True):
+        return True
     if meta.get("decision_impact") and prom.get("decision_impact_promotes", True):
         return True
     touches = meta.get("touches") or []
@@ -149,18 +149,42 @@ def reap(memory_root, as_of, cfg, dry_run=False):
             meta.setdefault("layer", layer)
             atoms.append([p, meta, body, layer])
 
-    # journal-driven supersession (corrections/retractions)
-    superseded_by = {}
+    # Journal corrections/retractions name journal entry ids. Resolve those ids to every source
+    # spelling atoms may carry, while retaining direct atom-id references for compatibility.
+    journal_entries = []
+    journal_aliases = {}
     jdir = memory_root / "journal"
     if jdir.is_dir():
         for p in sorted(jdir.glob("*.md")):
             jmeta, _ = parse_atom(p.read_text())
             if not isinstance(jmeta, dict):
                 continue
-            jid = jmeta.get("id") or p.stem
-            for key in ("retracts", "corrects"):
-                if jmeta.get(key):
-                    superseded_by[jmeta[key]] = jid
+            jid = str(jmeta.get("id") or p.stem)
+            aliases = {jid, p.name, p.stem, f"journal/{p.name}"}
+            journal_entries.append((jmeta, jid))
+            for alias in aliases:
+                journal_aliases[alias] = aliases
+
+    journal_atom_superseded_by = {}
+    journal_source_superseded_by = {}
+    for jmeta, jid in journal_entries:
+        for key in ("retracts", "corrects"):
+            if not jmeta.get(key):
+                continue
+            target = str(jmeta[key])
+            journal_atom_superseded_by[target] = jid
+            for alias in journal_aliases.get(target, {target}):
+                journal_source_superseded_by[alias] = jid
+
+    # Atom-level supersedes is active only when both ids are present and current in live layers.
+    live_ids = {str(meta.get("id")) for p, meta, body, layer in atoms
+                if meta.get("id") and meta.get("status") != "superseded"}
+    atom_superseded_by = {}
+    for p, meta, body, layer in atoms:
+        source_id = str(meta.get("id") or "")
+        target = str(meta.get("supersedes") or "")
+        if source_id in live_ids and target in live_ids:
+            atom_superseded_by[target] = source_id
 
     # PHASE 1 — structural plan (one action per atom); hash dedup is first-writer-wins
     plan = []
@@ -171,8 +195,15 @@ def reap(memory_root, as_of, cfg, dry_run=False):
             plan.append(("quarantine", i, None))
             structural.add(i)
             continue
-        if meta.get("status") != "superseded" and meta.get("id") in superseded_by:
-            plan.append(("supersede", i, superseded_by[meta["id"]]))
+        superseder = journal_atom_superseded_by.get(str(meta.get("id") or ""))
+        if not superseder:
+            for source in meta.get("sources") or []:
+                superseder = journal_source_superseded_by.get(str(source))
+                if superseder:
+                    break
+        superseder = superseder or atom_superseded_by.get(str(meta.get("id") or ""))
+        if meta.get("status") != "superseded" and superseder:
+            plan.append(("supersede", i, superseder))
             structural.add(i)
             continue
         h = meta.get("content_hash")
@@ -215,7 +246,7 @@ def reap(memory_root, as_of, cfg, dry_run=False):
                 meta.pop("below_exit_since", None)          # recovered; clear the clock
                 dirty.add(i)
         elif layer == "short-term":
-            # pivotal always promotes (homeostasis promotion.explicit_pivotal); everything
+            # trusted pivotal always promotes (homeostasis promotion.explicit_pivotal); everything
             # else needs raw activation over the bar AND a promotion signal
             if (A >= lt_enter or meta.get("pivotal")) and promotion_ready(meta, as_of, cfg):
                 plan.append(("move", i, "long-term"))

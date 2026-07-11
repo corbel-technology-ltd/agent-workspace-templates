@@ -32,6 +32,8 @@ value-gate, design-spec §9).
 - Decision flow: `decision-packet` schema + template, `decision-queue`, `decision-log`.
 - Workflows: `daily-brief`, `weekly-review`, `open-loop-tracking`, `email-triage-approve`,
   `memory-reaper`.
+- Memory sleep: the bounded prep/synthesis/apply pass and minimal subconscious outputs are current;
+  ambitious temporal-KG synthesis remains deferred.
 
 - Registers: `decision-queue`, `decision-log`, `blocked-actions`, `component-registry`,
   `improvement-backlog`, `measurement`. Project loops live per project in `80_projects/`
@@ -39,12 +41,6 @@ value-gate, design-spec §9).
 - Integrations map (`70_integrations/README.md`) - slots to fill per instance.
 
 ## awaits-inputs (spec ready; activate on real inputs)
-
-- `memory-sleep` (deep pass: schema/world-model/trend synthesis) - turn on once the journal has
-  weeks of entries; minimal mode first (co-occurrence + deterministic trend stats).
-
-- `subconscious/` synthesis (associations, priors, world-model snapshots, trends) - produced by the
-  sleep pass; minimal mode now, ambitious temporal-KG mode deferred.
 
 - `evaluation` (memory-sharpness harness) - build the gold set once there is real journal volume.
 - `opportunity` schema + worksheet - activates when a real opportunity signal lands.
