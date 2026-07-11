@@ -43,13 +43,31 @@ assumed, ~15 minutes.
 ### Choosing what to install
 
 The default command above creates a **workspace** — the thing most people want, and the thing
-you may eventually have several of. The other members install the same way:
+you may eventually have several of. Copy the exact line for what you need:
 
-| You want | Command ends with | You get |
-|---|---|---|
-| A workspace (the default; run again with a new name for each additional one) | `\| sh` or `\| sh -s -- ~/second-workspace` | `folder-agent-workspace` at `~/my-workspace` (or your path) |
-| The shared brain above several workspaces | `\| sh -s -- shared-context` | `shared-context` at `~/my-shared` |
-| The versioned tooling registry | `\| sh -s -- capability-registry` | `capability-registry` at `~/my-registry` |
+**A workspace** (at `~/my-workspace`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh
+```
+
+**Another workspace** (each additional one just needs its own name):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh -s -- ~/second-workspace
+```
+
+**The shared brain** that sits above several workspaces (at `~/my-shared`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh -s -- shared-context
+```
+
+**The versioned tooling registry** (at `~/my-registry`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh -s -- capability-registry
+```
 
 Each stands alone; together they click ([FAMILY.md](FAMILY.md)). Typical growth path: one
 workspace → a second workspace + the shared store → the registry once tooling is worth
