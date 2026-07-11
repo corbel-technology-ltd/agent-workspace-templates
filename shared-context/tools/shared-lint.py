@@ -39,12 +39,13 @@ ALLOWED_ROOT_FILES = {
 POINTER_RE = re.compile(r"^[A-Z][A-Z0-9_-]*\.md$")
 MAX_POINTER_LINES = 16
 ALLOWED_ROOT_DIRS = {
-    "identity", "operating-rules", "people", "tech-stack", "calibration-os",
-    "boundaries", "glossary", "_coordination", "_meta", "core", "tools",
+    "identity", "operating-rules", "people", "places", "concepts", "automations",
+    "tech-stack", "calibration-os", "boundaries", "glossary",
+    "_coordination", "_meta", "core", "tools",
 }
 CONTENT_DIRS = [
-    "identity", "operating-rules", "people", "tech-stack", "calibration-os",
-    "boundaries", "glossary",
+    "identity", "operating-rules", "people", "places", "concepts", "automations",
+    "tech-stack", "calibration-os", "boundaries", "glossary",
 ]
 
 ENTRY_RE = re.compile(
