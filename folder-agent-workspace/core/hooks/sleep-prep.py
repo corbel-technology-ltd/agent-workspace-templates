@@ -63,7 +63,11 @@ def main():
     marker = {} if a.all else load_marker(meta_dir)
     last = marker.get("last_processed", "")
 
-    journal = sorted((root / "journal").glob("*.md"))
+    # Entries only: skip the README and anything without machine frontmatter. Crucial for the
+    # marker too — "README.md" sorts AFTER date-named entries, so staging it would advance
+    # last_processed past every future entry and silently end all future sleeps.
+    journal = [p for p in sorted((root / "journal").glob("*.md"))
+               if p.name.lower() != "readme.md" and parse_atom(p.read_text())[0]]
     fresh = [p for p in journal if p.name > last][:cap]
     dropped = max(0, len([p for p in journal if p.name > last]) - cap)
 

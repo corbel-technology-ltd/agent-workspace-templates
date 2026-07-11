@@ -41,7 +41,11 @@ def parse_atom(text):
     parts = text.split("---", 2)
     if len(parts) < 3:
         return {}, text
-    return (yaml.safe_load(parts[1]) or {}), parts[2]
+    try:
+        meta = yaml.safe_load(parts[1]) or {}
+    except yaml.YAMLError:
+        return {}, text  # not machine-frontmatter (prose doc, legacy file) — treat as non-atom
+    return (meta if isinstance(meta, dict) else {}), parts[2]
 
 
 def dump_atom(meta, body):
