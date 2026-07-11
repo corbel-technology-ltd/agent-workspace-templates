@@ -77,6 +77,41 @@ def existing_atom_ids(root):
     return ids
 
 
+def entity_atom_map(root):
+    """entity -> [(relpath, atom_id)] over the live layers, for related-edge derivation."""
+    m = {}
+    for layer in R.LAYERS:
+        d = root / layer
+        if not d.is_dir():
+            continue
+        for p in d.rglob("*.md"):
+            if p.name.lower() == "readme.md":
+                continue
+            meta, _ = R.parse_atom(p.read_text())
+            if not (isinstance(meta, dict) and meta.get("id")):
+                continue
+            ents = (meta.get("who") or []) + (meta.get("where") or [])
+            rel = str(p.relative_to(root.parent))
+            for e in ents:
+                m.setdefault(str(e).strip(), []).append((rel, meta["id"]))
+    return m
+
+
+def derive_related(claim, ent_map, own_id, cap=4):
+    """Typed edges to existing atoms that share this claim's entities - the graph Jake described:
+    frontmatter carries the interconnections so retrieval can walk edges instead of grepping."""
+    seen, out = set(), []
+    for e in claim.get("changed_entities") or []:
+        for rel, aid in ent_map.get(str(e).strip(), []):
+            if aid == own_id or aid in seen:
+                continue
+            seen.add(aid)
+            out.append({"ref": rel, "dimension": "who", "polarity": "complements"})
+            if len(out) >= cap:
+                return out
+    return out
+
+
 def trust_tier(claim, entries_by_file):
     conf = float(claim.get("confidence", 0))
     trusted = all(entries_by_file.get(f, {}).get("trust") == "trusted"
@@ -175,6 +210,7 @@ def main():
     atom_ids = existing_atom_ids(root)
     seen_hashes = existing_hashes(root)
 
+    ent_map = entity_atom_map(root)
     accepted, rejected = [], []
     for c in claims:
         why = validate(c, journal_dir, known, atom_ids)
@@ -195,6 +231,9 @@ def main():
         for c, h in accepted:
             tier = trust_tier(c, entries_by_file)
             meta = atom_frontmatter(c, today, tier, h, entries_by_file)
+            rel_edges = derive_related(c, ent_map, meta["id"])
+            if rel_edges:
+                meta["related"] = rel_edges
             body = (f"\n\n# {meta['what']}\n\n{str(c.get('claim')).strip()}\n\n"
                     f"Synthesised by the sleep pass on {today} from "
                     f"{len(c['support_event_ids'])} journal event(s).\n")
@@ -207,6 +246,10 @@ def main():
             path.write_text(R.dump_atom(meta, body))
             written.append(path.name)
             seen_hashes[h] = meta["id"]
+            # same-run atoms can link to each other too
+            for e in (meta.get("who") or []) + (meta.get("where") or []):
+                ent_map.setdefault(str(e).strip(), []).append(
+                    (str(path.relative_to(root.parent)), meta["id"]))
 
             for edge in c.get("proposed_edges") or []:
                 ed = root / "subconscious" / "associations"

@@ -17,11 +17,19 @@ matching `what` so the reader can decide without opening anything.
 
 --touch records the retrieval on atom hits (appends a touch + bumps retrieval_count), feeding
 ACT-R activation so that USE strengthens memory. Off by default: browsing is not remembering.
+On an ARCHIVE hit, --touch REELS THE ATOM BACK IN: it returns to short-term with a fresh
+last_verified, and the reaper re-tiers it from there (the deep-sea catch; unused, it will float
+back down through decay as designed).
+
+--follow walks each hit's `related:` frontmatter edges one hop and shows the linked atoms -
+retrieval by graph edge instead of grepping everything.
 
 Usage:
     python3 tools/recall-tiered.py <query terms>            # stop at first answering depth
     python3 tools/recall-tiered.py --all <query terms>      # walk every depth
-    python3 tools/recall-tiered.py --touch <query terms>    # count this retrieval as a touch
+    python3 tools/recall-tiered.py --follow <query terms>   # show 1-hop linked atoms per hit
+    python3 tools/recall-tiered.py --touch <query terms>    # count retrieval as a touch; reel
+                                                            # archive hits back to short-term
 """
 import datetime
 import os
@@ -92,10 +100,42 @@ def touch(p):
         return False
 
 
+def reel_in(p):
+    """An archive hit that proved useful returns to short-term: fresh last_verified, layer
+    rewritten, file moved. The reaper re-tiers it from there — and lets it float back down
+    if it goes unused again."""
+    today = datetime.date.today().isoformat()
+    try:
+        text = p.read_text()
+        text = re.sub(r"^layer: .*$", "layer: short-term", text, count=1, flags=re.M)
+        text = re.sub(r"^last_verified: .*$", f"last_verified: '{today}'", text, count=1, flags=re.M)
+        text = re.sub(r"^status: (stale|superseded)$", "status: current", text, count=1, flags=re.M)
+        dst = MEM / "short-term" / p.name
+        dst.write_text(text)
+        p.unlink()
+        touch(dst)
+        return dst
+    except OSError:
+        return None
+
+
+def related_refs(text):
+    """Every ref target in the frontmatter's related: block - both the house flow style
+    ({ref: path, ...}) and the block style yaml.safe_dump emits (- ref: path)."""
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        return []
+    fm = parts[1]
+    refs = [r.strip() for r in re.findall(r"\{ref:\s*([^,}]+)", fm)]
+    refs += [r.strip().strip("'\"") for r in re.findall(r"^\s*-\s+ref:\s*(.+)$", fm, re.M)]
+    return list(dict.fromkeys(refs))
+
+
 def main():
     args = [a for a in sys.argv[1:]]
     walk_all = "--all" in args
     do_touch = "--touch" in args
+    follow = "--follow" in args
     terms = [a.lower() for a in args if not a.startswith("--")]
     if not terms:
         print(__doc__.split("Usage:")[1])
@@ -117,8 +157,22 @@ def main():
             print(f"  {p.relative_to(ROOT)}{badge}")
             if what:
                 print(f"    {what}")
+            if follow:
+                for ref in related_refs(p.read_text())[:6]:
+                    tgt = ROOT / ref
+                    if tgt.exists():
+                        tmeta, _ = parse_front(tgt.read_text())
+                        twhat = (tmeta.get("what") or tmeta.get("name") or "").strip('"')[:80]
+                        print(f"    ~ linked: {ref}" + (f" - {twhat}" if twhat else ""))
+                    else:
+                        print(f"    ~ linked: {ref} (moved or archived - search by name)")
             if do_touch and name in ("working", "short-term", "long-term"):
                 touch(p)
+            elif do_touch and name == "archive":
+                dst = reel_in(p)
+                if dst:
+                    print(f"    ^ REELED IN -> {dst.relative_to(ROOT)} (back in short-term; "
+                          "the reaper re-tiers it from here)")
         if len(hits) > 10:
             print(f"  ... and {len(hits) - 10} more")
         if not walk_all and name != "journal":
