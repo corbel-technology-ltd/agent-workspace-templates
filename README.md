@@ -11,7 +11,9 @@ for running your work as plain Markdown + git that an AI agent operates and you 
 - [`folder-agent-workspace/`](folder-agent-workspace/README.md) - the **workspace**: a folder-based agent control plane
   (constitution, memory, registers, workflows, safety gate). Its four-layer memory - journal ->
   sleep synthesis -> activation-based tiering with hysteresis - is fully implemented and proven
-  by a self-test that runs as a family gate.
+  by a self-test that runs as a family gate. It is not another recall database: it is the layer
+  where an agent develops taste and learns how you like to work - curated, source-linked beliefs
+  with governance - and it composes happily with any retrieval system underneath.
 - [`shared-context/`](shared-context/README.md) - the **shared context**: one governed store above every
   workspace for identity, rules, calibration, and boundaries; shared outranks local.
 - [`capability-registry/`](capability-registry/README.md) - the **capability registry**: versioned, checksummed
