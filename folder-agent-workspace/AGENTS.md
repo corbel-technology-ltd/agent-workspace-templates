@@ -154,6 +154,13 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 | C3 | Reference (doctrine, canon, memory model) | `10_doctrine/`, `15_canon/`, `20_memory/` model docs |
 | C4 | Working artefacts | `90_runs/`, register rows, journal entries |
 
+C-layers classify **documents by governance** - how constitutional a file is, how rarely it
+changes, what outranks what (lower number wins a conflict). Do not confuse this axis with the
+**memory depth axis** (`working / short-term / long-term / subconscious` under `20_memory/`),
+which ranks *memories by living salience*. A register is C1 forever; an atom moves between
+depths daily. The two systems deliberately use different vocabularies so a `layer:` value is
+never ambiguous about which axis it belongs to.
+
 ## Routing map
 
 | Task | Load first | Then | Output |
