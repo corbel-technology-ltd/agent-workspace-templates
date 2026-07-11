@@ -65,6 +65,8 @@ Start-of-session behaviour and authority still come from `AGENTS.md`.
 | `okf-check.py` | Checks required frontmatter, valid links, and mirrored relationships. |
 | `recall-tiered.py` | Searches memory from the hottest curated layer down to raw journal truth. |
 | `scrub-check.py` | Finds configured private or instance-specific terms before distribution. |
+| `template-update.py` | Checks, classifies, and safely applies template changes without clobbering customisations. |
+| `update-selftest.py` | Proves the non-clobbering template update flow in disposable repositories. |
 
 Other executable entry points: `core/onboarding/apply.py` performs the one-time atomic placeholder
 fill; `core/git-hooks/pre-commit` is the optional runtime-independent journal backstop.
@@ -123,22 +125,24 @@ or changing adapter wiring is an operator-approved settings change.
 
 ## Updating from the template
 
-| What changed upstream | Safe update path |
-|---|---|
-| A stocked script or gate | From the capability registry, run `status`, inspect `diff`, then approve `install`; never overwrite a local difference blindly. |
-| Doctrine, schemas, workflows, or templates | Instantiate the latest template beside this workspace, compare it, and port only the reviewed neutral changes. Never merge a blank template wholesale over live identity, canon, registers, or memory. |
-| A useful local generic improvement | Port it to the template or use the capability registry's `pack` flow; keep instance facts here. |
-
-The neutral workflow catalogue is [`60_workflows/README.md`](60_workflows/README.md), and the gate
-catalogue is [`tools/README.md`](tools/README.md).
-
-Capability update one-liners (replace `<registry-root>`):
+The safe flow is check, inspect, apply, then merge only the paths the tool flags:
 
 ```bash
-python3 <registry-root>/core/chandler.py status --workspace "$PWD"
-python3 <registry-root>/core/chandler.py diff <capability> --workspace "$PWD"
-python3 <registry-root>/core/chandler.py install <capability> --workspace "$PWD"
+python3 tools/template-update.py --check
+python3 tools/template-update.py --status
+python3 tools/template-update.py --apply
 ```
+
+`--check` prints the upstream changelog slice and exits `10` when an update is available. `--status`
+is offline. `--apply` replaces only files still matching the origin manifest, adds brand-new managed
+files, and preserves a customized file beside `<path>.template-new`. Merge each candidate by hand,
+then run `python3 tools/template-update.py --accept <path>`. The complete small-model-safe procedure,
+including dry-run and final verification, is in
+[`60_workflows/template-update.md`](60_workflows/template-update.md).
+
+Instance content, doctrine, canon, memory, registers, projects, runs, and integrations are outside
+the managed spine and are never touched. Generic local improvements still belong upstream; shared
+capability development continues to use the Capability Registry's pack/install flow.
 
 ## Backup and mirror
 

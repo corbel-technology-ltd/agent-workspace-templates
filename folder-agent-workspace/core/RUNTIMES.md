@@ -109,7 +109,8 @@ session reflexes, and this file says so.
   (Claude Code treats exit 2 from a PreToolUse hook as "block", matching the contract directly).
   Tool mapping: `Edit`/`MultiEdit`/`NotebookEdit` -> `modify`; `Write` -> `create-or-overwrite`;
   `Bash` -> `shell`.
-- **Playbook pointer:** `.claude/skills/onboarding/SKILL.md` -> `core/onboarding/ONBOARDING.md`.
+- **Playbook pointers:** `.claude/skills/onboarding/SKILL.md` -> `core/onboarding/ONBOARDING.md`;
+  `.claude/skills/template-update/SKILL.md` -> `60_workflows/template-update.md`.
 - **Verified hook reality** (checked against the live binary; re-verify before relying on it -
   hook surfaces drift across versions): events include `SessionStart`, `UserPromptSubmit`,
   `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `SubagentStop`, `SessionEnd`,

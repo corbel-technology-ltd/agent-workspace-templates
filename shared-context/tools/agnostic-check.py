@@ -39,7 +39,12 @@ ADAPTER_DIRS = [".claude/", ".gemini/"]
 
 # The one sanctioned place for vendor detail outside the adapters, plus this
 # script (it carries the term list itself).
-SANCTIONED = {"core/RUNTIMES.md", "tools/agnostic-check.py"}
+SANCTIONED = {
+    "core/RUNTIMES.md",
+    "tools/agnostic-check.py",
+    # The update policy must enumerate adapter paths to hash/copy them, but owns no adapter logic.
+    "tools/template_paths.py",
+}
 
 # Capability payloads in a Capability-Registry registry are CARGO: they are checked in the
 # workspace they get installed into, not in the warehouse that stocks them (the

@@ -20,13 +20,15 @@ After substitution, a VALIDATOR asserts no leftover `<<X>>` remains for any
 registered token name (the generic `<<TOKEN>>` doc literal is ignored). The run is ATOMIC + IDEMPOTENT: a pre-flight snapshot of the tracked
 tree is taken before any write; per-phase checkpoint flags are recorded; a
 re-run from a partial state is a no-op; on validation failure the tree is
-restored from the snapshot. On success the snapshot, checkpoints, and
-values.json are deleted.
+restored from the snapshot. On success the confirmed values and post-fill managed-file hashes are
+persisted in `00_meta/template-origin.json`, then the snapshot, checkpoints, and values.json are
+deleted.
 
 stdlib + PyYAML only.
 """
 import argparse
 import fnmatch
+import hashlib
 import json
 import os
 import re
@@ -234,22 +236,24 @@ def substitute_file(path: Path, order, values, write=True) -> int:
     except (UnicodeDecodeError, FileNotFoundError):
         return 0
 
-    if ext == ".py":
-        replaced = _sub_uniform(text, order, values, esc_python)
-    elif ext == ".json":
-        replaced = _sub_uniform(text, order, values, esc_json)
-    elif ext in (".yml", ".yaml"):
-        replaced = _sub_uniform(text, order, values, esc_yaml_scalar)
-    elif ext == ".md":
-        replaced = _sub_markdown(text, order, values)
-    else:
-        # default: treat unknown text files as prose (raw substitution)
-        replaced = _sub_uniform(text, order, values, lambda v: v)
-
-    new_text, count = replaced
+    new_text, count = substitute_text(text, ext, order, values)
     if count and new_text != text and write:
         path.write_text(new_text, encoding="utf-8")
     return count
+
+
+def substitute_text(text: str, suffix: str, order, values):
+    """Return (filled text, occurrence count) using the engine's file-type rules."""
+    ext = suffix.lower()
+    if ext == ".py":
+        return _sub_uniform(text, order, values, esc_python)
+    if ext == ".json":
+        return _sub_uniform(text, order, values, esc_json)
+    if ext in (".yml", ".yaml"):
+        return _sub_uniform(text, order, values, esc_yaml_scalar)
+    if ext == ".md":
+        return _sub_markdown(text, order, values)
+    return _sub_uniform(text, order, values, lambda v: v)
 
 
 def _sub_uniform(text, order, values, escaper):
@@ -426,6 +430,34 @@ def clear_checkpoints(root: Path):
         shutil.rmtree(d, ignore_errors=True)
 
 
+def persist_origin_values(root: Path, values: dict):
+    """Atomically retain onboarding values and rebase managed hashes after token fill."""
+    path = root / "00_meta" / "template-origin.json"
+    if not path.exists():
+        return  # legacy/direct test workspace without an instantiation stamp
+    try:
+        origin = json.loads(path.read_text(encoding="utf-8"))
+        manifest = origin["managed_manifest"]
+        if not isinstance(manifest, dict):
+            raise ValueError("managed_manifest is not an object")
+    except (OSError, KeyError, ValueError, json.JSONDecodeError) as exc:
+        raise AbortError(f"cannot persist onboarding values in {path}: {exc}")
+    origin["values"] = dict(values)
+    for rel in list(manifest):
+        managed = root / rel
+        if managed.is_file():
+            manifest[rel] = hashlib.sha256(managed.read_bytes()).hexdigest()
+    temp = path.with_name(path.name + ".tmp")
+    try:
+        temp.write_text(json.dumps(origin, indent=2) + "\n", encoding="utf-8")
+        os.replace(temp, path)
+    finally:
+        try:
+            temp.unlink()
+        except FileNotFoundError:
+            pass
+
+
 # --------------------------------------------------------------------------- #
 # main run                                                                      #
 # --------------------------------------------------------------------------- #
@@ -541,6 +573,11 @@ def run(root: Path, placeholders_path: Path, values_path: Path,
                 "post-substitution validator FAILED — leftover registered "
                 f"tokens remain: {json.dumps(leftovers, indent=2)}")
         write_checkpoint(root, "validate")
+
+        # Future template revisions need the exact confirmed values. Keep this
+        # inside the rollback boundary so values.json is never deleted first.
+        persist_origin_values(root, values)
+        write_checkpoint(root, "persist-origin")
 
     except BaseException as e:
         # restore the tree to its pre-flight state so it stays recoverable

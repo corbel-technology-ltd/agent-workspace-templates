@@ -13,6 +13,10 @@ counterpart is the live drift report (`python3 core/chandler.py fleet`), compute
 
 <!-- ledger: append new entries directly below this line, newest first -->
 
+2026-07-11 | pack | agnostic-check v3 packed from folder-agent-workspace (1 file(s) changed) | install to the rest of the fleet to close drift
+
+2026-07-11 | pack | onboarding-engine v7 packed from folder-agent-workspace (1 file(s) changed) | install to the rest of the fleet to close drift
+
 2026-07-11 | pack | onboarding-engine v6 packed from Folder-Agent-Workspace-Template-v6 (1 file(s) changed) | install to the rest of the fleet to close drift
 
 2026-07-11 | pack | onboarding-engine v5 packed from tmp.L20JUrXkZH (1 file(s) changed) | install to the rest of the fleet to close drift

@@ -15,7 +15,7 @@ runtime adapter to inject at session start. The workspace root is taken from the
 <<WORKSPACE_ROOT_ENV>> env var if set, else inferred from this file's location (repo root = two
 levels up from core/hooks/).
 """
-import sys, os, json, glob, re
+import sys, os, json, glob, re, datetime
 from pathlib import Path
 
 ROOT = Path(os.environ.get("<<WORKSPACE_ROOT_ENV>>") or Path(__file__).resolve().parents[2])
@@ -43,6 +43,25 @@ def sleep_nudge_threshold():
         return int(m.group(1)) if m else 10
     except Exception:
         return 10
+
+
+def template_nudge():
+    """Offline update reminder from the last explicit check; malformed state means check due."""
+    path = ROOT / "20_memory" / "_meta" / "template-check.json"
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+        if state.get("behind"):
+            commit = str(state.get("latest_commit") or "unknown")[:12]
+            return f"Template: update available at commit {commit} - run python3 tools/template-update.py --status"
+        checked = str(state["last_checked"]).replace("Z", "+00:00")
+        when = datetime.datetime.fromisoformat(checked)
+        if when.tzinfo is None:
+            when = when.replace(tzinfo=datetime.timezone.utc)
+        if datetime.datetime.now(datetime.timezone.utc) - when <= datetime.timedelta(days=7):
+            return ""
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        pass
+    return "Template: update check due - run python3 tools/template-update.py --check"
 
 
 def parse_table_lines(lines):
@@ -182,6 +201,10 @@ def main():
     if n >= sleep_nudge_threshold():
         lines.append(f"Memory: {n} journal entries await consolidation - a memory-sleep run is due "
                      "(the memory-sleep skill folds them into the depth layers).")
+
+    nudge = template_nudge()
+    if nudge:
+        lines.append(nudge)
 
     print("\n".join(lines))
     sys.exit(0)

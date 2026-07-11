@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """family-check.py - the family gate: members healthy, shared machinery in sync.
 
-Four checks across the three member templates (found beside this repo root under their
+Five checks across the three member templates (found beside this repo root under their
 assembled names or their local build names):
 
   (1) MEMBER GATES - each member's own pre-distribution gates exit 0 (scrub, okf, agnostic;
@@ -11,6 +11,8 @@ assembled names or their local build names):
       supply chain; this is the check that makes that claim true.
   (3) LICENCE PARITY - every member's LICENSE is byte-identical to the family root's.
   (4) FAMILY THREAD - every member README names the family and points at FAMILY.md.
+  (5) CHANGELOG DISCIPLINE - advisory warning when HEAD changes a member without changing the
+      family CHANGELOG.md [Unreleased] block.
 
 Exit 0 if all green, 1 otherwise. Stdlib only (the registry manifests are parsed with a minimal
 line scanner, so this gate runs even where PyYAML is absent).
@@ -34,7 +36,7 @@ MEMBERS = {
 
 GATES = {
     "folder-agent-workspace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
-                 "tools/memory-selftest.py"],
+                 "tools/memory-selftest.py", "tools/update-selftest.py"],
     "shared-context": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
                  "tools/shared-lint.py"],
     "capability-registry": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
@@ -65,6 +67,36 @@ def manifest_entries(manifest: Path):
         if m and target:
             yield target, m.group(1)
             target = None
+
+
+def unreleased_block(text):
+    match = re.search(r"^## \[Unreleased\]\s*$\n(.*?)(?=^## \[|\Z)",
+                      text, re.MULTILINE | re.DOTALL)
+    return match.group(1).strip() if match else ""
+
+
+def changelog_warning():
+    """Advisory only: a member-changing HEAD should grow the family Unreleased notes."""
+    try:
+        changed = subprocess.run(
+            ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
+            cwd=ROOT, check=True, capture_output=True, text=True).stdout.splitlines()
+        prefixes = tuple(candidate + "/" for candidates in MEMBERS.values()
+                         for candidate in candidates)
+        if not any(path.startswith(prefixes) for path in changed):
+            return ""
+        before = subprocess.run(
+            ["git", "show", "HEAD^:CHANGELOG.md"], cwd=ROOT,
+            capture_output=True, text=True).stdout
+        after = subprocess.run(
+            ["git", "show", "HEAD:CHANGELOG.md"], cwd=ROOT,
+            capture_output=True, text=True).stdout
+        if unreleased_block(before) == unreleased_block(after):
+            return ("warning: newest commit changed a family member but did not add a "
+                    "CHANGELOG.md [Unreleased] entry")
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+    return ""
 
 
 def main():
@@ -127,6 +159,10 @@ def main():
         text = readme.read_text(encoding="utf-8") if readme.is_file() else ""
         if "FAMILY.md" not in text:
             problems.append(f"{name}: README.md does not point at FAMILY.md")
+
+    warning = changelog_warning()
+    if warning:
+        print(warning)
 
     if problems:
         for pr in problems:

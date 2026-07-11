@@ -14,7 +14,7 @@ related:
 # Pre-distribution gates
 
 Three deterministic, stdlib-only gates that must be **green before this template is
-distributed**, plus one maintenance tool (`gen-related.py`). They are gates, not
+distributed**, plus the maintenance and self-test tools below. The three are gates, not
 linters: they fail loud (exit 1) so a leak, a broken knowledge edge, or vendor
 lock-in cannot ship. All are pure Python 3 standard library - no dependencies, no
 network. They read the live git tree via `git ls-files`, so they check exactly what
@@ -86,6 +86,13 @@ listing each ref as a markdown link (title derived from the target's `name:` or 
 The maintenance loop: add or change a `related:` edge, run `gen-related.py`, and
 `okf-check` passes. Do not hand-maintain the `## Related` sections - regenerate them.
 
+## `template-update.py` - safe live-instance template updates
+
+Uses the instantiation origin stamp to classify the managed spine, fetch an upstream changelog and
+commit into a local cache, replace only pristine files, and leave `.template-new` candidates beside
+customized files. `--status` is offline; `--accept <path>` records a reviewed human merge. It never
+touches instance-content paths. `update-selftest.py` proves this flow in disposable repositories.
+
 ## Running them
 
 ```bash
@@ -93,6 +100,7 @@ python3 tools/gen-related.py               # refresh the ## Related mirrors afte
 python3 tools/scrub-check.py;    echo "exit $?"
 python3 tools/okf-check.py;      echo "exit $?"
 python3 tools/agnostic-check.py; echo "exit $?"
+python3 tools/update-selftest.py; echo "exit $?"
 ```
 
 All three gates must print a clean line and exit `0` before distribution. While the

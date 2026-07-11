@@ -12,6 +12,7 @@ Run:
   python3 -m pytest .../tests/test_apply.py
   python3 .../tests/test_apply.py        # falls back to unittest runner
 """
+import hashlib
 import json
 import os
 import re
@@ -69,6 +70,20 @@ class FixtureTree:
             p = self.dir / rel
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(content, encoding="utf-8")
+        origin = {
+            "repo_url": "https://example.invalid/templates.git",
+            "member": "folder-agent-workspace",
+            "commit": "fixture",
+            "instantiated": "2026-06-27",
+            "managed_manifest": {
+                rel: hashlib.sha256((self.dir / rel).read_bytes()).hexdigest()
+                for rel in files
+            },
+            "values": {},
+        }
+        stamp = self.dir / "00_meta" / "template-origin.json"
+        stamp.parent.mkdir(parents=True, exist_ok=True)
+        stamp.write_text(json.dumps(origin, indent=2) + "\n", encoding="utf-8")
         (self.dir / "values.json").write_text(
             json.dumps(values, ensure_ascii=False), encoding="utf-8")
         # make it a git repo and track everything except values.json
@@ -78,6 +93,7 @@ class FixtureTree:
         # track the content files (NOT values.json — apply.py walks git ls-files)
         for rel in files:
             git(self.dir, "add", rel)
+        git(self.dir, "add", "00_meta/template-origin.json")
         git(self.dir, "commit", "-q", "-m", "fixture")
 
     def read(self, rel):
@@ -534,6 +550,20 @@ class TestAtomicityCleanup(unittest.TestCase):
                              msg=f"checkpoint leftovers: {leftovers}")
             # .git still intact
             self.assertTrue((fix.dir / ".git").is_dir())
+        finally:
+            fix.cleanup()
+
+    def test_values_and_filled_hashes_persist_in_origin_stamp(self):
+        fix = FixtureTree(standard_files(), GOOD_VALUES)
+        try:
+            r = run_apply(fix.dir)
+            self.assertEqual(r.returncode, 0, msg=r.stdout + r.stderr)
+            origin = json.loads(fix.read("00_meta/template-origin.json"))
+            self.assertEqual(origin["values"], GOOD_VALUES)
+            for rel, digest in origin["managed_manifest"].items():
+                self.assertEqual(
+                    digest, hashlib.sha256((fix.dir / rel).read_bytes()).hexdigest(),
+                    msg=f"origin hash was not rebased after filling {rel}")
         finally:
             fix.cleanup()
 

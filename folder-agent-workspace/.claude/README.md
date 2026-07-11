@@ -11,5 +11,7 @@ Contents:
   matching `core/hooks/` script.
 - `skills/onboarding/SKILL.md` - thin pointer to the neutral onboarding playbook
   (`core/onboarding/ONBOARDING.md`).
+- `skills/template-update/SKILL.md` - thin pointer to the neutral safe-update playbook
+  (`60_workflows/template-update.md`).
 
 `tools/agnostic-check.py` fails the build if this layer grows content beyond wiring.

@@ -9,6 +9,10 @@ Never used a terminal? Start with START-HERE.md instead.
 """
 from __future__ import print_function
 
+import datetime
+import hashlib
+import importlib.util
+import json
 import os
 import shlex
 import shutil
@@ -30,6 +34,7 @@ MEMBERS = {
     "shared-context": ["shared-context", "Shared-Context-Template"],
     "capability-registry": ["capability-registry", "Capability-Registry-Template"],
 }
+DEFAULT_REPO_URL = "https://github.com/CORBEL-Technology/agent-workspace-templates.git"
 
 
 def fail(msg):
@@ -61,6 +66,55 @@ def check_git_identity():
             "No workspace files were created.")
 
 
+def load_managed_paths():
+    """Load the one path policy shipped with the workspace update tool."""
+    policy = find_member("folder-agent-workspace") / "tools" / "template_paths.py"
+    spec = importlib.util.spec_from_file_location("template_paths", policy)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def source_identity():
+    """Return (repo URL, HEAD), degrading cleanly for an extracted source archive."""
+    try:
+        top = subprocess.run(
+            ["git", "-C", str(HERE), "rev-parse", "--show-toplevel"],
+            check=True, capture_output=True, text=True).stdout.strip()
+        if Path(top).resolve() != HERE.resolve():
+            raise subprocess.CalledProcessError(1, "git rev-parse")
+        commit = subprocess.run(
+            ["git", "-C", str(HERE), "rev-parse", "HEAD"],
+            check=True, capture_output=True, text=True).stdout.strip()
+        remote = subprocess.run(
+            ["git", "-C", str(HERE), "remote", "get-url", "origin"],
+            capture_output=True, text=True)
+        repo_url = remote.stdout.strip() if remote.returncode == 0 else DEFAULT_REPO_URL
+        return repo_url or DEFAULT_REPO_URL, commit
+    except (OSError, subprocess.CalledProcessError):
+        return DEFAULT_REPO_URL, "unknown"
+
+
+def write_origin_stamp(stage, member):
+    policy = load_managed_paths()
+    repo_url, commit = source_identity()
+    manifest = {
+        rel: hashlib.sha256((stage / rel).read_bytes()).hexdigest()
+        for rel in policy.managed_files(stage)
+    }
+    stamp = {
+        "repo_url": repo_url,
+        "member": member,
+        "commit": commit,
+        "instantiated": datetime.date.today().isoformat(),
+        "managed_manifest": manifest,
+        "values": {},
+    }
+    target = stage / "00_meta" / "template-origin.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(stamp, indent=2) + "\n", encoding="utf-8")
+
+
 def main():
     if len(sys.argv) != 3:
         fail("use exactly: python3 instantiate.py <member> <destination>\n"
@@ -90,6 +144,7 @@ def main():
         shutil.copytree(
             src, stage, dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(".git", "__pycache__", ".pytest_cache", ".venv"))
+        write_origin_stamp(stage, name)
         subprocess.run(["git", "init", "-q"], cwd=stage, check=True)
         subprocess.run(["git", "add", "-A"], cwd=stage, check=True)
         subprocess.run(

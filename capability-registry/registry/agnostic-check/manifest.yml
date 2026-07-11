@@ -1,11 +1,11 @@
 name: agnostic-check
-version: 2
+version: 3
 description: Agent-agnostic gate - no vendor term outside the adapter layer; adapter
   pointers stay thin.
-provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace workspace
-  template
+provenance: FAW family shared tooling; upstream home is the Folder-Agent-Workspace
+  workspace template
 requires: []
 files:
 - src: files/agnostic-check.py
   target: tools/agnostic-check.py
-  sha256: 788c0f575cbf052bac8e3e713a1ded679cafd813fcd5404d8983b41b2747b43f
+  sha256: 8c6a58e1b46129e02c88e75e99d6975cceaae18bbc7d6dd7f7b819c8b73ad086

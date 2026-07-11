@@ -60,6 +60,8 @@ graduates from.
 - [`memory-sleep.md`](memory-sleep.md) - the deep, bounded-LLM synthesis pass (schema abstraction,
   subconscious world-model, trend detection). `awaits-inputs`: the reaper suffices until there is
   real journal volume to synthesise.
+- [`template-update.md`](template-update.md) - the non-clobbering check, inspect, apply, merge, and
+  accept flow for bringing template-managed spine changes into a live instance.
 
 ## How they connect
 
