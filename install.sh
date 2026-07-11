@@ -2,15 +2,33 @@
 # Agent-Workspace-Templates one-command install.
 #
 #   curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh
-#   curl -fsSL .../install.sh | sh -s -- ~/my-workspace     # choose the workspace path
+#       -> a folder-agent-workspace at ~/my-workspace (the common case)
+#
+#   ... | sh -s -- ~/second-workspace                      # another workspace, your path
+#   ... | sh -s -- shared-context                          # the shared store  -> ~/my-shared
+#   ... | sh -s -- capability-registry                     # the registry      -> ~/my-registry
+#   ... | sh -s -- shared-context ~/our-brain              # member AND path
 #
 # What it does, in order (and nothing else): check git + Python 3.8+, clone this repository
 # into ./agent-workspace-templates (or reuse it), make sure PyYAML is importable (pip --user
-# if not), instantiate a fresh workspace, and print the next step. POSIX systems (Linux/Mac);
-# on Windows follow START-HERE.md instead.
+# if not), instantiate the chosen member, and print the next step. POSIX systems (Linux/Mac
+# and Windows via WSL); see START-HERE.md for the walkthrough.
 set -e
 
-TARGET="${1:-$HOME/my-workspace}"
+MEMBER="folder-agent-workspace"
+TARGET=""
+case "${1:-}" in
+    folder-agent-workspace|shared-context|capability-registry) MEMBER="$1"; TARGET="${2:-}" ;;
+    "") ;;
+    *) TARGET="$1" ;;   # a path with the default member
+esac
+if [ -z "$TARGET" ]; then
+    case "$MEMBER" in
+        folder-agent-workspace) TARGET="$HOME/my-workspace" ;;
+        shared-context)         TARGET="$HOME/my-shared" ;;
+        capability-registry)    TARGET="$HOME/my-registry" ;;
+    esac
+fi
 REPO_URL="https://github.com/CORBEL-Technology/agent-workspace-templates.git"
 REPO_DIR="agent-workspace-templates"
 
@@ -43,10 +61,10 @@ if ! "$PY" -c 'import yaml' >/dev/null 2>&1; then
         || die "could not install PyYAML. Run: $PY -m pip install --user PyYAML  then re-run this command."
 fi
 
-[ -e "$TARGET" ] && die "$TARGET already exists - choose another path: ... | sh -s -- ~/another-name"
+[ -e "$TARGET" ] && die "$TARGET already exists - choose another path: ... | sh -s -- $MEMBER ~/another-name"
 
-say "-> creating your workspace at $TARGET"
-"$PY" "$REPO_DIR/instantiate.py" folder-agent-workspace "$TARGET"
+say "-> creating your $MEMBER at $TARGET"
+"$PY" "$REPO_DIR/instantiate.py" "$MEMBER" "$TARGET"
 
 say ""
 say "Done. Next step:"

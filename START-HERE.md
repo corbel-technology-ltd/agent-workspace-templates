@@ -167,12 +167,15 @@ loop in about two seconds.
 One workspace is plenty to start. The moment you want a second (say, one for work and one for
 personal), add the **shared context store** so both know who you are without repeating yourself:
 
-**1. Create the store and a second workspace** (from the `Agent-Workspace-Templates` folder):
+**1. Create the store and a second workspace** — same one-liner, different arguments:
 
 ```text
-python3 instantiate.py shared-context my-shared
-python3 instantiate.py folder-agent-workspace my-workspace-two
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh -s -- shared-context
+curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh -s -- ~/my-workspace-two
 ```
+
+(Or from the downloaded folder: `python3 instantiate.py shared-context ~/my-shared` and
+`python3 instantiate.py folder-agent-workspace ~/my-workspace-two`.)
 
 **2. Onboard the store.** Open `my-shared` in your agent runtime (`cd my-shared` then `claude`)
 and say "Read AGENTS.md and introduce yourself" - it fills in who you are once: your identity,

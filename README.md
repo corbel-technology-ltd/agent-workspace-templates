@@ -23,29 +23,49 @@ Each stands alone; together they click. The whole story, the composition diagram
 take-just-one-part paths: **[FAMILY.md](FAMILY.md)**. Agents start at
 **[AGENTS.md](AGENTS.md)** - the family-root constitution.
 
-## Quick start
+## Install
 
-One command (Linux/Mac) - checks git + Python 3.8+, fetches everything, installs the one
-dependency, and creates your workspace:
+**Linux / Mac** — one command; checks git + Python 3.8+ (telling you exactly what to install if
+missing), fetches everything, installs the one dependency, creates your workspace:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/CORBEL-Technology/agent-workspace-templates/main/install.sh | sh
 ```
 
-(Pick your own path with `... | sh -s -- ~/another-name`. Windows: one-time `wsl --install`
-first, then the same command inside Ubuntu - see [START-HERE.md](START-HERE.md).)
+**Windows** — one extra command, once. In PowerShell (run as administrator): `wsl --install`,
+restart, then paste the Linux/Mac command into the Ubuntu window that appears. That window is
+your terminal from now on. (Native Windows without WSL is not supported — the workspace would
+create but its guard hooks would not fire.)
 
-Or by hand:
+**Never used a terminal?** [START-HERE.md](START-HERE.md) spells out every step, nothing
+assumed, ~15 minutes.
+
+### Choosing what to install
+
+The default command above creates a **workspace** — the thing most people want, and the thing
+you may eventually have several of. The other members install the same way:
+
+| You want | Command ends with | You get |
+|---|---|---|
+| A workspace (the default; run again with a new name for each additional one) | `\| sh` or `\| sh -s -- ~/second-workspace` | `folder-agent-workspace` at `~/my-workspace` (or your path) |
+| The shared brain above several workspaces | `\| sh -s -- shared-context` | `shared-context` at `~/my-shared` |
+| The versioned tooling registry | `\| sh -s -- capability-registry` | `capability-registry` at `~/my-registry` |
+
+Each stands alone; together they click ([FAMILY.md](FAMILY.md)). Typical growth path: one
+workspace → a second workspace + the shared store → the registry once tooling is worth
+versioning.
+
+<details>
+<summary>Manual install (no curl-pipe)</summary>
 
 ```bash
 git clone https://github.com/CORBEL-Technology/agent-workspace-templates.git && cd agent-workspace-templates
 python3 -m pip install --user "PyYAML>=6,<7"
-python3 instantiate.py folder-agent-workspace ~/my-workspace   # copy a member out into a fresh git repo
-cd ~/my-workspace                                   # open it in your agent runtime;
-                                                    # onboarding runs on first session
+python3 instantiate.py folder-agent-workspace ~/my-workspace   # or shared-context / capability-registry
+cd ~/my-workspace   # open it in your agent runtime; onboarding runs on first session
 ```
 
-Or take the whole family as-is and instantiate members as you need them.
+</details>
 
 ## Health
 
