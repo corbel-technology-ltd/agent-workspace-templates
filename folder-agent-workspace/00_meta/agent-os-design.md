@@ -61,52 +61,6 @@ event list, block semantics, and configuration surface for each wired runtime ar
 - **No write-only dead logs** - wire a consumer in the same step, or don't write.
 - **Notify only when a human is needed.**
 
-## Staged plan
-
-### NOW (built / shipped with the template)
-
-- **`AGENTS.md`** is the full constitution (operating loop, proactivity + prioritisation hierarchy,
-  sensor doctrine, the OS map, definition of done). Judgment only.
-
-- **`50_registers/improvement-backlog.md`** - where proactivity output lands, with a prose priority
-  tag (do-now / suggest / log / ignore).
-
-- **Reflex hooks**, logic in `core/hooks/`, wired per runtime (installing or changing wiring edits
-  runtime settings, so it needs operator approval):
-  1. **Journal-immutability guard** (pre-tool-use) - block any modify/overwrite/delete targeting
-     `20_memory/journal/*`. Turns the load-bearing append-only invariant into a reflex. Narrow
-     matcher; silent unless it blocks. An optional git pre-commit guard (`core/git-hooks/`) backs it
-     at commit time for any runtime.
-  2. **Onboarding gate** (session start) - while the `.uninitialised` sentinel exists, route the
-     agent to the onboarding playbook before any other work.
-  3. **Session brief** (session start) - a boot-orientation block (who you are, load shared context,
-     read `00_meta/staging.md`, re-verify the newest handover) plus open `decision-queue` items and
-     the per-project `## Open` loops aggregated from `80_projects/*/loops.md` (`## Closed` excluded).
-     A few lines; situational awareness at near-zero cost.
-  4. **Session digest** (session end) - append one journal event (what changed, decisions, files) so
-     the session is captured as truth for the reaper. Silent (writes to `journal/`).
-  5. **Reaper** (session end) - the deterministic fast memory pass.
-  6. **Registry-drift sensor** (session end, advisory) - flag uncatalogued ops components.
-
-### AWAIT-NEED (specced, switch on when the input exists)
-
-- A prompt-submit task-router (deterministic classify) - once prompt volume justifies it.
-- Post-tool-use metric/data-stream detection + a `metric-scout` subagent - once the journal has real
-  volume for it to scan (a subagent with no journal to read is pointless now).
-
-- A file-changed data-stream scout - once there are real data streams to map.
-- Playbooks - graduate a `60_workflows/` spec into `core/` (surfaced as a runtime skill) when it is
-  invoked repeatedly.
-- A pre-compaction snapshot - useful insurance once sessions carry heavy context.
-
-### DEFER (no data / over-strict)
-
-- Any statistical graduation apparatus (no events logged yet - use plain counts if/when fed).
-- A broad `PreToolUse` BLOCK on send/publish/push (over-strict vs the gate's CONFIRM; match narrowly
-  on `--force` / protected branches only, and only once such tooling exists here).
-
-- `risk-reviewer` / `simplifier` subagents - reuse a review skill / a doctrine line first.
-
 ## Prioritisation (prose hierarchy, not a formula)
 
 Proactivity without prioritisation is noise. Rank by, in order: **blocking** (unblocks the founder or
@@ -116,30 +70,6 @@ Within that, gate each surfaced improvement: **do-now** (clearly high-impact + l
 score with inputs we don't yet measure - that reads precise and gets hand-waved. Promote to a real
 score only when the inputs (confidence, recurrence, cost-to-delay) are actually tracked.
 
-## Emergent-intelligence refinements
-
-The aim: a small artificial ecology where observations are born cheaply, patterns compete for
-survival, useful priors bias attention, and only repeatedly-useful behaviours graduate to policy or
-automation. Folded in as doctrine/targets, not new infrastructure (they activate with the await-need
-feedback hooks):
-
-- **Observation budget (3 levels).** L1 raw event: always append cheap facts (command, file, test
-  result, duration). L2 semantic observation: only when anomalous / repeated / risky / inefficient /
-  goal-relevant. L3 pattern candidate: only by deterministic fold after thresholds. Stops narrating
-  every tiny thing.
-- **Anti-superstition feedback.** The feedback hooks MUST log `prior.used` and `prior.outcome` as
-  SEPARATE events; never self-validate a prior because an action was taken. Confidence moves on a
-  real outcome (caught regression / confirmed signal), not on mere use. See
-  `20_memory/subconscious/README.md`.
-- **Nudge limits.** Priors enter context as hypotheses only: ≤3 per turn, ≤80 words, confidence
-  >~0.55, source-linked, never cited as fact.
-- **Promotion ladder.** observation→pattern (≥3 occurrences / 2+ distinct sessions / 14d / avg-conf
-  ≥0.6) → prior (≥5 / 45d / ≥0.7 / 2+ successful uses) → **policy candidate (human review required)**.
-  Decay: half-life ~14d; archive below conf 0.25 or unused 30d. These are targets; wire into
-  `homeostasis.yml` only when the journal actually feeds them (no data yet - plain counts until then).
-- **Prior→policy graduation requires human review** unless purely local, reversible, low-risk - the
-  gate, applied to self-modification.
-
 ## What stays in `AGENTS.md` vs moves out
 
 - **Stays (judgment):** mission, the one vocabulary, hard invariants, the gate's *intent*, the
@@ -147,6 +77,18 @@ feedback hooks):
 
 - **Moves out (enforcement/inventory):** the gate's *enforcement* → a `PreToolUse` hook; long
   playbooks → skills; heavy audits → subagents; events/metrics → the journal + registers.
+
+## Load policy
+
+The staged build status and the emergent-intelligence learning-system detail are situational, not
+needed every time this design is consulted, so they live in a concept folder rather than forcing
+every reader through the full roadmap and the speculative refinements. Map:
+[`00-INDEX.md`](agent-os-design/00-INDEX.md).
+
+| File | Contains | Load when |
+| --- | --- | --- |
+| `agent-os-design/01-staged-plan.md` | what's built (NOW), what awaits an input (AWAIT-NEED), what's deliberately deferred (DEFER) | checking hook build status, or deciding what to build/wire next |
+| `agent-os-design/02-emergent-intelligence.md` | observation budget, anti-superstition feedback, nudge limits, the promotion ladder | working on the subconscious/learning system or `homeostasis.yml` |
 
 ## Related
 

@@ -1,0 +1,23 @@
+# decomposition-check exceptions - one per line: <path>  # <why the keep-intact policy applies>
+#
+# tools/decomposition-check.py reads this list and FAILS if a row is stale (path not tracked) or
+# reasonless (no `#`-delimited reason), so the exception list stays honest instead of turning into
+# a dumping ground.
+#
+# Format: one tracked repo-relative path per line, followed by `#` and a reason. Blank lines and
+# lines starting with `#` are ignored (comments/headers).
+#
+# A file that already lives in a concept folder (a directory with 00-INDEX.md) has the same ceiling
+# as other prose and does not need a row merely because it is a concept note. Reserve this list for
+# genuinely oversized files covered by a keep-intact class (see
+# 10_doctrine/context-decomposition.md).
+#
+# The template starts with only reasoned rows for genuinely oversized template files. Add a row
+# only when a real file earns one, with a reason a reviewer can judge on its own terms:
+#   some/tracked/path.md  # which keep-intact class applies and why
+00_meta/design-spec.md  # single founding blueprint (type: design-spec) read top-to-bottom as one decisions->verdict->structure->deferred-scope narrative; most sections are 4-10 lines and only ever read together (anti-confetti), and the load-bearing parts (memory, vocabulary) already delegate to their canonical files elsewhere - matches doctrine's 'coherent specifications' keep-intact class
+00_meta/memory-architecture.md  # coherent single-purpose design-spec (frontmatter type: design-spec, one owner/status/layer) whose sections are mutually-referential facets of one architecture - four-layer model, activation/hysteresis formulas, two-pass reaper/sleep consolidation, subconscious graph, retrieval scoring, and trust tiers all cross-reference each other rather than standing as independently-needed notes; no section reaches standalone "substantial note" scale (shortest are 2-7 lines of context/definitions, not retrievable sub-topics); a lighter operator-facing view already exists separately at 20_memory/README.md; at 162 lines a concept-folder index would not clearly outperform the intact spec - conservative keep-intact clause applies, no clear decomposition win
+60_workflows/memory-sleep.md  # single-purpose workflow contract (one pass, paired 1:1 with memory-reaper.md); 154 lines is a marginal overage from the LLM-contract+validator+playbook being one coupled procedure, not multiple concepts - all inbound refs load it as one unit and the smallest candidate sections (cadence, guardrails) are under the 30-line anti-confetti floor
+core/onboarding/ONBOARDING.md  # single-procedure, checkpointed playbook (Steps A-H run in strict sequence over shared on-disk state - sentinel, values.json, apply.py snapshots); the tokens table, derivation rules, resumability cheatsheet and guardrails are facets of that one workflow, not independent retrieval targets, so splitting would scatter a live procedure an agent must follow in order for no retrieval win (D1-D3 absent; keep-intact clause for single-procedure playbooks/workflow contracts applies).
+core/onboarding/apply.py  # atomic code engine: one tightly-coupled deterministic onboarding transaction (registry load -> validate -> context-aware substitute -> leftover-check -> atomic snapshot/checkpoint), invoked by this exact path from tools/update-selftest.py, core/hooks/onboarding-gate.py and the runtime onboarding skill pointer; under the doctrine's keep-intact class, a module split is a separate refactor outside this decomposition pass
+core/onboarding/tests/test_apply.py  # atomic test suite: one test module for apply.py whose TestCase classes share module-level fixtures (FixtureTree, run_apply, git, GOOD_VALUES, standard_files) and are collected together; under the doctrine's keep-intact class, a module split is a separate refactor outside this decomposition pass

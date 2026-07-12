@@ -9,6 +9,15 @@ All notable changes to the Agent-Workspace-Templates family are documented here.
 
 - A non-clobbering live-instance template update channel: origin manifests, cached update checks,
   pacnew-style apply/accept semantics, a seven-day session nudge, and end-to-end proof.
+- A context-decomposition doctrine and constitution rule: large durable context is broken into
+  concept folders behind an index map so an agent loads exactly what a task needs, with a
+  decomposition test, keep-intact classes, an anti-confetti rule, and a backdating procedure for
+  existing files. Enforced by a `decomposition-check` gate (wired into `family-check`) with a
+  reasoned exceptions file and a disposable-repo self-test.
+- A subagent-dispatch constitution rule: each subagent gets one bounded task and an explicitly
+  chosen model tier matched to its difficulty, so bulk or parallel work never silently inherits the
+  session model; dispatch depth and concurrency stay bounded. Runtime-conditional where the runtime
+  exposes per-subagent model selection.
 
 ## [0.6.0] - 2026-07-11
 

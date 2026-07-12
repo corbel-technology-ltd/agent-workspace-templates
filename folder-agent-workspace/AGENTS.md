@@ -143,6 +143,14 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 7. The graph/index is a map, not the terrain. On conflict, the source file wins.
 8. **Design the spine up front; add leaves only when their inputs exist.** No JIT dormant-mechanism
    table, and no speculative governance apparatus either.
+9. **Dispatch subagents task- and capability-specifically.** Give each one bounded task. Where the
+   runtime supports per-subagent model selection, pin the cheapest justified tier using
+   `10_doctrine/model-selection.md`. Keep dispatch depth to 2 and concurrency to 3; these are this
+   rule's caps, honoured through shared context when one is wired.
+10. **Large durable context is decomposed into concept folders behind an index map** so context
+    loads granularly (`10_doctrine/context-decomposition.md`; fill-in template at
+    `40_templates/concept-folder/`). `tools/decomposition-check.py` enforces the gate; exceptions
+    live in `tools/decomposition-exceptions.txt` with reasons.
 
 ## Context layers
 

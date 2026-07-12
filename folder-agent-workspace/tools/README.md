@@ -1,24 +1,23 @@
 ---
 id: <<workspace_slug>>.tools.readme
-name: Pre-distribution gates & maintenance - scrub-check, okf-check, gen-related
+name: Pre-distribution gates & maintenance
 type: doc
 layer: C3
 status: current
 owner: shared
 created: <<CREATED_DATE>>
-tags: [tools, gates, distribution, scrub, okf, frontmatter]
+tags: [tools, gates, distribution, scrub, okf, frontmatter, decomposition]
 related:
   - {ref: AGENTS.md, dimension: why, polarity: explains}
 ---
 
 # Pre-distribution gates
 
-Three deterministic, stdlib-only gates that must be **green before this template is
-distributed**, plus the maintenance and self-test tools below. The three are gates, not
-linters: they fail loud (exit 1) so a leak, a broken knowledge edge, or vendor
-lock-in cannot ship. All are pure Python 3 standard library - no dependencies, no
-network. They read the live git tree via `git ls-files`, so they check exactly what
-would be distributed.
+The deterministic, stdlib-only gates below must be **green before this template is distributed**.
+They are gates, not linters: they fail loud (exit 1) so a leak, broken knowledge edge, runtime
+lock-in, or oversized context file cannot ship. The maintenance and self-test tools are also pure
+Python 3 standard library - no dependencies, no network. The gates read the live git tree via
+`git ls-files`, so they check exactly what would be distributed.
 
 The contract they enforce is set by the root manifest, [`AGENTS.md`](../AGENTS.md)
 (OKF v0.1 compatibility + the typed-edge / body-link mirroring convention).
@@ -93,6 +92,36 @@ commit into a local cache, replace only pristine files, and leave `.template-new
 customized files. `--status` is offline; `--accept <path>` records a reviewed human merge. It never
 touches instance-content paths. `update-selftest.py` proves this flow in disposable repositories.
 
+## `decomposition-check.py` - context decomposition (concept folders with index maps)
+
+A workspace health gate for the decomposition doctrine
+([`10_doctrine/context-decomposition.md`](../10_doctrine/context-decomposition.md)): large durable
+context decomposes into one-concept notes behind an index map so context loads granularly. Every
+git-tracked file is in scope by default; exceptions are explicit, per-file, and must carry a reason
+in `tools/decomposition-exceptions.txt`.
+
+Five checks:
+
+1. **Prose size** - a `.md` file outside the structural exemptions may not exceed the doctrine's
+   150-line or 12,000-character ceiling unless it has a necessary exceptions entry. Concept notes
+   have the same ceilings.
+2. **Code size** - recognised code files (`.py`, `.js`, `.sh`, `.ts`, `.tsx`, `.jsx`, `.mjs`,
+   `.cjs`, `.rs`, `.go`, `.rb`, `.java`, `.c`, `.h`, `.cpp`, `.hpp`, `.bash`) may not exceed the
+   500-line ceiling unless an exception cites the atomic code/test-suite keep-intact class.
+3. **Exception hygiene** - every row must be unique, reasoned, tracked, necessary, and outside a
+   structural exemption; duplicate, stale, reasonless, and unnecessary rows fail.
+4. **Owning index** - every concept note must have a genuine top-level frontmatter `status:` key
+   and an actual Markdown link or related-edge ref to its owning `00-INDEX.md`. This still applies
+   in exempt directories and to excepted notes.
+5. **Readable inputs** - an unreadable tracked Markdown or recognised code file is a violation.
+
+Structural exemptions mirror the doctrine's keep-whole classes: `AGENTS.md`, `50_registers/**`,
+`20_memory/**`, `90_runs/**`, `30_schemas/**`, `40_templates/**`, `CHANGELOG.md`, and
+non-code/non-Markdown files. Runtime pointer files need no size exemption because the adapter-purity
+gate already caps them to a few lines.
+
+Output: one violation line per hit. Exit `1` on any violation, `0` if clean.
+
 ## Running them
 
 ```bash
@@ -100,10 +129,13 @@ python3 tools/gen-related.py               # refresh the ## Related mirrors afte
 python3 tools/scrub-check.py;    echo "exit $?"
 python3 tools/okf-check.py;      echo "exit $?"
 python3 tools/agnostic-check.py; echo "exit $?"
+python3 tools/memory-selftest.py; echo "exit $?"
 python3 tools/update-selftest.py; echo "exit $?"
+python3 tools/decomposition-check.py; echo "exit $?"
+python3 tools/decomposition-selftest.py; echo "exit $?"
 ```
 
-All three gates must print a clean line and exit `0` before distribution. While the
+All gates must print a clean line and exit `0` before distribution. While the
 build is in progress a gate may legitimately exit `1` (mirroring not yet completed,
 scrub pass unfinished) - that is expected mid-build. The release gate is: **all
 green**.

@@ -36,7 +36,8 @@ MEMBERS = {
 
 GATES = {
     "folder-agent-workspace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
-                 "tools/memory-selftest.py", "tools/update-selftest.py"],
+                 "tools/memory-selftest.py", "tools/update-selftest.py",
+                 "tools/decomposition-check.py", "tools/decomposition-selftest.py"],
     "shared-context": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
                  "tools/shared-lint.py"],
     "capability-registry": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
