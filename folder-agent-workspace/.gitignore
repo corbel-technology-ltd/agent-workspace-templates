@@ -6,6 +6,7 @@
 .env
 .env.*
 .venv/
+.worktrees/
 __pycache__/
 *.pyc
 # local binaries; unzip in place when needed

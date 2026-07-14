@@ -54,6 +54,10 @@ leaves grow on demand, so these files are deliberately complete, not stubs. When
   from bloating, the reaper contract, and what is kept deliberately crude. The doctrine behind the
   memory model in [`../20_memory/README.md`](../20_memory/README.md).
 
+- [`context-decomposition.md`](context-decomposition.md) - the rule for splitting large durable
+  context into one-concept notes behind an index map, including ceilings, keep-whole classes and
+  the anti-confetti test.
+
 - [`non-goals.md`](non-goals.md) - the hard rails: what the system must **not** do (auto-send,
   auto-publish, auto-pay, auto-sign, replace founder judgment, swamp memory). Preparation is
   automated; authority stays gated.

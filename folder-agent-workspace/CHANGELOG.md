@@ -2,6 +2,16 @@
 
 Template-level history (what changed in Folder-Agent-Workspace itself, not in any instance). Newest first.
 
+## 0.6 - 2026-07-14 - repeated-update safety
+
+- Preserved accepted local customisations across repeated template updates by separating reviewed
+  upstream baselines from accepted local hashes; local-only paths no longer acquire synthetic
+  baselines.
+- Documented the two-hash state model, reviewed versus unreviewed status, candidate acceptance and
+  the exact conditions under which apply emits `.template-new`.
+- Completed discoverability for the context-decomposition doctrine and concept-folder template,
+  registered both decomposition gates, and added `.worktrees/` to the distributed ignore rules.
+
 ## 0.5 - 2026-07-10 - taxonomy glossary + knowledge-pack template
 
 - **`30_schemas/taxonomy.md`** (new): the living glossary of concept types (10 families) and

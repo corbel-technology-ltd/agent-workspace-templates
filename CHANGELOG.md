@@ -19,6 +19,12 @@ All notable changes to the Agent-Workspace-Templates family are documented here.
   session model; dispatch depth and concurrency stay bounded. Runtime-conditional where the runtime
   exposes per-subagent model selection.
 
+### Fixed
+
+- Preserved accepted local customisations across repeated template updates by separating reviewed
+  upstream baselines from accepted local hashes; local-only paths no longer acquire synthetic
+  baselines.
+
 ## [0.6.0] - 2026-07-11
 
 ### Added

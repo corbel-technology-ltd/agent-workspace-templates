@@ -50,6 +50,9 @@ agent) fills fields rather than reinventing structure each time. Where each kind
   feeding atoms and opportunities.
 - [`design-system.md`](design-system.md) - a blank **DESIGN.md** (AI-readable design tokens + brand
   rationale), copied into a client/project repo as `DESIGN.md`.
+- [`concept-folder/`](concept-folder/README.md) - a fill-in index map plus one-concept note scaffold
+  for decomposing large durable context under the
+  [`context-decomposition`](../10_doctrine/context-decomposition.md) rule.
 - [`knowledge-pack/`](knowledge-pack/README.md) - a stampable **knowledge corpus** for a project
   repo (manifest, type/relation registries, one-concept-per-file `concepts/`), copied into the
   target repo as `knowledge/`. Vocabulary: [`../30_schemas/taxonomy.md`](../30_schemas/taxonomy.md).

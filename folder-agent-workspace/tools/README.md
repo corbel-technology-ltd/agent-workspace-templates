@@ -87,10 +87,15 @@ The maintenance loop: add or change a `related:` edge, run `gen-related.py`, and
 
 ## `template-update.py` - safe live-instance template updates
 
-Uses the instantiation origin stamp to classify the managed spine, fetch an upstream changelog and
-commit into a local cache, replace only pristine files, and leave `.template-new` candidates beside
-customized files. `--status` is offline; `--accept <path>` records a reviewed human merge. It never
-touches instance-content paths. `update-selftest.py` proves this flow in disposable repositories.
+Uses the instantiation origin stamp to classify the managed spine and fetch updates. Two independent
+hashes make repeated cycles safe: `managed_manifest[path]` is the last reviewed upstream candidate,
+and `accepted_local_manifest[path]` exists only when the reviewed local result differs.
+`accepted-customized` is reviewed and protected; `customized` is unreviewed. Accepting with a
+candidate advances the upstream base to the candidate hash and records the local result separately;
+accepting without a candidate leaves the existing upstream base intact. Local-only paths stay outside
+updater state until upstream introduces the same path. Apply emits `.template-new` only for a real
+upstream delta or a manifest-backed missing file. `--status` is offline, and the tool never touches
+instance-content paths. `update-selftest.py` proves this flow in disposable repositories.
 
 ## `decomposition-check.py` - context decomposition (concept folders with index maps)
 

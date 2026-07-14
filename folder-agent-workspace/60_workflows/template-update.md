@@ -18,6 +18,17 @@ Use this playbook when the session brief says a template check is due or an upda
 The tool may be called by cron, but this workspace never creates or enables a schedule itself.
 Scheduling is a separate operator decision under doctrine.
 
+## State across repeated updates
+
+The origin stamp keeps two independent hashes. `managed_manifest[path]` is the last reviewed
+upstream candidate; `accepted_local_manifest[path]` exists only when the reviewed local result
+differs. Status therefore distinguishes `accepted-customized` (reviewed and protected) from
+`customized` (unreviewed). Accepting with a candidate advances the upstream base to the candidate
+hash and records the local result separately; accepting without a candidate leaves the existing
+upstream base intact. Local-only paths stay outside updater state until upstream introduces the
+same path. Apply emits `.template-new` only for a real upstream delta or a manifest-backed missing
+file.
+
 ## Run the update
 
 1. From the workspace root, run `python3 tools/template-update.py --check`. Exit `0` means current;
