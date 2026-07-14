@@ -77,6 +77,9 @@ def main():
             instance = temp / "instance"
             run([sys.executable, "instantiate.py", "folder-agent-workspace", str(instance)],
                 cwd=family, env=env)
+            origin_path = instance / "00_meta/template-origin.json"
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+            new_stamp_has_empty_accepted = origin.get("accepted_local_manifest") == {}
             (instance / "values.json").write_text(json.dumps(VALUES), encoding="utf-8")
             run([sys.executable, "core/onboarding/apply.py", "--root", "."],
                 cwd=instance, env=env)
@@ -178,20 +181,219 @@ def main():
             require(origin["managed_manifest"][custom_rel] == custom_baseline,
                     "customized manifest hash advanced before human acceptance")
 
-            custom.write_text(pacnew.read_text(encoding="utf-8") + "\nLocal merged line.\n",
-                              encoding="utf-8")
+            u2_candidate_digest = digest(pacnew)
+            custom.write_text(
+                pacnew.read_text(encoding="utf-8") + "\nLocal merged line.\n",
+                encoding="utf-8",
+            )
+            local_l2 = custom.read_bytes()
             run([sys.executable, "tools/template-update.py", "--accept", custom_rel],
                 cwd=instance, env=env)
-            require(not pacnew.exists(), "--accept did not remove .template-new")
-            origin = json.loads((instance / "00_meta/template-origin.json").read_text())
-            require(origin["managed_manifest"][custom_rel] == digest(custom),
-                    "--accept did not record the merged hash")
+
+            upstream_custom = family / "folder-agent-workspace" / custom_rel
+            upstream_custom.write_text(
+                upstream_custom.read_text(encoding="utf-8")
+                + "\nUpstream generation: U3.\n",
+                encoding="utf-8",
+            )
+            git(family, env, "add", f"folder-agent-workspace/{custom_rel}")
+            git(family, env, "commit", "-q", "-m", "third upstream generation")
+            third = git(family, env, "rev-parse", "HEAD").stdout.strip()
+            git(family, env, "push", "-q", "origin", "main")
+
+            run(
+                [sys.executable, "tools/template-update.py", "--check"],
+                cwd=instance,
+                env=env,
+                expected=10,
+            )
+            run(
+                [sys.executable, "tools/template-update.py", "--apply"],
+                cwd=instance,
+                env=env,
+            )
+
+            require(
+                custom.read_bytes() == local_l2,
+                "accepted local merge was clobbered by the next upstream update",
+            )
+            pacnew = custom.with_name(custom.name + ".template-new")
+            require(
+                pacnew.is_file()
+                and "Upstream generation: U3." in pacnew.read_text(encoding="utf-8"),
+                "third upstream generation was not isolated as .template-new",
+            )
+
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+            require(
+                origin["managed_manifest"][custom_rel] == u2_candidate_digest,
+                "pending U3 incorrectly advanced the accepted upstream base",
+            )
+            require(
+                origin["accepted_local_manifest"][custom_rel] == digest(custom),
+                "accepted local hash was not retained while U3 awaited review",
+            )
+            require(
+                new_stamp_has_empty_accepted,
+                "new origin stamp omitted an empty accepted-local manifest",
+            )
+
+            custom.write_text(
+                pacnew.read_text(encoding="utf-8") + "\nLocal merged U3 line.\n",
+                encoding="utf-8",
+            )
+            run(
+                [sys.executable, "tools/template-update.py", "--accept", custom_rel],
+                cwd=instance,
+                env=env,
+            )
+
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+            origin.pop("accepted_local_manifest", None)
+            origin_path.write_text(json.dumps(origin, indent=2) + "\n", encoding="utf-8")
+            legacy = run(
+                [sys.executable, "tools/template-update.py", "--status"],
+                cwd=instance,
+                env=env,
+            ).stdout
+            require("Template status" in legacy, "legacy origin without accepted-local map did not load")
+            run(
+                [sys.executable, "tools/template-update.py", "--accept", custom_rel],
+                cwd=instance,
+                env=env,
+            )
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+            accepted_local = origin.get("accepted_local_manifest")
+            require(
+                isinstance(accepted_local, dict)
+                and accepted_local.get(custom_rel) == digest(custom),
+                "post-legacy acceptance did not restore the accepted-local map",
+            )
+
+            local_only_rel = "40_templates/local-only-proof.md"
+            local_only = instance / local_only_rel
+            local_only.write_text("local-only content\n", encoding="utf-8")
+            status = run(
+                [sys.executable, "tools/template-update.py", "--status"],
+                cwd=instance,
+                env=env,
+            ).stdout
+            require(local_only_rel not in status, "local-only path appeared in updater status")
+            refused = run(
+                [sys.executable, "tools/template-update.py", "--accept", local_only_rel],
+                cwd=instance,
+                env=env,
+                expected=1,
+            )
+            require(
+                "cannot accept local-only path without an upstream candidate" in refused.stderr,
+                "local-only --accept did not refuse a synthetic baseline",
+            )
+
+            upstream_local_only = family / "folder-agent-workspace" / local_only_rel
+            upstream_local_only.write_text("upstream local-only collision\n", encoding="utf-8")
+            git(family, env, "add", f"folder-agent-workspace/{local_only_rel}")
+            git(family, env, "commit", "-q", "-m", "introduce colliding upstream path")
+            fourth = git(family, env, "rev-parse", "HEAD").stdout.strip()
+            git(family, env, "push", "-q", "origin", "main")
+
+            local_only_before = local_only.read_bytes()
+            run(
+                [sys.executable, "tools/template-update.py", "--check"],
+                cwd=instance,
+                env=env,
+                expected=10,
+            )
+            run(
+                [sys.executable, "tools/template-update.py", "--apply"],
+                cwd=instance,
+                env=env,
+            )
+            require(
+                local_only.read_bytes() == local_only_before,
+                "new upstream path clobbered a pre-existing local-only file",
+            )
+            local_only_candidate = local_only.with_name(local_only.name + ".template-new")
+            require(
+                local_only_candidate.is_file(),
+                "upstream collision did not create a .template-new candidate",
+            )
+            candidate_digest = digest(local_only_candidate)
+            run(
+                [sys.executable, "tools/template-update.py", "--accept", local_only_rel],
+                cwd=instance,
+                env=env,
+            )
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+            require(
+                origin["managed_manifest"][local_only_rel] == candidate_digest,
+                "collision acceptance did not record the upstream candidate hash",
+            )
+            require(
+                origin["accepted_local_manifest"][local_only_rel] == digest(local_only),
+                "collision acceptance did not record the local hash separately",
+            )
+
+            backfill_rel = "60_workflows/weekly-review.md"
+            backfill = instance / backfill_rel
+            backfill_base = origin["managed_manifest"][backfill_rel]
+            backfill.write_text(
+                backfill.read_text(encoding="utf-8") + "\nBackfilled local line.\n",
+                encoding="utf-8",
+            )
+            preview = run(
+                [sys.executable, "tools/template-update.py", "--apply", "--dry-run"],
+                cwd=instance,
+                env=env,
+            ).stdout
+            require("no file changes" in preview, "no-delta backfill manufactured an apply action")
+            require(
+                not backfill.with_name(backfill.name + ".template-new").exists(),
+                "no-delta backfill manufactured a .template-new candidate",
+            )
+            run(
+                [sys.executable, "tools/template-update.py", "--accept", backfill_rel],
+                cwd=instance,
+                env=env,
+            )
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+            require(
+                origin["managed_manifest"][backfill_rel] == backfill_base,
+                "no-candidate acceptance replaced the upstream base",
+            )
+            require(
+                origin["accepted_local_manifest"][backfill_rel] == digest(backfill),
+                "no-candidate acceptance did not record the reviewed local hash",
+            )
+            require(origin["commit"] == fourth, "origin did not advance to the fourth fixture commit")
+
             final = run([sys.executable, "tools/template-update.py", "--status"],
                         cwd=instance, env=env).stdout
-            require("customized: 0" in final and "missing: 0" in final
-                    and "new-upstream: 0" in final, "final status was not clean")
+            groups = (
+                "unchanged",
+                "accepted-customized",
+                "customized",
+                "missing",
+                "new-upstream",
+            )
+            count_lines = {}
+            for line in final.splitlines():
+                group, separator, count = line.partition(": ")
+                if group in groups and separator and count.isdigit():
+                    count_lines[group] = int(count)
+            require(set(count_lines) == set(groups), "status omitted a standalone count group")
+            require(
+                count_lines["accepted-customized"] == 3
+                and count_lines["customized"] == 0
+                and count_lines["missing"] == 0
+                and count_lines["new-upstream"] == 0,
+                "final status was not clean",
+            )
 
-        print("update-selftest: all green - pristine replaced, custom preserved/pacnew/accepted, new added, manifests current.")
+        print(
+            "update-selftest: all green - repeated updates preserve accepted local results, "
+            "collisions isolate candidates, legacy stamps load, and manifests remain current."
+        )
         return 0
     except (AssertionError, OSError, subprocess.SubprocessError) as exc:
         print(f"update-selftest: FAILURE - {exc}", file=sys.stderr)

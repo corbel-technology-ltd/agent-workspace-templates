@@ -108,6 +108,7 @@ def write_origin_stamp(stage, member):
         "commit": commit,
         "instantiated": datetime.date.today().isoformat(),
         "managed_manifest": manifest,
+        "accepted_local_manifest": {},
         "values": {},
     }
     target = stage / "00_meta" / "template-origin.json"

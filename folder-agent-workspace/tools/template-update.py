@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from template_paths import is_managed, managed_files
+from template_paths import is_managed
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,6 +65,9 @@ def read_origin():
             raise UpdateError(f"template origin is missing {key!r}")
     if not isinstance(origin["managed_manifest"], dict):
         raise UpdateError("template origin managed_manifest must be one object")
+    accepted = origin.setdefault("accepted_local_manifest", {})
+    if not isinstance(accepted, dict):
+        raise UpdateError("template origin accepted_local_manifest must be one object")
     return origin
 
 
@@ -202,9 +205,18 @@ def cached_target(need_check_state=False):
 
 def classify(origin, upstream):
     manifest = origin["managed_manifest"]
-    local_paths = set(managed_files(ROOT))
-    paths = set(manifest) | set(upstream) | local_paths
-    groups = {name: [] for name in ("unchanged", "customized", "missing", "new-upstream")}
+    accepted = origin["accepted_local_manifest"]
+    paths = set(manifest) | set(upstream)
+    groups = {
+        name: []
+        for name in (
+            "unchanged",
+            "accepted-customized",
+            "customized",
+            "missing",
+            "new-upstream",
+        )
+    }
     for rel in sorted(paths):
         local = ROOT / rel
         if rel in manifest:
@@ -212,10 +224,15 @@ def classify(origin, upstream):
                 groups["customized"].append(rel)
             elif not regular_local(local):
                 groups["missing"].append(rel)
-            elif sha256_file(local) == manifest[rel]:
-                groups["unchanged"].append(rel)
             else:
-                groups["customized"].append(rel)
+                local_digest = sha256_file(local)
+                accepted_digest = accepted.get(rel)
+                if local_digest == manifest[rel]:
+                    groups["unchanged"].append(rel)
+                elif accepted_digest is not None and local_digest == accepted_digest:
+                    groups["accepted-customized"].append(rel)
+                else:
+                    groups["customized"].append(rel)
         elif regular_local(local) or local.is_symlink():
             groups["customized"].append(rel)
         elif rel in upstream:
@@ -229,7 +246,13 @@ def status_mode():
     upstream = tree_entries(target, origin["member"]) if target else {}
     groups = classify(origin, upstream)
     print("Template status" + (f" against cached {target[:12]}" if target else " (offline; no cache)"))
-    for name in ("unchanged", "customized", "missing", "new-upstream"):
+    for name in (
+        "unchanged",
+        "accepted-customized",
+        "customized",
+        "missing",
+        "new-upstream",
+    ):
         print(f"{name}: {len(groups[name])}")
         for rel in groups[name]:
             print(f"  {rel}")
@@ -298,6 +321,7 @@ def apply_mode(dry_run=False):
     engine, registry = load_fill_engine()
     values = origin.get("values") or {}
     manifest = dict(origin["managed_manifest"])
+    accepted = dict(origin["accepted_local_manifest"])
     actions = []
     merge = []
 
@@ -305,20 +329,36 @@ def apply_mode(dry_run=False):
         if rel not in upstream:
             continue  # upstream deletion never deletes or reclassifies a local file
         mode, _ = upstream[rel]
-        data = fill_upstream(rel, blob(target, origin["member"], rel),
-                             values, engine, registry)
+        data = fill_upstream(
+            rel,
+            blob(target, origin["member"], rel),
+            values,
+            engine,
+            registry,
+        )
         digest = sha256_bytes(data)
         local = ROOT / rel
         baseline = manifest.get(rel)
         present = local.exists() or local.is_symlink()
+        local_digest = sha256_file(local) if regular_local(local) else None
+        upstream_changed = baseline is None or digest != baseline
+
         if baseline is None and not present:
             actions.append(("added", rel, local, data, mode))
             manifest[rel] = digest
-        elif baseline is not None and regular_local(local) and sha256_file(local) == baseline:
+            accepted.pop(rel, None)
+        elif baseline is not None and local_digest == baseline:
             manifest[rel] = digest
-            if sha256_file(local) != digest or (local.stat().st_mode & 0o777) != int(mode[-3:], 8):
+            accepted.pop(rel, None)
+            expected_mode = int(mode[-3:], 8)
+            if local_digest != digest or (local.stat().st_mode & 0o777) != expected_mode:
                 actions.append(("replaced", rel, local, data, mode))
-        elif baseline is None or not regular_local(local) or sha256_file(local) != baseline:
+        elif baseline is not None and not regular_local(local):
+            pacnew = local.with_name(local.name + ".template-new")
+            actions.append(("preserved", rel, pacnew, data, mode))
+            merge.append(rel)
+        elif upstream_changed:
+            # Accepted and unreviewed local content are both protected on upstream delta.
             pacnew = local.with_name(local.name + ".template-new")
             actions.append(("preserved", rel, pacnew, data, mode))
             merge.append(rel)
@@ -344,6 +384,7 @@ def apply_mode(dry_run=False):
     if not dry_run:
         origin["commit"] = target
         origin["managed_manifest"] = manifest
+        origin["accepted_local_manifest"] = accepted
         write_json_atomic(ORIGIN_PATH, origin)
         print(f"Origin advanced to {target}.")
     return 0
@@ -351,8 +392,12 @@ def apply_mode(dry_run=False):
 
 def accept_mode(rel):
     candidate = Path(rel)
-    if (candidate.is_absolute() or ".." in candidate.parts or not is_managed(candidate)
-            or candidate.name.endswith(".template-new")):
+    if (
+        candidate.is_absolute()
+        or ".." in candidate.parts
+        or not is_managed(candidate)
+        or candidate.name.endswith(".template-new")
+    ):
         raise UpdateError(f"--accept path is outside the managed spine: {rel}")
     rel = candidate.as_posix()
     if rel.startswith("./"):
@@ -360,14 +405,35 @@ def accept_mode(rel):
     local = ROOT / rel
     if not regular_local(local):
         raise UpdateError(f"cannot accept missing file: {rel}")
+
     origin = read_origin()
-    origin["managed_manifest"][rel] = sha256_file(local)
-    write_json_atomic(ORIGIN_PATH, origin)
+    manifest = origin["managed_manifest"]
+    accepted = origin["accepted_local_manifest"]
     pacnew = local.with_name(local.name + ".template-new")
-    removed = pacnew.is_file()
-    if removed:
+    candidate_present = pacnew.exists() or pacnew.is_symlink()
+    if candidate_present and not regular_local(pacnew):
+        raise UpdateError(f"template candidate is not a regular file: {rel}.template-new")
+    if candidate_present:
+        manifest[rel] = sha256_file(pacnew)
+    elif rel not in manifest:
+        raise UpdateError(
+            f"cannot accept local-only path without an upstream candidate: {rel}"
+        )
+
+    local_digest = sha256_file(local)
+    if local_digest == manifest[rel]:
+        accepted.pop(rel, None)
+    else:
+        accepted[rel] = local_digest
+
+    origin["managed_manifest"] = manifest
+    origin["accepted_local_manifest"] = accepted
+    write_json_atomic(ORIGIN_PATH, origin)
+    if candidate_present:
         pacnew.unlink()
-    print(f"Accepted {rel}; manifest updated" + ("; .template-new deleted." if removed else "."))
+    state = "upstream base plus accepted local hash" if rel in accepted else "upstream base"
+    suffix = "; .template-new deleted." if candidate_present else "."
+    print(f"Accepted {rel}; recorded {state}{suffix}")
     return 0
 
 
