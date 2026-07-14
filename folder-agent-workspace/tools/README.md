@@ -13,11 +13,11 @@ related:
 
 # Pre-distribution gates
 
-The deterministic, stdlib-only gates below must be **green before this template is distributed**.
-They are gates, not linters: they fail loud (exit 1) so a leak, broken knowledge edge, runtime
-lock-in, or oversized context file cannot ship. The maintenance and self-test tools are also pure
-Python 3 standard library - no dependencies, no network. The gates read the live git tree via
-`git ls-files`, so they check exactly what would be distributed.
+Most gates below are deterministic, stdlib-only, and offline; all must be **green before this
+template is distributed**. They fail loud so leaks, broken edges, runtime lock-in, or oversized
+context cannot ship. The template updater and its self-test load the hash-allowlisted onboarding
+engine and therefore require PyYAML. Only explicit `template-update.py --check` contacts the
+configured remote; gates still read the tracked tree through git so they check exactly what ships.
 
 The contract they enforce is set by the root manifest, [`AGENTS.md`](../AGENTS.md)
 (OKF v0.1 compatibility + the typed-edge / body-link mirroring convention).
@@ -87,15 +87,15 @@ The maintenance loop: add or change a `related:` edge, run `gen-related.py`, and
 
 ## `template-update.py` - safe live-instance template updates
 
-Uses the instantiation origin stamp to classify the managed spine and fetch updates. Two independent
-hashes make repeated cycles safe: `managed_manifest[path]` is the last reviewed upstream candidate,
-and `accepted_local_manifest[path]` exists only when the reviewed local result differs.
-`accepted-customized` is reviewed and protected; `customized` is unreviewed. Accepting with a
-candidate advances the upstream base to the candidate hash and records the local result separately;
-accepting without a candidate leaves the existing upstream base intact. Local-only paths stay outside
-updater state until upstream introduces the same path. Apply emits `.template-new` only for a real
-upstream delta or a manifest-backed missing file. `--status` is offline, and the tool never touches
-instance-content paths. `update-selftest.py` proves this flow in disposable repositories.
+Uses separate reviewed-upstream and accepted-local hashes. Legacy reconstruction uses the recorded
+commit's hash-allowlisted fill engine and registry. Manifest-backed pending sidecars block legacy
+migration; verified legacy `--accept` keeps one-hash state until reviews finish. Stale candidates need
+explicit operator-reviewed restoration or removal. Missing inputs block writes with recovery guidance.
+Every sidecar is checked against its recorded token-filled blob. Local-only paths stay outside updater
+state; unchanged present non-regular nodes receive no candidate. Manifest keys must be canonical managed
+POSIX paths. Writes use progress-checked exclusive same-directory temps. Parent traversal or any
+symlinked lexical ancestor is refused; failed legacy preflight leaves state and local bytes unchanged.
+`--status` is offline; only explicit `--check` contacts the remote. The self-test proves these contracts.
 
 ## `decomposition-check.py` - context decomposition (concept folders with index maps)
 

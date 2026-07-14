@@ -41,7 +41,28 @@ candidate; `accepted_local_manifest[path]` exists only when the reviewed local r
 candidate advances the upstream base to the candidate hash and records the local result separately;
 accepting without a candidate leaves the existing upstream base intact. Local-only paths stay
 outside updater state until upstream introduces the same path. Apply emits `.template-new` only for
-a real upstream delta or a manifest-backed missing file.
+a real upstream delta or a manifest-backed missing file; an unchanged symlink or other present
+non-regular node stays untouched and produces no candidate. Both manifests require canonical
+relative POSIX managed paths, and accepted-local keys must be a subset of the managed map. Legacy
+one-hash stamps migrate automatically from the recorded commit's registry and hash-allowlisted fill engine.
+The commit must be fetchable from origin or restored to the mirror cache. Missing fill values block
+writes, as does an unsupported recorded or target engine; both keep status conservative with recovery
+or upgrade guidance. Acceptance verifies sidecar bytes against the same recorded upstream provenance
+before updating the stamp or removing the sidecar.
+
+A pending manifest-backed candidate makes a legacy stamp ambiguous, so check/apply leave the origin,
+check state, candidate, and local file unchanged and require explicit review. Each provenance-valid
+legacy acceptance records the merged local hash in the old one-hash map and removes only that
+candidate; after the last candidate, check migrates the stamp. A tampered sidecar or deleted recorded
+path cannot be accepted automatically. Restore the valid candidate or remove it only after operator
+review confirms it is stale.
+
+Atomic state and managed-file writes use exclusive, unpredictable same-directory temporaries and a
+progress-checked write-all loop; no-progress writes refuse before replacement. Parent traversal is
+rejected before normalisation. Every lexical ancestor must be a real directory, not a symlink, even
+when the link resolves elsewhere inside the workspace; resolved parents must remain under the root.
+Legacy migration stays in memory until deterministic check/apply preflight succeeds; apply persists
+the reconstructable two-hash state immediately before any managed-file write.
 
 Instance content, doctrine, canon, memory, registers, projects, runs, and integrations are outside
 the managed spine and are never touched. Generic local improvements still belong upstream; shared

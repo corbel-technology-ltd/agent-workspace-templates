@@ -24,6 +24,14 @@ All notable changes to the Agent-Workspace-Templates family are documented here.
 - Preserved accepted local customisations across repeated template updates by separating reviewed
   upstream baselines from accepted local hashes; local-only paths no longer acquire synthetic
   baselines.
+- Migrated legacy one-hash stamps from their recorded token-filled upstream tree using a
+  hash-allowlisted historical fill engine, verified `.template-new` provenance before acceptance,
+  and stopped unchanged non-regular paths from producing misleading candidates.
+- Preserved explicit review for pending legacy candidates, replaced predictable temporary writes
+  with exclusive atomic files, and refused symlinked managed or state ancestors across both outside
+  and intra-workspace boundaries.
+- Rejected non-canonical or out-of-spine manifest keys before use, completed short writes before
+  atomic replacement, and deferred legacy persistence until deterministic preflight succeeds.
 
 ## [0.6.0] - 2026-07-11
 

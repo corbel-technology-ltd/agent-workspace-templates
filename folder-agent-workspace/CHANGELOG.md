@@ -9,6 +9,13 @@ Template-level history (what changed in Folder-Agent-Workspace itself, not in an
   baselines.
 - Documented the two-hash state model, reviewed versus unreviewed status, candidate acceptance and
   the exact conditions under which apply emits `.template-new`.
+- Added conservative automatic migration for legacy one-hash stamps with hash-allowlisted historical
+  fill semantics, origin-commit provenance checks before sidecar acceptance, and no-delta
+  suppression for present non-regular paths.
+- Kept pending legacy candidates under explicit review, hardened atomic writes against temporary-file
+  symlinks, and rejected symlinked ancestors that tunnel managed or state paths across boundaries.
+- Rejected non-canonical manifest keys, made atomic writes complete every byte, and kept failed
+  legacy check/apply preflight byte-identical.
 - Completed discoverability for the context-decomposition doctrine and concept-folder template,
   registered both decomposition gates, and added `.worktrees/` to the distributed ignore rules.
 
