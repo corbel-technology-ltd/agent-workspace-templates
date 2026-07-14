@@ -28,3 +28,7 @@ a concept note. Folder map: [00-INDEX.md](00-INDEX.md).>
 
 <One line per deeper concept, pointing at its note, so a reader knows more exists without loading
 it.>
+
+## Related
+
+- [<Topic> index](00-INDEX.md)

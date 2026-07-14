@@ -70,3 +70,7 @@ Source: the spine, `00_meta/agent-os-design.md`, "Staged plan" section, moved ve
 folder was created under `10_doctrine/context-decomposition.md`. Update this note when a hook or
 mechanism actually ships, moves stage, or is dropped; update the spine only if the underlying design
 rationale itself changes.
+
+## Related
+
+- [Agent OS design — situational detail index](00-INDEX.md)

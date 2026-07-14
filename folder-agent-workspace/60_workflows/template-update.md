@@ -83,5 +83,5 @@ preflight, and before managed-file writes. Restore real directories before retry
 
 ## Related
 
-- [Workspace user reference](../REFERENCE.md)
+- [Workspace user reference - files, scripts, memory, adapters, upkeep](../REFERENCE.md)
 - [<<WORKSPACE_NAME>>](../AGENTS.md)

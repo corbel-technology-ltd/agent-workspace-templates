@@ -49,3 +49,7 @@ Source: the spine, `00_meta/agent-os-design.md`, "Emergent-intelligence refineme
 verbatim when this folder was created under `10_doctrine/context-decomposition.md`. These remain
 targets, not yet wired - update here when the journal actually starts feeding `homeostasis.yml`, per
 the note's own text above.
+
+## Related
+
+- [Agent OS design — situational detail index](00-INDEX.md)

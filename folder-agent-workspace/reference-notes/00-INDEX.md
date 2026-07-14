@@ -67,4 +67,4 @@ changes, check whether a note's summary of a source file has drifted too.
 
 ## Related
 
-- [Workspace user reference](../REFERENCE.md)
+- [Workspace user reference - files, scripts, memory, adapters, upkeep](../REFERENCE.md)

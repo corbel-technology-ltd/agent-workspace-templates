@@ -53,3 +53,7 @@ spine's own load-policy section points at.
 Update a concept note only when evidence for that concept changes (a hook ships, a target's status
 moves). Update this index when files, load cues or authority change. Record any contradiction
 between the spine and a note rather than silently flattening it.
+
+## Related
+
+- [Agent OS design - constitution / reflexes / playbooks / cognition / memory](../agent-os-design.md)

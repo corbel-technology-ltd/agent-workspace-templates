@@ -75,6 +75,6 @@ Run by hand: `python3 core/hooks/reaper.py --as-of YYYY-MM-DD [--dry-run]`.
 
 ## Related
 
-- [Memory homeostasis - the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)
+- [Memory homeostasis — the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)
 - [Memory sleep - the deep consolidation & synthesis pass](memory-sleep.md)
 - [Memory architecture (research-backed, v2)](../00_meta/memory-architecture.md)

@@ -95,5 +95,5 @@ you no longer need it to create or compare workspaces.
 
 ## Related
 
-- [Reference notes index](00-INDEX.md)
-- [Workflows](../60_workflows/README.md)
+- [Workspace reference notes — index](00-INDEX.md)
+- [Workflows - the operating playbooks](../60_workflows/README.md)

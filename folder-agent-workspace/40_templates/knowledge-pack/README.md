@@ -55,3 +55,8 @@ Each native file declares a `mode` in `manifest.yaml`:
   `AgentInstructions`; secrets live nowhere in the corpus.
 - Add detail with `profile:` on an existing type, not a new top-level type.
 - Every change appends a line to `log.md`.
+
+## Related
+
+- [Taxonomy - the shared vocabulary of concept types and relation types](../../30_schemas/taxonomy.md)
+- [Templates - copy-and-complete authoring scaffolds](../README.md)

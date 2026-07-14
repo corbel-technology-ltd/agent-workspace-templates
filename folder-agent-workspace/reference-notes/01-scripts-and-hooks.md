@@ -82,7 +82,7 @@ or changing adapter wiring is an operator-approved settings change.
 
 ## Related
 
-- [Reference notes index](00-INDEX.md)
-- [Runtime adapters](../core/RUNTIMES.md)
-- [Reflex hooks](../core/hooks/README.md)
-- [Tools](../tools/README.md)
+- [Workspace reference notes — index](00-INDEX.md)
+- [Runtime adapters - the contract and the 15-minute wiring guide](../core/RUNTIMES.md)
+- [Reflex hooks (neutral core)](../core/hooks/README.md)
+- [Pre-distribution gates & maintenance](../tools/README.md)

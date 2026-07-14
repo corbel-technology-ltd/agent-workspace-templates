@@ -18,6 +18,10 @@ Template-level history (what changed in Folder-Agent-Workspace itself, not in an
   legacy check/apply preflight byte-identical.
 - Completed discoverability for the context-decomposition doctrine and concept-folder template,
   registered both decomposition gates, and added `.worktrees/` to the distributed ignore rules.
+- Added canonical generated `## Related` sections to the new decomposition, taxonomy, knowledge-pack
+  and reference surfaces, and cleared the remaining relationship-generation debt.
+- Aligned context-decomposition prose with the checker's actual mechanical ceiling and sibling-index
+  contract, and scoped pinned-pointer purity to the root runtime manifests it governs.
 
 ## 0.5 - 2026-07-10 - taxonomy glossary + knowledge-pack template
 

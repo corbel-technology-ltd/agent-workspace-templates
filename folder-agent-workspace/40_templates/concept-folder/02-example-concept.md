@@ -27,3 +27,7 @@ If this note needs a sibling's content, LINK to it — never duplicate it.>
 
 <Where this came from; dates; what would change it. Record contradictions explicitly rather than
 averaging them away.>
+
+## Related
+
+- [<Topic> index](00-INDEX.md)

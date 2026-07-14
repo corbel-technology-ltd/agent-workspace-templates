@@ -52,4 +52,4 @@ preload the whole folder.
 ## Related
 
 - [Folder-Agent-Workspace](README.md)
-- [Reference notes index](reference-notes/00-INDEX.md)
+- [Workspace reference notes — index](reference-notes/00-INDEX.md)

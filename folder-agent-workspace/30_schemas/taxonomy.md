@@ -87,3 +87,9 @@ native file owns, the native file wins. Each native file takes one of three mode
   form of this; a stamped pack's validation carries `require_relation_targets`).
 - Update this glossary by proposing a diff (C2 contract - `AGENTS.md` safety gate); additions
   are append-friendly, renames need a `supersedes` note in the change log.
+
+## Related
+
+- [Schemas - the shape contracts for structured artefacts](README.md)
+- [Knowledge-pack template - stampable knowledge corpus for a project repo](../40_templates/knowledge-pack/README.md)
+- [<<WORKSPACE_NAME>>](../AGENTS.md)

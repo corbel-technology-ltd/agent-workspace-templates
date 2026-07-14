@@ -21,6 +21,10 @@ All notable changes to the Agent-Workspace-Templates family are documented here.
 
 ### Fixed
 
+- Added canonical generated `## Related` sections to the new decomposition, taxonomy, knowledge-pack
+  and reference surfaces, and cleared the remaining member relationship-generation debt.
+- Aligned context-decomposition prose with the checker's actual mechanical ceiling and sibling-index
+  contract, and scoped pinned-pointer purity to the root runtime manifests it governs.
 - Preserved accepted local customisations across repeated template updates by separating reviewed
   upstream baselines from accepted local hashes; local-only paths no longer acquire synthetic
   baselines.

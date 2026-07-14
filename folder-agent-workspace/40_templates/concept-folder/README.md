@@ -42,3 +42,7 @@ Worked pattern: reach for this once a topic fails the decomposition test — for
 agent identity profile, or a policy/canon document that has outgrown a single-file read. Once
 decomposed, the result is an index (shaped like `00-INDEX.md`) plus one concept note per idea,
 exactly as sketched above.
+
+## Related
+
+- [Context decomposition - concept folders with index maps](../../10_doctrine/context-decomposition.md)

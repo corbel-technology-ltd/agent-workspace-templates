@@ -91,4 +91,4 @@ big enough to need one (spine-not-leaves).
 
 - [Memory structure - the model](../20_memory/README.md)
 - [Memory reaper - the fast consolidation pass](../60_workflows/memory-reaper.md)
-- [Memory homeostasis - the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)
+- [Memory homeostasis — the set-points panel (v2, research-backed).](../20_memory/homeostasis.yml)

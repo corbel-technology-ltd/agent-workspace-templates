@@ -126,7 +126,7 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
    cite its `sources:`; an atom with none is quarantined.
 
 4. Do not silently rewrite C3 reference/doctrine. Propose diffs for review.
-5. Runtime adapter files are pinned pointers; never add content to them
+5. Root runtime manifest adapters are pinned pointers; never add content to them
    (`tools/agnostic-check.py` enforces it).
 6. Write durable outputs as Markdown with an **OKF-compatible body** (one concept per file, `type`
    required, `index.md`/`log.md` reserved, untyped links in body) **plus** a typed-edge +

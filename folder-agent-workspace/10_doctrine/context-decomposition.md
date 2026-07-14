@@ -34,8 +34,9 @@ notes load on their retrieval cues.
 - **D3 - independently needed sections:** sections are commonly loaded on their own; a compact
   core would serve most sessions while the rest is situational.
 - **D4 - size x mixture:** the file exceeds ~150 lines or ~12,000 characters AND covers more than
-  one distinct concept or category (the mechanical trigger `tools/decomposition-check.py`
-  enforces).
+  one distinct concept or category.
+- **Mechanical ceiling:** the checker flags non-structural tracked Markdown over either size
+  threshold; human review then splits it or adds a reasoned keep-intact exception.
 
 ## Keep intact - do not chunk
 
@@ -100,9 +101,9 @@ navigation files); the uppercase prefixed name carries full frontmatter.
 3. **Retrieval cues** - a concrete "load when ..." row in the owning index.
 4. **Provenance** - where the content came from (source path, date, decision id; verbatim
    banner when decomposed from an existing authority).
-5. **An owning index** - a `related:` edge (mirrored body link) to the folder's `00-INDEX.md`,
-   or to the spine file when an existing authority was decomposed in place
-   (`tools/decomposition-check.py` enforces membership).
+5. **An owning index** - a `related:` edge (mirrored body link) to the sibling folder's
+   `00-INDEX.md` (`tools/decomposition-check.py` enforces this); for a decomposed authority, the
+   original spine separately links that index.
 
 Plus: one concept per note; target <= ~120 lines; no cross-concept duplication - link siblings.
 When decomposing an EXISTING authority, section text moves **verbatim**: structural glue only.

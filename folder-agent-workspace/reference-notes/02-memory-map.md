@@ -43,5 +43,5 @@ should strengthen the matching atom. The full model is in [`20_memory/README.md`
 
 ## Related
 
-- [Reference notes index](00-INDEX.md)
-- [Memory](../20_memory/README.md)
+- [Workspace reference notes — index](00-INDEX.md)
+- [Memory structure - the model](../20_memory/README.md)
