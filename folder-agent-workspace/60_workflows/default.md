@@ -29,6 +29,19 @@ Handle ordinary workspace tasks when no specialised workflow applies.
 - A specialised workflow exists for the task type
 - The work is large enough to warrant designing its own workflow first
 
+## Optional acceptance prompt
+
+For an ambiguous or delegated task, settle only the fields needed to make completion testable
+before execution:
+
+- **Objective:** the outcome to achieve
+- **Output path:** where the durable result belongs
+- **Output format:** the required shape or interface
+- **Acceptance checks:** observable checks that prove completion
+
+Skip fields that are already clear. This prompt does not turn ordinary work into a consequential
+Decision Packet.
+
 ## Stages
 
 | Stage | Action | Output | Check |

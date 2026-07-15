@@ -38,10 +38,11 @@ no auto-update - copying files and recording checksums, with a human at the gate
 
 ## It ships stocked - and load-bearing
 
-The five seed capabilities are the FAW family's own shared tools (the scrub/OKF/agent-agnostic
-gates, the Related-mirror generator, the onboarding engine). They are not demo content: the family
-repo's own check verifies every sibling template's vendored copies against **this registry's
-checksums**. The registry keeps the family honest before it ever keeps your fleet honest.
+The six seed capabilities are the FAW family's own shared tools (the scrub, OKF,
+agent-agnostic, and skill-surface gates, the Related-mirror generator, and the onboarding engine).
+They are not demo content: the family repo's own check verifies every sibling template's vendored
+copies against **this registry's checksums**. The registry keeps the family honest before it ever
+keeps your fleet honest.
 
 ## Composes with, never requires
 
@@ -64,7 +65,7 @@ core/chandler.py the engine: list · verify · status · diff · install · pack
 ledger.md        append-only history of the stock
 fleet.yml        the workspaces this capability-registry outfits
 core/            onboarding + the session-start gate, runtime-neutral
-tools/           the family gates (scrub, OKF, agent-agnostic)
+tools/           the family gates (scrub, OKF, agent-agnostic, skill-surface)
 ```
 
 Plus one thin adapter per wired runtime (`core/RUNTIMES.md`). Start at [`AGENTS.md`](AGENTS.md).

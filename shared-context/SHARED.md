@@ -4,6 +4,7 @@ name: <<STORE_NAME>>
 type: doctrine
 layer: C0
 status: current
+load: always
 owner: shared
 spec_version: 0.1
 initialised: false
@@ -74,14 +75,16 @@ here, inherit the whole brain.
    Folder-Agent-Workspace workspace fills `SHARED_CONTEXT_PATH` at onboarding; any other layout keeps an
    equivalent pointer). If the workspace symlinks this store into its tree, its search tooling
    must **follow symlinks**, or the shared brain silently vanishes from local search.
-3. **Boot reflex.** At session start, the workspace's agent loads `identity/` and
-   `operating-rules/` at minimum, then checks [`_coordination/dashboard.md`](_coordination/dashboard.md)
-   for anything owed to or by it, and reviews open objection windows in [`CHANGES.md`](CHANGES.md).
-   The canonical boot rule (paste into the workspace constitution):
+3. **Boot reflex.** At session start, read this file and the index READMEs for `identity/`,
+   `operating-rules/`, and `boundaries/`. Load every indexed `load: always` file only when it is
+   `status: current` and substantively non-blank; then load `triggered` files whose stated cue
+   matches the task. Check [`_coordination/dashboard.md`](_coordination/dashboard.md) and open
+   objection windows in [`CHANGES.md`](CHANGES.md). The canonical boot rule:
 
-   > **Load the shared context first.** Read `<store-path>/SHARED.md`, then `identity/` and
-   > `operating-rules/`. The store outranks this workspace's local notes on the principal. Check
-   > `_coordination/dashboard.md` for open handoffs owed to this workspace.
+   > **Load the shared context first.** Read `<store-path>/SHARED.md` and the `identity/`,
+   > `operating-rules/`, and `boundaries/` index READMEs. Load their current, non-blank `always`
+   > set before local context, then only triggered files relevant to the task. The store outranks
+   > local notes on the principal. Check `_coordination/dashboard.md` for open handoffs.
 
 4. **Precedence.** The workspace acknowledges the hierarchy above: the store wins on shared-scope
    conflicts, and corrections flow back through governance rather than forking locally.
@@ -125,7 +128,8 @@ here, inherit the whole brain.
 
 Load the **minimum** a task needs; the map is a ceiling, not a checklist. Never load blank files -
 they cost attention and add nothing. Consolidate before adding: a new file must pass the scope
-test and the file cap.
+test and the file cap. `load: always` means eventual applicability, not permission to inject a
+seed: only `status: current` files with substantive content are eligible.
 
 ## Related
 

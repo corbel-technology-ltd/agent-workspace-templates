@@ -1,12 +1,15 @@
 ---
 name: template-update
-description: Check and safely apply upstream template changes without overwriting local customisations
+description: Use when a live instantiated workspace reports an upstream template check or update and local customisations must be preserved
 type: skill
 ---
 
 # Template update (Claude Code adapter)
 
-This is a thin runtime pointer. Read and follow
+Use only in a live instantiated workspace with valid origin metadata. Read and follow
 [`60_workflows/template-update.md`](../../../60_workflows/template-update.md) exactly.
 
-Keep policy and procedure in that neutral playbook so every runtime inherits the same safe flow.
+Run its validation before apply. On provenance or validation failure, stop. Preserve local
+differences as `.template-new` for manual review; never force-overwrite them.
+
+Keep procedure in that neutral playbook so every runtime inherits the same safe flow.

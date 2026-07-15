@@ -19,12 +19,9 @@ The canonical root manifest for the <<WORKSPACE_NAME>> workspace: <<ENTITY>>'s d
 operations and IP. A **Filesystem Agent Workspace (FAW)** run as a **founder control plane** - a
 stateful business routing system, not an autonomous AI CEO.
 
-> **Built from Folder-Agent-Workspace, a Filesystem Agent Workspace (FAW).** This workspace is an instance of the
-> Folder-Agent-Workspace template: an open, file-based agent-workspace pattern in the spirit of the Open Knowledge
-> Format (OKF), extended from formatting knowledge to running a whole workspace. Improvements made here
-> that are generic to the operating system (doctrine, schemas, workflows, hooks) should flow back
-> **upstream** to the template so it stays the best version. Instance-specific content (canon,
-> integrations, registers) stays here.
+Built from the Folder-Agent-Workspace template. Generic spine improvements flow upstream through
+the non-clobbering template-update process; instance canon, integrations, registers, and working
+content stay local.
 
 This file is the **constitution**: it holds judgment. Reflexes live in hooks, playbooks in skills,
 heavy cognition in subagents, evidence in the journal + registers (see [The OS map](#the-os-map) and
@@ -39,9 +36,11 @@ On a fresh session, before anything else:
 
 1. **You are <<AGENT_NAME>>**, this workspace's agent (see [Identity](#identity) for scope).
 2. **Load the shared context**, if one is wired: the store path is `<<SHARED_CONTEXT_PATH>>`. If
-   that is blank, no store is wired yet - skip this step until one is. When present, load
-   `identity/` and `operating-rules/` at minimum; it outranks this workspace's local notes on the
-   owner. See [Shared context](#shared-context).
+   that is blank, skip this step. The session brief injects the store's current, substantive
+   `load: always` set before local orientation. Manual fallback: read `SHARED.md`, then the
+   `identity/`, `operating-rules/`, and `boundaries/` index READMEs, their eligible `always` rows,
+   and only triggered rows relevant to the task. It outranks local owner notes. See
+   [Shared context](#shared-context).
 3. **Read [`00_meta/staging.md`](00_meta/staging.md)** - the `Now / In flight` block - for current
    focus and what is already underway.
 4. **Read the handover named in [`00_meta/staging.md`](00_meta/staging.md)'s `Latest handover`
@@ -128,17 +127,12 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 4. Do not silently rewrite C3 reference/doctrine. Propose diffs for review.
 5. Root runtime manifest adapters are pinned pointers; never add content to them
    (`tools/agnostic-check.py` enforces it).
-6. Write durable outputs as Markdown with an **OKF-compatible body** (one concept per file, `type`
-   required, `index.md`/`log.md` reserved, untyped links in body) **plus** a typed-edge +
-   lifecycle-key frontmatter extension. The extension keys (`id`, `status`, `owner`, `layer`,
-   `created`, and the typed 5W1H `related:` edges) are a permitted producer superset - an OKF
-   consumer preserves unknown keys and reads relationships from body links. **Mirroring convention:**
-   every `related[].ref` must also appear as an inline markdown link in the body, so an OKF consumer
-   sees the (untyped) edge. `index.md` carries no frontmatter and lists `* [Title](rel) - desc`;
-   `log.md` is date-grouped, newest-first. Draw `type` and relation names from the taxonomy
-   glossary (`30_schemas/taxonomy.md`) where one fits; prefer an existing type or profile over
-   inventing a new one. Native files own their facts (taxonomy, "native-files rule"): reference,
-   mirror, or regenerate them - never overwrite a file that owns its own schema.
+6. Write durable Markdown to the compact OKF contract in [`30_schemas/README.md`](30_schemas/README.md):
+   one concept, required `type`, body links, and the permitted typed-edge/lifecycle frontmatter
+   extension. Mirror every `related[].ref` as a body link; keep `index.md` frontmatter-free and
+   `log.md` date-grouped newest-first. Use [`30_schemas/taxonomy.md`](30_schemas/taxonomy.md) before
+   inventing types or relations. Native files own their facts: reference, mirror, or regenerate;
+   never overwrite a file that owns its schema.
 
 7. The graph/index is a map, not the terrain. On conflict, the source file wins.
 8. **Design the spine up front; add leaves only when their inputs exist.** No JIT dormant-mechanism
@@ -162,12 +156,9 @@ are where this compounds). Sensing is cheap; acting on a sensed signal is gated 
 | C3 | Reference (doctrine, canon, memory model) | `10_doctrine/`, `15_canon/`, `20_memory/` model docs |
 | C4 | Working artefacts | `90_runs/`, register rows, journal entries |
 
-C-layers classify **documents by governance** - how constitutional a file is, how rarely it
-changes, what outranks what (lower number wins a conflict). Do not confuse this axis with the
-**memory depth axis** (`working / short-term / long-term / subconscious` under `20_memory/`),
-which ranks *memories by living salience*. A register is C1 forever; an atom moves between
-depths daily. The two systems deliberately use different vocabularies so a `layer:` value is
-never ambiguous about which axis it belongs to.
+C-layers classify document governance and authority; lower numbers win conflicts. They are not the
+memory-depth axis (`working / short-term / long-term / subconscious`): a register stays C1 while an
+atom can move between depths. Full placement detail: [`00_meta/design-spec.md`](00_meta/design-spec.md).
 
 ## Routing map
 
@@ -184,7 +175,7 @@ never ambiguous about which axis it belongs to.
 | Reach an existing system | `70_integrations/README.md` | the named system | (varies) |
 | Structure a repo/product's knowledge (new or retrofit) | `40_templates/knowledge-pack/README.md` | `30_schemas/taxonomy.md` (the vocabulary); stamp the pack into the target repo as `knowledge/` | a stamped knowledge pack (manifest, registries, concepts) |
 | Name a concept type / relation, or define a term | `30_schemas/taxonomy.md` | the family table; extend by proposed diff only | a `type`/relation drawn from (or added to) the glossary |
-| Load shared context (if a store path is set) | `<<SHARED_CONTEXT_PATH>>` (`identity/`, `operating-rules/`); blank means none wired | the relevant shared file (see [Shared context](#shared-context)) | shared SSOT in context, outranking local notes |
+| Load shared context (if a store path is set) | the injected `SHARED.md` + three index READMEs and eligible `always` set; blank means none wired | triggered shared files relevant to the task (see [Shared context](#shared-context)) | shared SSOT in context, outranking local notes |
 | Need current external / library docs | the live-docs integration wired for this instance (see `70_integrations/README.md`) | the source it returns | up-to-date docs in context, never memory |
 
 ## Safety gate (default by action class)
@@ -207,19 +198,11 @@ Full action table: [`10_doctrine/autonomy-and-gates.md`](10_doctrine/autonomy-an
 
 ## The OS map
 
-Where each kind of thing lives (full design: [`00_meta/agent-os-design.md`](00_meta/agent-os-design.md)):
-
-| Concern | Home |
-|---|---|
-| Judgment (this file) | `AGENTS.md` |
-| Reflexes (enforce, log, guard) | `core/hooks/` (logic), wired per runtime by a thin adapter (`core/RUNTIMES.md`) |
-| Playbooks (reusable workflows) | `core/` (e.g. `core/onboarding/`), surfaced per runtime as skills/commands; the `60_workflows/` specs graduate here |
-| Heavy cognition (audits, reviews, research) | the runtime's subagent surface (adapter-specific; `core/RUNTIMES.md`) |
-| Memory / evidence | `20_memory/journal/` (events) + `50_registers/` (observations, decisions, backlog, metrics) |
-
-Hooks are the **sensors that append to the journal**; the reaper folds it; the subconscious spots
-trends. Hook discipline: silent by default, narrow matchers, no write-only logs, notify only when a
-human is needed. Installing hooks edits system settings → requires the operator's approval.
+Judgment stays here; reflexes in `core/hooks/`; neutral playbooks in `core/` and `60_workflows/`;
+heavy cognition on the runtime's subagent surface; evidence in the journal and registers. The
+canonical map, hook discipline, and placement rules live in
+[`00_meta/agent-os-design.md`](00_meta/agent-os-design.md); runtime wiring lives in
+[`core/RUNTIMES.md`](core/RUNTIMES.md). Installing hooks changes settings and requires approval.
 
 ## Definition of done
 
@@ -234,21 +217,13 @@ anything consequential was gated, not assumed.
 
 The canonical source of **the owner** (and any cross-workspace rules) is the shared store whose
 path is **`<<SHARED_CONTEXT_PATH>>`** (blank if none is wired yet). When set, load it at session
-boot; it outranks this workspace's local notes on the owner's identity. The **Shared-Context** template
-(this template's family sibling) ships exactly such a store, with a link-in contract that registers
-this workspace in its roster. A typical store holds:
-
-- `identity/` - the owner's canonical profile, voice, personality, and availability.
-- `operating-rules/` - cross-workspace rules (proactivity, coding-discipline, archive-discipline,
-  progressive-disclosure, rule-plumbing-discipline, and similar).
-- `people/`, `tech-stack/` - shared people and the machines + software SSOT.
-- `coordination-state.md`, `CHANGES.md` - cross-workspace coordination and a change log siblings read.
-
-This workspace's `15_canon/` and `20_memory/` carry only the **deltas** over that shared base. When
-a store path is set, reach for it via the [Routing map](#routing-map) "Load shared context" row.
-Each instance has its own store; never hardcode one owner's path into another instance. Onboarding
-sets this path (leaving it blank if no store is wired yet); a blank value means "no shared store -
-this workspace's local notes on the owner stand until one is wired".
+boot and treat it as authoritative over local owner context. Follow that store's own constitution
+and indexes rather than assuming its directory contents. `load: always` is eligible only with
+`status: current` and substantive content; seed skeletons never load. If safe loading fails,
+consequential work waits for manual Shared-context review. This workspace reads fixed paths as
+data and never executes code from the external store. Its `15_canon/` and `20_memory/` carry only
+deltas over the shared base. Never hardcode one instance's path into another; a blank value means
+no store is wired and local notes stand until one is.
 
 ## Credentials
 
@@ -271,10 +246,8 @@ and replace each token by hand (token table in the template `README.md`;
 `core/onboarding/placeholders.yml` is the single source of truth). Wiring the instance's live
 systems (`70_integrations/`) is a later, per-instance step, not part of onboarding.
 
-Six now-tier reflexes ship in `core/hooks/` (`journal-guard`, `onboarding-gate`, `session-brief`,
-`session-digest`, `reaper`, `registry-drift`), wired for the shipped runtime adapters (see
-[`core/RUNTIMES.md`](core/RUNTIMES.md) and
-[`00_meta/agent-os-design.md`](00_meta/agent-os-design.md)).
+The shipped reflex inventory and per-runtime wiring are canonical in
+[`core/RUNTIMES.md`](core/RUNTIMES.md) and [`core/hooks/README.md`](core/hooks/README.md).
 
 This workspace declares **OKF v0.1** compatibility (`okf_version: "0.1"` in this file's
 frontmatter); `AGENTS.md` is the

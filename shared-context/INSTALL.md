@@ -68,12 +68,13 @@ scrub gate is the check: a live store *fails* it (via the boundaries file), and 
 to share". The derived `tools/scrub-terms.txt` is gitignored (regenerate it locally with
 `python3 core/derive-scrub.py --write`), so the denylist itself never ships.
 
-Run the gates ([`tools/README.md`](tools/README.md)) - all four must exit `0` on a genericised copy:
+Run the gates ([`tools/README.md`](tools/README.md)); every command must exit `0` on a genericised copy:
 
 ```bash
 python3 tools/scrub-check.py
 python3 tools/okf-check.py
 python3 tools/agnostic-check.py
+python3 tools/skill-surface-check.py
 python3 tools/shared-lint.py
 ```
 

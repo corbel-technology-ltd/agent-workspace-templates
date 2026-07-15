@@ -13,39 +13,32 @@ related:
 
 # Pre-distribution gates
 
-Most gates below are deterministic, stdlib-only, and offline; all must be **green before this
-template is distributed**. They fail loud so leaks, broken edges, runtime lock-in, or oversized
-context cannot ship. The template updater and its self-test load the hash-allowlisted onboarding
-engine and therefore require PyYAML. Only explicit `template-update.py --check` contacts the
-configured remote; gates still read the tracked tree through git so they check exactly what ships.
+Most gates are deterministic, stdlib-only, and offline; all must be **green before distribution**.
+The template updater and self-test require PyYAML. Only explicit `template-update.py --check`
+contacts the remote; gates read the tracked tree through git and check exactly what ships.
 
 The contract they enforce is set by the root manifest, [`AGENTS.md`](../AGENTS.md)
 (OKF v0.1 compatibility + the typed-edge / body-link mirroring convention).
 
 ## `scrub-check.py` - zero in-house terms
 
-Asserts that **no in-house term leaks** into the distributable template. It reads
-the term list from [`scrub-terms.txt`](scrub-terms.txt) (one lowercase term per
-line; `#` comments and blank lines ignored) and scans every git-tracked file
-across **three surfaces**:
+Asserts that **no in-house term leaks**. It reads [`scrub-terms.txt`](scrub-terms.txt) and scans
+every git-tracked file across **three surfaces**:
 
 1. file **contents** (every line),
 2. frontmatter **`id:`** values,
 3. **filenames** (the tracked path itself).
 
-Matching is case-insensitive and **whole-word** (regex `\b` boundaries), so a short
-term never fires as a substring of a longer token (e.g. an in-house `cat` would not
-match `category`, and a generic English homograph would not match `neighbouring`).
-Collision-prone terms are still reported for human review - a hit is a prompt to
-look, not proof of a leak. The terms file and the `tools/` check scripts are
-excluded from the scan.
+Matching is case-insensitive and **whole-word** (regex `\b` boundaries), so a short term never
+fires inside a longer token. Collision-prone terms still require human review: a hit is a prompt,
+not proof of a leak. The terms file and check scripts are excluded.
 
 Output: `path:line: term` for each hit. Exit `1` on any hit, `0` if clean.
 
 ## `okf-check.py` - OKF frontmatter + body-link mirroring
 
-Asserts that durable Markdown is **OKF-compatible** and that every typed
-`related[].ref` edge is mirrored into the body so a plain OKF consumer sees it. For
+Asserts that durable Markdown is **OKF-compatible** and every typed `related[].ref` edge is
+mirrored into the body so a plain OKF consumer sees it. For
 every git-tracked `*.md` with frontmatter it verifies:
 
 - required key **`type`** is present and non-empty;
@@ -72,6 +65,11 @@ specific vendor" checkable instead of aspirational.
 
 Output: `path:line: vendor term ...` or a pointer-purity message per violation. Exit `1` on any
 violation, `0` if clean.
+
+## `skill-surface-check.py` - skill discovery + neutral thin pointers
+
+Validates each tracked skill's `name` and one-line `description`, adapter-local name uniqueness,
+resolvable neutral playbook link, and thin-pointer shape. Semantic quality remains human-reviewed.
 
 ## `gen-related.py` - mirror typed edges into a body section
 
@@ -108,42 +106,43 @@ in `tools/decomposition-exceptions.txt`.
 Five checks:
 
 1. **Prose size** - a `.md` file outside the structural exemptions may not exceed the doctrine's
-   150-line or 12,000-character ceiling unless it has a necessary exceptions entry. Concept notes
-   have the same ceilings.
-2. **Code size** - recognised code files (`.py`, `.js`, `.sh`, `.ts`, `.tsx`, `.jsx`, `.mjs`,
-   `.cjs`, `.rs`, `.go`, `.rb`, `.java`, `.c`, `.h`, `.cpp`, `.hpp`, `.bash`) may not exceed the
-   500-line ceiling unless an exception cites the atomic code/test-suite keep-intact class.
+   150-line or 12,000-character ceiling without a necessary exception; concept notes use the same ceilings.
+2. **Code size** - recognised code files (`.py`, `.js`, `.sh`, `.ts`, `.tsx`, `.jsx`, `.mjs`, `.cjs`,
+   `.rs`, `.go`, `.rb`, `.java`, `.c`, `.h`, `.cpp`, `.hpp`, `.bash`) may not exceed 500 lines without
+   an exception citing the atomic code/test-suite keep-intact class.
 3. **Exception hygiene** - every row must be unique, reasoned, tracked, necessary, and outside a
    structural exemption; duplicate, stale, reasonless, and unnecessary rows fail.
-4. **Owning index** - every concept note must have a genuine top-level frontmatter `status:` key
-   and an actual Markdown link or related-edge ref to its owning `00-INDEX.md`. This still applies
-   in exempt directories and to excepted notes.
+4. **Owning index** - every concept note needs a top-level frontmatter `status:` key and an actual
+   Markdown link or related-edge ref to its owning `00-INDEX.md`, including exempt or excepted notes.
 5. **Readable inputs** - an unreadable tracked Markdown or recognised code file is a violation.
 
 Structural exemptions mirror the doctrine's keep-whole classes: `AGENTS.md`, `50_registers/**`,
-`20_memory/**`, `90_runs/**`, `30_schemas/**`, `40_templates/**`, `CHANGELOG.md`, and
-non-code/non-Markdown files. Runtime pointer files need no size exemption because the adapter-purity
-gate already caps them to a few lines.
+`20_memory/**`, `90_runs/**`, `30_schemas/**`, `40_templates/**`, `CHANGELOG.md`, and non-code or
+non-Markdown files. Adapter purity caps pointer files; the gate emits one line per hit and exits `1`.
 
-Output: one violation line per hit. Exit `1` on any violation, `0` if clean.
+## Extraction-safe distribution checks
 
-## Running them
+This is the standalone member's canonical inventory; run every command from its root.
 
 ```bash
-python3 tools/gen-related.py               # refresh the ## Related mirrors after editing edges
+python3 tools/gen-related.py --check; echo "exit $?"
 python3 tools/scrub-check.py;    echo "exit $?"
 python3 tools/okf-check.py;      echo "exit $?"
 python3 tools/agnostic-check.py; echo "exit $?"
+python3 tools/skill-surface-check.py; echo "exit $?"
 python3 tools/memory-selftest.py; echo "exit $?"
-python3 tools/update-selftest.py; echo "exit $?"
 python3 tools/decomposition-check.py; echo "exit $?"
 python3 tools/decomposition-selftest.py; echo "exit $?"
+python3 core/onboarding/tests/test_apply.py; echo "exit $?"
 ```
 
-All gates must print a clean line and exit `0` before distribution. While the
-build is in progress a gate may legitimately exit `1` (mirroring not yet completed,
-scrub pass unfinished) - that is expected mid-build. The release gate is: **all
-green**.
+All must exit `0` before distribution. After editing typed edges, run `python3 tools/gen-related.py`
+to refresh mirrors before repeating its report-only check.
+
+## Family-checkout maintenance proof
+
+`python3 tools/update-selftest.py` requires the family root and `instantiate.py`; it is not a
+standalone check. Family maintainers run it through root `python3 tools/family-check.py`.
 
 ## Related
 

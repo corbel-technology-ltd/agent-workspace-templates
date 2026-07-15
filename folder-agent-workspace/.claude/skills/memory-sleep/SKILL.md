@@ -1,16 +1,18 @@
 ---
 name: memory-sleep
-description: Consolidate unconsolidated journal entries into memory atoms (the sleep pass) - run when the session brief reports a sleep run is due, or when the user asks to consolidate/fold memory
+description: Use when the session brief says the deep memory-sleep pass is due or the user asks to consolidate unconsolidated journal evidence
 type: skill
 ---
 
 # Memory sleep (Claude Code adapter)
 
-This skill is a thin runtime adapter. The playbook it wraps is neutral and lives at
+For routine deterministic consolidation use the fast path,
+[`60_workflows/memory-reaper.md`](../../../60_workflows/memory-reaper.md), instead.
+
+For the due or requested deep pass, follow the neutral playbook at
 [`60_workflows/memory-sleep.md`](../../../60_workflows/memory-sleep.md).
 
-Read that file and follow its "Running the pass" section exactly: `sleep-prep.py`, then
-synthesise strict-JSON claims per the contract there, then `sleep-apply.py` (the validator).
+Follow its validation and bounded-synthesis contract exactly. A validator or tool failure stops
+the pass before durable writes.
 
-Do not duplicate playbook content here. If the flow needs to change, change
-`60_workflows/memory-sleep.md` so every runtime inherits the fix.
+Keep procedure in the neutral playbook so every runtime inherits the same flow.

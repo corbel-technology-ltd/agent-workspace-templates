@@ -34,8 +34,8 @@ preferences, credentials (see the scope rule in [`AGENTS.md`](../AGENTS.md)).
 ## Seed stock
 
 The FAW family's own shared tools ship stocked: `scrub-check`, `okf-check`, `gen-related`,
-`agnostic-check`, `onboarding-engine`. Their upstream home (and tests) is the Folder-Agent-Workspace
-workspace template; the family repo verifies every sibling's vendored copies against the
+`agnostic-check`, `skill-surface-check`, and `onboarding-engine`. Each manifest names its upstream
+home and proof surface; the family repo verifies every sibling's vendored copies against the
 checksums here.
 
 ## Related

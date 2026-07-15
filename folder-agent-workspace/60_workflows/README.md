@@ -36,6 +36,29 @@ the same pattern repeats often enough, a workflow **graduates** to a playbook in
 per runtime as a skill (see [the OS map](../AGENTS.md#the-os-map)); these specs are the source it
 graduates from.
 
+## Skill promotion contract
+
+These are conservative promotion requirements, not a claim that skills help arbitrary work. The
+selection caveat and paired protocol live in the family
+[context-and-skill evaluation decision](https://github.com/corbel-technology-ltd/agent-workspace-templates/blob/main/decisions/0003-context-and-skill-evaluation.md).
+
+Every promoted skill must first pass the operational tier:
+
+- Give discovery metadata a discriminative, observable trigger and test its nearest
+  non-applicable case.
+- State the applicability boundary and cheapest safe fast path.
+- Keep exact output constraints and validation in the neutral playbook.
+- Provide a debugging or manual fallback for every prescribed tool.
+- Keep runtime pointers thin; require human review and per-runtime discovery-and-effect proof.
+
+Task-time self-authoring and automatic adoption are prohibited. A human-owned instance-local
+provisional draft may follow repeated journal evidence only after leakage review.
+
+A **new family-distributed skill** must additionally pass a candidate-specific, held-out paired
+evaluation under the family decision: benefit on its applicable class, no hard-invariant
+regression, and no regression on its nearest non-applicable case. Otherwise revise it or keep it
+instance-local. Scenarios are written just in time for the candidate, not kept as a standing bank.
+
 ## What lives here
 
 - [`default.md`](default.md) - the fallback. The irreducible six-stage skeleton (discover → route →

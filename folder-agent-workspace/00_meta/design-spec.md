@@ -99,7 +99,7 @@ defaults like batching.
   80_projects/         per-project trackers and their open loops
   90_runs/             working instances (today's brief, filled decision packets)
   core/                the neutral machinery: reflex hooks, onboarding engine, runtime guide
-  tools/               the pre-distribution gates (scrub, OKF, agent-agnostic)
+  tools/               the pre-distribution gates (scrub, OKF, agent-agnostic, skill-surface)
 ```
 
 Layer test (C3 vs C4): would this file still be true tomorrow? Yes → reference (doctrine,

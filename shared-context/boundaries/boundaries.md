@@ -4,6 +4,7 @@ name: The boundary tiers - never-share / share-with-care / public
 type: doctrine
 layer: C0
 status: seed
+load: always
 owner: human
 created: <<CREATED_DATE>>
 tags: [boundaries, never-share, scrub-source, privacy]

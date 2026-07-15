@@ -1,16 +1,17 @@
 ---
 name: onboarding
-description: Onboard a freshly copied blank workspace template - run when the .uninitialised sentinel is present, before any other work
+description: Use only when .uninitialised exists at the current workspace root and never at the family template root or in an initialised live workspace
 type: skill
 ---
 
 # Onboarding (Claude Code adapter)
 
-This skill is a thin runtime adapter. The playbook it wraps is neutral and lives at
+This skill applies only when `.uninitialised` exists at the current workspace root. If it is
+absent, stop; never run onboarding at the family template root or in an initialised live instance.
+
+The neutral playbook lives at
 [`core/onboarding/ONBOARDING.md`](../../../core/onboarding/ONBOARDING.md).
 
-Read that file and follow it exactly: staged interview, confirm-before-write, then the
-deterministic fill via `python3 core/onboarding/apply.py --root .`.
+Follow it exactly, including its validation and recovery rules. Stop if validation fails.
 
-Do not duplicate playbook content here. If the flow needs to change, change
-`core/onboarding/ONBOARDING.md` so every runtime inherits the fix.
+Keep procedure in that neutral playbook so every runtime inherits the same flow.

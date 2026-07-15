@@ -13,6 +13,12 @@ counterpart is the live drift report (`python3 core/chandler.py fleet`), compute
 
 <!-- ledger: append new entries directly below this line, newest first -->
 
+2026-07-15 | install | skill-surface-check v1 and agnostic-check v4 installed byte-identically in all three family members | registry verify and family parity required before release
+
+2026-07-15 | stocked | skill-surface-check v1 validates discovery metadata, neutral links and thin skill pointers | install to all family members
+
+2026-07-15 | registry fix | agnostic-check v4 sanctions Folder origin metadata that records adapter paths | install to all family members
+
 2026-07-11 | pack | agnostic-check v3 packed from folder-agent-workspace (1 file(s) changed) | install to the rest of the fleet to close drift
 
 2026-07-11 | pack | onboarding-engine v7 packed from folder-agent-workspace (1 file(s) changed) | install to the rest of the fleet to close drift

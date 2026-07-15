@@ -21,6 +21,129 @@ from pathlib import Path
 ROOT = Path(os.environ.get("<<WORKSPACE_ROOT_ENV>>") or Path(__file__).resolve().parents[2])
 WORKSPACE_NAME = os.environ.get("<<WORKSPACE_ROOT_ENV>>_NAME") or "<<WORKSPACE_NAME>>"
 SHARED = os.environ.get("<<WORKSPACE_ROOT_ENV>>_SHARED") or "<<SHARED_CONTEXT_PATH>>"
+SHARED_DIRS = ("identity", "operating-rules", "boundaries")
+SHARED_REQUIRED = (
+    "SHARED.md", "identity/README.md", "operating-rules/README.md", "boundaries/README.md",
+    "identity/principal.md", "boundaries/boundaries.md",
+)
+SHARED_CORE_ORDER = SHARED_REQUIRED[:4]
+
+
+def shared_frontmatter(text):
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None, 0
+    for index in range(1, len(lines)):
+        if lines[index].strip() == "---":
+            values = {}
+            for line in lines[1:index]:
+                match = re.match(r"^([A-Za-z0-9_-]+):\s*(.*)$", line)
+                if match:
+                    key = match.group(1)
+                    if key in ("status", "load") and key in values:
+                        raise ValueError(f"duplicate frontmatter key {key!r}")
+                    values[key] = match.group(2).strip().strip("'\"")
+            return values, index + 1
+    return None, 0
+
+
+def shared_substantive(text):
+    meta, body_start = shared_frontmatter(text)
+    if meta is None or "> Blank by design" in text:
+        return False
+    in_comment = in_related = False
+    for line in text.splitlines()[body_start:]:
+        stripped = line.strip()
+        if in_comment:
+            if "-->" in stripped:
+                in_comment = False
+            continue
+        if "<!--" in stripped:
+            if "-->" not in stripped:
+                in_comment = True
+            stripped = stripped.split("<!--", 1)[0].strip()
+        if stripped == "## Related":
+            in_related = True
+            continue
+        if not in_related and stripped and not stripped.startswith("#"):
+            return True
+    return False
+
+
+def safe_shared_file(root, path):
+    resolved = path.resolve(strict=True)
+    if resolved != root and root not in resolved.parents:
+        raise OSError(f"{path.relative_to(root)} resolves outside the configured store")
+    if not resolved.is_file():
+        raise OSError(f"{path.relative_to(root)} is not a regular file")
+    return resolved
+
+
+def shared_always_set(raw_root):
+    """Read fixed Shared paths as data; never import or execute anything from that store."""
+    configured = Path(raw_root)
+    if not configured.is_absolute():
+        raise OSError("configured store path is not absolute")
+    root = configured.resolve(strict=True)
+    if not root.is_dir():
+        raise OSError("configured store path is not a directory")
+    if (root / ".uninitialised").exists():
+        raise ValueError("configured Shared store is uninitialised")
+    paths = [root / "SHARED.md"]
+    for directory in SHARED_DIRS:
+        folder = (root / directory).resolve(strict=True)
+        if folder != root and root not in folder.parents:
+            raise OSError(f"{directory}/ resolves outside the configured store")
+        paths.extend(sorted((root / directory).glob("*.md")))
+    records = {}
+    for path in paths:
+        resolved = safe_shared_file(root, path)
+        text = resolved.read_text(encoding="utf-8")
+        rel = path.relative_to(root).as_posix()
+        meta, _ = shared_frontmatter(text)
+        if meta is None:
+            raise ValueError(f"{rel} has malformed frontmatter")
+        records[rel] = (meta, text, shared_substantive(text))
+    missing_required = sorted(set(SHARED_REQUIRED) - set(records))
+    if missing_required:
+        raise ValueError("required always file(s) missing: " + ", ".join(missing_required))
+    incomplete = sorted(rel for rel, (meta, _, _) in records.items()
+                        if meta.get("load") not in ("always", "triggered"))
+    warnings = (["loading metadata is incomplete or invalid; all current substantive governed "
+                 "files were loaded conservatively"] if incomplete else [])
+    selected = set()
+    for rel, (meta, _, has_body) in records.items():
+        if rel in SHARED_CORE_ORDER and (meta.get("status") != "current" or not has_body):
+            raise ValueError(f"{rel} required core file must be current and substantive")
+        if meta.get("status") == "current" and not has_body:
+            raise ValueError(f"{rel} has status current but a blank body")
+        if meta.get("status") != "current":
+            continue
+        if incomplete or meta.get("load") == "always":
+            selected.add(rel)
+        if rel in SHARED_REQUIRED and meta.get("load") != "always":
+            selected.add(rel)
+            warnings.append(f"{rel} is required always but declares load: {meta.get('load', 'missing')}")
+    ordered = [rel for rel in SHARED_CORE_ORDER if rel in selected]
+    ordered.extend(sorted(selected - set(ordered)))
+    return [(rel, records[rel][1]) for rel in ordered], sorted(set(warnings))
+
+
+def shared_context_lines():
+    if not SHARED or not SHARED.strip() or "<<" in SHARED:
+        return [], False
+    try:
+        selected, warnings = shared_always_set(SHARED)
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        return (["Shared-context WARNING: safe loading could not be established "
+                 f"({exc}). Consequential work must wait for manual Shared-context review."], False)
+    lines = []
+    for rel, text in selected:
+        lines.extend((f"<<< shared-context:{rel} >>>", text.rstrip(),
+                      f"<<< end shared-context:{rel} >>>"))
+    lines.extend(f"Shared-context WARNING: {warning}; run the store's shared-lint gate."
+                 for warning in warnings)
+    return lines, True
 
 
 def unconsolidated_entries():
@@ -170,11 +293,14 @@ def main():
     if (ROOT / ".uninitialised").exists():
         sys.exit(0)
 
-    lines = [f"[{WORKSPACE_NAME} brief]"]
+    shared_lines, shared_loaded = shared_context_lines()
+    lines = shared_lines + [f"[{WORKSPACE_NAME} brief]"]
     lines.append("You are <<AGENT_NAME>>, this workspace's agent (see AGENTS.md Identity for scope).")
     boot = "Boot: "
-    if SHARED and SHARED.strip():
-        boot += f"load the shared context at {SHARED} (identity, operating-rules); "
+    if shared_loaded:
+        boot += "the Shared always set is injected above; use its indexes for triggered context; "
+    elif SHARED and SHARED.strip() and "<<" not in SHARED:
+        boot += "Shared context is configured but was not safely injected; obey the warning above; "
     boot += ("read 00_meta/staging.md; re-verify the newest handover. If no task is queued, "
              "stand by for <<OWNER>> and do not act unprompted.")
     lines.append(boot)

@@ -4,7 +4,7 @@
 `.claude/settings.json` wires each hook event to `shim.py <hook-name>`. This store's hooks
 (`onboarding-gate`, `store-brief`) take no payload, so the shim just runs the matching
 `core/hooks/<name>.py`, passes its stdout/stderr through, and returns 0 (continue) unless the hook
-signalled a block with exit 2.
+signalled a block with exit 2. Other failures continue the session but inject a manual-review warning.
 
 Keep this file thin: wiring only, no policy. Policy lives in core/. See core/RUNTIMES.md.
 """
@@ -38,6 +38,9 @@ def main():
         sys.exit(0)
     sys.stdout.write(r.stdout)
     sys.stderr.write(r.stderr)
+    if r.returncode not in (0, 2):
+        sys.stdout.write(f"[shim] {core_hook.name} exited {r.returncode}; consequential work must "
+                         "wait for manual review of the core hook failure.\n")
     sys.exit(r.returncode if r.returncode == 2 else 0)
 
 

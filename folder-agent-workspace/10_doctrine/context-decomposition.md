@@ -125,6 +125,16 @@ No rewording without the file's normal edit gate.
 6. Record a journal event naming the file, the decision authority and the verification result;
    each new note carries a provenance banner.
 
+## Always-loaded delta
+
+Always-loaded context carries only unique, consequential, non-derivable constraints: invariants,
+gates, exact non-standard conventions, and commands. Put descriptive or explanatory material in
+canonical indexed documentation so humans and agents can retrieve it selectively.
+
+Before adding to a constitution or other always-loaded surface, name the observed failure,
+credible risk, mandated invariant, or measured benefit, and name the displaced or redundant text
+the addition removes. If no delta can be stated, link to the canonical source instead.
+
 ## Where user context lives
 
 User and principal context, and cross-workspace operating principles, live in the linked

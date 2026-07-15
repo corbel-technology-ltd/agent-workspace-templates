@@ -45,6 +45,7 @@ Folder map: [00-INDEX.md](00-INDEX.md).
 | `okf-check.py` | Checks required frontmatter, valid links, and mirrored relationships. |
 | `recall-tiered.py` | Searches memory from the hottest curated layer down to raw journal truth. |
 | `scrub-check.py` | Finds configured private or instance-specific terms before distribution. |
+| `skill-surface-check.py` | Validates skill metadata, neutral links and thin runtime pointers. |
 | `template-update.py` | Checks, classifies, and safely applies template changes without clobbering customisations. |
 | `update-selftest.py` | Proves the non-clobbering template update flow in disposable repositories. |
 
@@ -62,10 +63,11 @@ contracts; it does not own policy, workflows, or business logic. Root pointer fi
 
 | Step | Change |
 |---|---|
-| 1. Neutral playbook | Add `60_workflows/<skill-name>.md` with the same frontmatter pattern as its siblings and no runtime-specific language. |
-| 2. Thin pointers | In each supported runtime skill/command surface listed in `core/RUNTIMES.md`, add a short pointer that says to follow that playbook. |
-| 3. Registry | Add the pointer paths and lifecycle wiring notes to `core/RUNTIMES.md`; keep all vendor detail there. |
-| 4. Proof | Run `python3 tools/agnostic-check.py`; it must report that the neutral core is vendor-free and adapters are thin pointers. |
+| 1. Evidence and tier | Apply the [skill promotion contract](../60_workflows/README.md#skill-promotion-contract); family distribution additionally needs its paired release gate. |
+| 2. Neutral playbook | Add `60_workflows/<skill-name>.md` with exact outputs, validation and fallback, and no runtime-specific language. |
+| 3. Match-grade pointers | Give each supported runtime a thin pointer with a discriminative trigger and nearest non-applicable case. |
+| 4. Registry | Add pointer and lifecycle rows to `core/RUNTIMES.md` and `50_registers/component-registry.md`; keep vendor detail in the runtime registry. |
+| 5. Proof | Run the static gates, then prove applicable discovery, non-applicable restraint, intended effect and output validation in every claimed runtime. |
 
 ## Hook wiring and proof
 
@@ -75,6 +77,7 @@ contracts; it does not own policy, workflows, or business logic. Root pointer fi
 | Onboarding gate | `python3 core/hooks/onboarding-gate.py` is silent when live; on a blank copy it prints the exact onboarding action. |
 | Journal block | Send `{"op":"modify","path":"20_memory/journal/<existing-entry>.md"}` to `python3 core/hooks/journal-guard.py`; exit `2` means blocked. |
 | Adapter purity | `python3 tools/agnostic-check.py` exits `0`. |
+| Skill surface | `python3 tools/skill-surface-check.py` exits `0`; then prove discovery and effect per runtime. |
 | Automatic wiring | Start a new runtime session and confirm the session brief appears; use the adapter's wiring and verification entry in `core/RUNTIMES.md` if it does not. |
 
 Hook logic and its payload contract are in [`core/hooks/README.md`](../core/hooks/README.md). Installing

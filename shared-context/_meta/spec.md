@@ -62,7 +62,7 @@ and the family-standard machinery (`core/`, `tools/`, thin runtime adapters).
 ## 5. Staging
 
 - **v1-now:** the constitution, governance, link-in contract (`core/link-workspace.py`), the
-  store brief, the four gates, scrub derivation from boundaries.
+  store brief, the five gates, scrub derivation from boundaries.
 - **awaits-inputs:** calibration content (needs a principal), roster (needs workspaces),
   dashboard rows (need two consumers), evaluation of agent calibration (needs history).
 - **deferred:** any UI, any database, any automated merge of contradictory edits - the ledger +

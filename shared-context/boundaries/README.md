@@ -4,6 +4,7 @@ name: Boundaries - the confidentiality line
 type: reference
 layer: C0
 status: current
+load: always
 owner: shared
 created: <<CREATED_DATE>>
 tags: [boundaries, confidentiality, scrub, privacy, never-share]
@@ -20,8 +21,14 @@ what needs care, what is public. Everything privacy-mechanical in the family der
 never-share list by `python3 core/derive-scrub.py`, so the line is written once and enforced
 mechanically everywhere.
 
-- [`boundaries.md`](boundaries.md) - the three-tier line itself. `owner: human`: agents propose
-  additions (tightening is low-risk); only the principal relaxes a boundary.
+## Load policy
+
+| File | Load | Trigger |
+|---|---|---|
+| [`boundaries.md`](boundaries.md) | always | Every session once current and populated, because it carries privacy and publication constraints. |
+
+`boundaries.md` is human-owned: agents may propose tightening, but only the principal relaxes a
+boundary.
 
 Two rules agents apply without being asked:
 

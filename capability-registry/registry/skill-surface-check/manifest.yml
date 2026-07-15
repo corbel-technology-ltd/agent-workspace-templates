@@ -1,0 +1,10 @@
+name: skill-surface-check
+version: 1
+description: Structural skill gate - discovery metadata, adapter-local name uniqueness,
+  neutral playbook links, and thin pointers.
+provenance: FAW family shared tooling; registry-owned gate with embedded disposable self-tests
+requires: []
+files:
+- src: files/skill-surface-check.py
+  target: tools/skill-surface-check.py
+  sha256: de7bd7b19731ffd8c794357bed6cf2aee109f1ffb870bebe4110155d30ae3621

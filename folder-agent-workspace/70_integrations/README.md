@@ -38,6 +38,7 @@ software *would* run if a workflow ever earns automation.
 | Relationship memory / CRM | (instance CRM) | TODO |
 | Always-on executor | (optional; see `00_meta/always-on-executor-spec.md`) | optional |
 | Off-site backup | (instance off-site store) | TODO |
+| System snapshot | (instance snapshot command and output location) | TODO |
 | Deferred-software runtime | (instance infra: a host/VPS, an automation hub, a git remote, monitoring) | reserved |
 
 ---
@@ -112,6 +113,15 @@ the deferred event pipeline; a host/VPS for any database or vector store; a git 
 event store; monitoring for any stood-up service. Until the gate fires, this is reserved capacity,
 not running software. The workspace is run **by hand over the filesystem**; do not describe the
 deferred control plane as if it exists.
+
+### 11. System snapshot command
+
+- **What:** the instance's approved command for a pre-change machine or service snapshot, plus the
+  location where it writes the result.
+- **Command:** (unwired; add the exact instance command here).
+- **Output check:** (unwired; name the path or deterministic probe that proves the snapshot exists).
+- **Stop rule:** `60_workflows/system-maintenance.md` stops before changing system state while this
+  slot is unwired. The template does not guess a command or ship integration code.
 
 ## Related
 

@@ -16,6 +16,9 @@ tags: [decision, packaging, naming, mono-repo, family]
 family repo **`Agent-Workspace-Templates`**, members **Folder-Agent-Workspace** (workspace), **Shared-Context** (shared context),
 **Capability-Registry** (capability registry - see decision 0002).
 
+> **Amendment, 2026-07-15:** the five-tool statement below records the v0.1 decision-time stock.
+> The current family vendors six shared capabilities after adding `skill-surface-check` v1.
+
 ## The packaging decision
 
 **Chosen: one repo, three root folders, shipped together.**

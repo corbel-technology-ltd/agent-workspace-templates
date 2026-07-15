@@ -4,6 +4,7 @@ name: Rule plumbing - how to install a rule properly
 type: doctrine
 layer: C3
 status: current
+load: triggered
 owner: shared
 created: <<CREATED_DATE>>
 tags: [rules, plumbing, discipline, propagation, discoverability]

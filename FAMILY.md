@@ -43,6 +43,10 @@ repo: `python3 instantiate.py <folder-agent-workspace|shared-context|capability-
 `git init`s it - or copy the folder by hand and `git init` yourself. Nothing in a member reaches
 into a sibling by relative path.
 
+The family gate proves this after delivery: `tools/instantiate-selftest.py` makes fresh standalone
+copies, preserves their blank onboarding state, and runs every extraction-safe member gate. Tests
+that intentionally exercise family-root machinery continue to run against the family checkout.
+
 - **Only a workspace?** Take Folder-Agent-Workspace. Leave `SHARED_CONTEXT_PATH` blank at onboarding; wire a
   Shared-Context later without re-onboarding.
 - **Only the shared brain?** Take Shared-Context. Its link-in contract speaks plain files; any workspace
@@ -70,7 +74,7 @@ build where a vendor name leaks into the neutral core or an adapter grows beyond
 - Append-only history with a mutable counterpart: journal + registers (Folder-Agent-Workspace), CHANGES +
   dashboard (Shared-Context), ledger + fleet report (Capability-Registry).
 
-The five shared tools are vendored byte-identical into each member, stocked as the Capability-Registry's
+The six shared tools are vendored byte-identical into each member, stocked as the Capability-Registry's
 seed capabilities, and `tools/family-check.py` (repo root) fails if any vendored copy drifts from
 the registry checksums - the family runs on its own supply chain.
 
@@ -79,3 +83,6 @@ the registry checksums - the family runs on its own supply chain.
 British English; no em dashes; one concept per file, linked into a graph; source-or-abstain;
 deterministic first, the model only where judgement is genuinely needed; the human at every
 consequential gate. MIT, © 2026 CORBEL Ltd.
+
+Always-loaded family context accepts only a stated consequential delta and names the redundant or
+displaced text it removes; descriptive material stays in canonical indexed documentation.

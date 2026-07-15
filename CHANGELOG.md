@@ -7,6 +7,20 @@ All notable changes to the Agent-Workspace-Templates family are documented here.
 
 ### Added
 
+- A registry-owned `skill-surface-check` capability, installed byte-identically in every member
+  and wired through member, extraction, parity, runtime, and documentation surfaces.
+- A two-tier skill promotion contract and corrected skill discovery boundaries and fallbacks.
+- Proposed release-gated optional acceptance prompts for ambiguous or delegated tasks; shipping
+  remains contingent on the paired protocol in decision 0003.
+- A bounded always-loaded-context delta rule and exact-file propagation for the doctrine and design
+  corrections that instantiated workspaces must receive. Existing instances must repeat the
+  update flow in a fresh process when `tools/template_paths.py` changes so the new policy can
+  surface protected review candidates.
+- A pre-registered paired-evaluation protocol for always-loaded context, new family-distributed
+  skills, and the optional task-acceptance pilot, with explicit leakage and shipping rules.
+- A standalone-instantiation self-test that preserves blank onboarding state and runs each
+  member's extraction-safe gates from an isolated delivered copy.
+
 - A non-clobbering live-instance template update channel: origin manifests, cached update checks,
   pacnew-style apply/accept semantics, a seven-day session nudge, and end-to-end proof.
 - A context-decomposition doctrine and constitution rule: large durable context is broken into
@@ -19,8 +33,24 @@ All notable changes to the Agent-Workspace-Templates family are documented here.
   session model; dispatch depth and concurrency stay bounded. Runtime-conditional where the runtime
   exposes per-subagent model selection.
 
+### Changed
+
+- Proposed a release-gated Shared-context loading contract with explicit always/triggered metadata,
+  seed suppression, deterministic injection, lint validation, and non-executing Folder consumption.
+- Proposed a release-gated constitution diet that pointerises duplicated overview, OKF, runtime,
+  and shared-store exposition while preserving every invariant and inbound heading anchor.
+
 ### Fixed
 
+- Restricted live-update origin metadata to Folder workspaces, sanctioned its inert adapter-path
+  inventory in the agent-agnostic gate, and stopped Shared-Context and Capability-Registry copies
+  receiving a member-inappropriate stamp.
+- Replaced the nonexistent system-snapshot command with a blank per-instance integration slot and
+  a stop-before-change rule when that slot is unwired.
+- Reconciled the complete Decision Packet lifecycle, gate documentation, and all three shipped
+  runtime skill pointers.
+- Restored the OKF producer-superset interoperability note to the Folder schemas index after the
+  post-implementation quality review found the constitution diet dropped it rather than moving it.
 - Added canonical generated `## Related` sections to the new decomposition, taxonomy, knowledge-pack
   and reference surfaces, and cleared the remaining member relationship-generation debt.
 - Aligned context-decomposition prose with the checker's actual mechanical ceiling and sibling-index

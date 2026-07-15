@@ -42,7 +42,7 @@ same `--as-of` → same gathered set. Only the section summaries vary.
 
 2. **Gather open decisions (deterministic).** Read the `## Open decisions` table in
    [`../50_registers/decision-queue.md`](../50_registers/decision-queue.md). Take every row with
-   `status: open` (and `snoozed` rows whose `Review` date is `<= as-of`). Sort by `risk`
+   `status: open` (and `snoozed` rows whose `review` date is `<= as-of`). Sort by `risk`
    descending, then by `date` ascending. For each, carry through its `summary`, `risk`, packet
    link, and queue `id`. Read the packet's `recommendation` field straight from
    `30_schemas/decision-packet.md` shape - do not re-derive it. These fill **§2 Immediate

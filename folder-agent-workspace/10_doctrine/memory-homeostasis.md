@@ -78,14 +78,11 @@ only if/when the store graduates to the deferred database software.
 
 ## The same anti-sprawl logic applies to the skill library
 
-The reaper governs *atom* bloat. It does not touch the playbook library (`core/` playbooks and
-their runtime skill surfaces, where `60_workflows/` graduate). That library sprawls the same way:
-count rises monotonically without
-active reshaping, and **high count is the failure mode, not the goal**. Periodically ask the question
-decay and promotion never ask: would a competent maintainer write this as N narrow skills, or fewer
-umbrella skills with labelled sections? A skill with zero uses is absence-of-evidence, not a cull
-signal. This is the insight only, no failsafe apparatus or graduation ladder until the library is
-big enough to need one (spine-not-leaves).
+The reaper governs atom bloat, not the playbook library or its runtime skill surfaces. Retrieve the
+smallest applicable skill set for the task. Retire or merge skills only when usage and interference
+evidence shows duplication or harm; do not infer quality from catalogue size, and zero uses is
+absence of evidence rather than a cull signal. The governing promotion rule is the
+[skill promotion contract](../60_workflows/README.md#skill-promotion-contract).
 
 ## Related
 

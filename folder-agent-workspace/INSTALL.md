@@ -57,13 +57,9 @@ build if an adapter grows content or a vendor name leaks into the neutral core.
 
 ## Before distributing your own copy
 
-Run the pre-distribution gates ([`tools/README.md`](tools/README.md)) - all three must exit `0`:
-
-```bash
-python3 tools/scrub-check.py      # zero in-house terms across contents, ids, filenames
-python3 tools/okf-check.py        # OKF-compatible frontmatter + body-link mirroring
-python3 tools/agnostic-check.py   # neutral core vendor-free, adapters thin pointers
-```
+Run the canonical extraction-safe distribution checks in
+[`tools/README.md`](tools/README.md). Every command in that section must exit `0`; the separately
+listed updater maintenance proof requires a template-family checkout.
 
 ## The family
 

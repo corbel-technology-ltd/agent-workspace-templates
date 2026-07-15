@@ -4,6 +4,7 @@ name: <<PRINCIPAL_NAME>> - availability and time shape
 type: context
 layer: C3
 status: seed
+load: triggered
 owner: human
 created: <<CREATED_DATE>>
 tags: [identity, availability, time, escalation, capacity]

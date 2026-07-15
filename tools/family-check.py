@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """family-check.py - the family gate: members healthy, shared machinery in sync.
 
-Five checks across the three member templates (found beside this repo root under their
+Six checks across the three member templates (found beside this repo root under their
 assembled names or their local build names):
 
-  (1) MEMBER GATES - each member's own pre-distribution gates exit 0 (scrub, okf, agnostic;
-      plus shared-lint for the shared-context member and `chandler.py verify` for the registry).
+  (1) MEMBER GATES - each member's own pre-distribution gates exit 0 (scrub, okf, agnostic,
+      skill-surface; plus shared-lint for Shared and `chandler.py verify` for the registry).
   (2) VENDORED PARITY - every capability manifest in the registry member is checked against
       each member's vendored copy: byte-for-byte (sha256) identical. The family runs on its own
       supply chain; this is the check that makes that claim true.
@@ -13,6 +13,8 @@ assembled names or their local build names):
   (4) FAMILY THREAD - every member README names the family and points at FAMILY.md.
   (5) CHANGELOG DISCIPLINE - advisory warning when HEAD changes a member without changing the
       family CHANGELOG.md [Unreleased] block.
+  (6) EXTRACTABILITY - fresh standalone copies keep their placeholders and pass the gates that do
+      not require family-root test fixtures.
 
 Exit 0 if all green, 1 otherwise. Stdlib only (the registry manifests are parsed with a minimal
 line scanner, so this gate runs even where PyYAML is absent).
@@ -36,11 +38,12 @@ MEMBERS = {
 
 GATES = {
     "folder-agent-workspace": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
-                 "tools/memory-selftest.py", "tools/update-selftest.py",
+                 "tools/skill-surface-check.py", "tools/memory-selftest.py", "tools/update-selftest.py",
                  "tools/decomposition-check.py", "tools/decomposition-selftest.py"],
     "shared-context": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
-                 "tools/shared-lint.py"],
-    "capability-registry": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py"],
+                 "tools/skill-surface-check.py", "tools/shared-lint.py"],
+    "capability-registry": ["tools/scrub-check.py", "tools/okf-check.py", "tools/agnostic-check.py",
+                 "tools/skill-surface-check.py"],
 }
 
 
@@ -161,6 +164,15 @@ def main():
         if "FAMILY.md" not in text:
             problems.append(f"{name}: README.md does not point at FAMILY.md")
 
+    # (6) delivered-copy health. Family-only self-tests already ran above against the source tree.
+    selftest = subprocess.run(
+        [sys.executable, str(ROOT / "tools" / "instantiate-selftest.py")],
+        cwd=ROOT, capture_output=True, text=True)
+    if selftest.returncode != 0:
+        problems.append("standalone instantiation self-test failed\n"
+                        + "\n".join("    " + line for line in
+                                    (selftest.stdout + selftest.stderr).splitlines()[:12]))
+
     warning = changelog_warning()
     if warning:
         print(warning)
@@ -170,8 +182,8 @@ def main():
             print(pr)
         print(f"\nfamily-check: {len(problems)} problem(s).", file=sys.stderr)
         return 1
-    print(f"family-check: clean - {len(paths)} members, gates green, vendored tools in sync, "
-          f"licences identical, family thread present.")
+    print(f"family-check: clean - {len(paths)} members, gates green, standalone copies healthy, "
+          f"vendored tools in sync, licences identical, family thread present.")
     return 0
 
 

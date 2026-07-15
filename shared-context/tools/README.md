@@ -1,25 +1,25 @@
 ---
 id: <<store_slug>>.tools.readme
-name: Pre-distribution gates - scrub, okf, agnostic, shared-lint
+name: Pre-distribution gates - scrub, okf, agnostic, skill-surface, shared-lint
 type: doc
 layer: C3
 status: current
 owner: shared
 created: <<CREATED_DATE>>
-tags: [tools, gates, distribution, scrub, okf, agnostic, shared-lint]
+tags: [tools, gates, distribution, scrub, okf, agnostic, skill-surface, shared-lint]
 related:
   - {ref: SHARED.md, dimension: why, polarity: explains}
 ---
 
 # Pre-distribution gates
 
-Four deterministic, stdlib-only gates that must be **green before this store is distributed**,
+Five deterministic, stdlib-only gates that must be **green before this store is distributed**,
 plus one maintenance tool (`gen-related.py`). Gates, not linters: they fail loud (exit 1) so a
 leak, a broken knowledge edge, vendor lock-in, or structural drift cannot ship. They read the live
 git tree via `git ls-files`, so they check exactly what would be distributed.
 
-Three are vendored byte-identical across the FAW family (scrub, okf, agnostic - the family's
-capability registry tracks them); `shared-lint` is this template's own.
+Four are vendored byte-identical across the FAW family (scrub, okf, agnostic, skill-surface); the
+family's capability registry tracks them, while `shared-lint` is this template's own.
 
 ## `scrub-check.py` - zero private terms
 
@@ -45,6 +45,11 @@ green with `gen-related.py` (regenerates the `## Related` sections; `--check` fo
 No vendor/runtime term outside the adapter layer + `core/RUNTIMES.md`; every adapter pointer
 stays a pointer (line cap, must defer to `AGENTS.md`, no content sections).
 
+## `skill-surface-check.py` - skill discovery + neutral thin pointers
+
+Checks tracked skill metadata, adapter-local name uniqueness, neutral playbook links, and
+thin-pointer shape. A store with no skill surface passes cleanly.
+
 ## `shared-lint.py` - the store's own shape
 
 Structure lock (no unknown top-level files/folders - dumping needs sign-off, not drift), the file
@@ -58,10 +63,11 @@ python3 tools/gen-related.py                # refresh mirrors after editing rela
 python3 tools/scrub-check.py;    echo "exit $?"
 python3 tools/okf-check.py;      echo "exit $?"
 python3 tools/agnostic-check.py; echo "exit $?"
+python3 tools/skill-surface-check.py; echo "exit $?"
 python3 tools/shared-lint.py;    echo "exit $?"
 ```
 
-All four must print a clean line and exit `0` before distribution.
+All five must print a clean line and exit `0` before distribution.
 
 ## Related
 

@@ -14,7 +14,7 @@ silent by default, narrow matchers, no write-only logs, notify only when a human
 |---|---|---|---|
 | `journal-guard.py` | before a file/shell operation | Blocks any operation that would edit, overwrite, delete, or move an EXISTING `20_memory/journal/` entry. Creating a NEW entry is allowed (append-only). The reflex behind the immutability invariant. | **yes** (exit 2) |
 | `onboarding-gate.py` | session start | If the `.uninitialised` sentinel is present, instructs the agent to run the onboarding playbook (`core/onboarding/ONBOARDING.md`) before ANY other work. Silent once onboarded. | no |
-| `session-brief.py` | session start | Injects boot orientation plus open decision-queue items + open loops, only if any exist. Situational awareness at near-zero cost. | no |
+| `session-brief.py` | session start | Safely reads the configured Shared store's eligible always set as data, injects it before local orientation, then adds open decisions and loops. | no |
 | `session-digest.py` | session end | Appends one terse L1 journal event (reason, last commit, working tree) so the session is captured as truth for the reaper. Silent. | no |
 | `reaper.py` | session end | The deterministic fast memory pass (membership, decay, supersession, quarantine, tiering, build marker). Spec: `60_workflows/memory-reaper.md`. Hook-safe (a failure never disrupts session end). | no |
 | `registry-drift.py` | session end (optional) | Advisory drift sensor: flags any ops component not catalogued in `50_registers/component-registry.md`. Silent when clean. | no |
@@ -48,8 +48,8 @@ These files carry placeholders alongside the rest of the template:
 - `<<WORKSPACE_ROOT_ENV>>` - the env-var name for the root override (e.g. `ACME_ROOT`; every hook).
 - `<<WORKSPACE_NAME>>` / `<<AGENT_NAME>>` / `<<OWNER>>` - the brief label and boot line printed by
   `session-brief.py`.
-- `<<SHARED_CONTEXT_PATH>>` - the shared-store path in the `session-brief.py` boot line (blank = no
-  store, and the line is omitted).
+- `<<SHARED_CONTEXT_PATH>>` - the shared-store path used by `session-brief.py` for fixed-path,
+  non-executing always-set loading (blank = no store).
 - `<<workspace_slug>>` - the build-marker id namespace (`reaper.py`) and the journal `where:` field
   (`session-digest.py`).
 - `<<agent_slug>>` - the lowercase agent handle written to the journal `who:` field

@@ -2,6 +2,28 @@
 
 Template-level history (what changed in Folder-Agent-Workspace itself, not in any instance). Newest first.
 
+## Unreleased
+
+- Proposed a paired-evaluation candidate for deterministic Shared-context always-set injection,
+  seed suppression, and safe failure before consequential work.
+- Proposed a paired-evaluation candidate that removes duplicated constitutional exposition while
+  preserving all safety rules, routing, doctrine, and heading anchors.
+- Added the shared skill-surface gate to the canonical tool inventory and component/runtime maps.
+- Added a two-tier skill promotion contract and tightened all three shipped skill pointers.
+- Proposed release-gated optional acceptance prompts for ambiguous or delegated work; shipping
+  remains contingent on the family paired-evaluation protocol.
+- Added an always-loaded-context delta rule and bounded exact-file propagation for maintained
+  doctrine and design corrections, including a tested fresh-process second pass when the managed
+  path policy itself changes.
+- Replaced the dangling system-snapshot command with an explicit instance integration slot and a
+  safe stop while that slot is unwired.
+- Made the tools README the canonical distribution-check inventory and documented every shipped
+  runtime skill surface.
+- Aligned the Decision Packet schema, template, queue, log, and daily brief on one lifecycle,
+  reversibility vocabulary, resolution date, review date, and mandatory options field.
+- Restored the OKF producer-superset interoperability note in the schemas index after quality
+  review found the constitution diet had dropped it rather than relocating it.
+
 ## 0.6 - 2026-07-14 - repeated-update safety
 
 - Preserved accepted local customisations across repeated template updates by separating reviewed

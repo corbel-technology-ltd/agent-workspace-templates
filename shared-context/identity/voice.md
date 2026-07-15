@@ -4,6 +4,7 @@ name: <<PRINCIPAL_NAME>> - voice and writing style
 type: context
 layer: C3
 status: seed
+load: triggered
 owner: human
 created: <<CREATED_DATE>>
 tags: [identity, voice, writing, style, delivery]

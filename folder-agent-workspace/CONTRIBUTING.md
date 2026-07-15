@@ -20,15 +20,9 @@ run artefacts. Those live in your own copy, never here.
 
 ## Before you open a PR
 
-Run the gates and the onboarding tests. All should pass on a clean checkout:
-
-```bash
-python3 tools/scrub-check.py
-python3 tools/okf-check.py
-python3 tools/agnostic-check.py
-python3 tools/gen-related.py --check
-python3 core/onboarding/tests/test_apply.py
-```
+Run the canonical extraction-safe distribution checks in
+[`tools/README.md`](tools/README.md). Every command in that section must pass on a clean checkout.
+Family maintainers also run the separately listed updater proof from the family checkout.
 
 If you add or change a `related:` frontmatter edge, run `python3 tools/gen-related.py` to refresh the
 body-link mirrors so `okf-check` stays green.

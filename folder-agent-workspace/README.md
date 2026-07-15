@@ -46,13 +46,9 @@ this member directly:
    fills the template deterministically. No find-and-replace by hand.
 5. You are live. Talk to your agent.
 
-Before you ever share your own copy onward, two gates prove it is clean and portable:
-
-```bash
-python3 tools/scrub-check.py      # no in-house terms leak (you configure the list)
-python3 tools/okf-check.py        # OKF-compatible frontmatter + linked knowledge graph
-python3 tools/agnostic-check.py   # neutral core stays vendor-free, adapters stay pointers
-```
+Before you ever share your own copy onward, run the canonical extraction-safe distribution checks
+in [`tools/README.md`](tools/README.md). Every command in that section must pass; the separately
+listed updater maintenance proof belongs to a template-family checkout.
 
 ## What is inside
 

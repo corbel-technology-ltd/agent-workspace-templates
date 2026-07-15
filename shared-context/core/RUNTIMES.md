@@ -23,7 +23,7 @@ A store needs far less wiring than a workspace. The whole contract:
 | Integration point | Wire | Payload |
 |---|---|---|
 | Pointer file at root | the file your runtime auto-loads, pointing at `AGENTS.md` (canonical text below) | - |
-| Session start | `core/hooks/onboarding-gate.py` then `core/hooks/store-brief.py`; inject stdout as context | none (any stdin JSON ignored) |
+| Session start | `core/hooks/onboarding-gate.py` then `core/hooks/store-brief.py`; inject the deterministic always set before governance/coordination context | none (any stdin JSON ignored) |
 
 Canonical pointer text (all adapters carry exactly this, with their runtime's name in the heading):
 
@@ -48,7 +48,8 @@ This file is a pinned pointer, not a document. Do not add content here;
    runtime's payload to the scripts and prints their stdout is enough - copy
    `.claude/hooks/shim.py`). No hook system? Nothing breaks: `AGENTS.md` routes a fresh agent by
    intent, and the onboarding gate's check is one `ls .uninitialised` away.
-3. **Prove it (1 min).** `python3 tools/agnostic-check.py` exits 0.
+3. **Prove it (1 min).** `python3 tools/agnostic-check.py` and
+   `python3 tools/skill-surface-check.py` exit 0.
 
 A consuming workspace needs **no wiring at all** to read the store - the link-in contract
 (`SHARED.md` §link-in) works with any agent that can read files.
@@ -58,7 +59,8 @@ A consuming workspace needs **no wiring at all** to read the store - the link-in
 - **Pointer:** `CLAUDE.md`.
 - **Wiring:** `.claude/settings.json` runs `.claude/hooks/shim.py onboarding-gate` and
   `.claude/hooks/shim.py store-brief` at `SessionStart`; the shim (shared family-wide) pipes the
-  payload through and passes exit codes back.
+  core hook's stdout and stderr through, preserves an exit-2 block, and otherwise continues the
+  session. A different non-zero exit injects a manual-review warning instead of disappearing.
 - **Skill pointer:** `.claude/skills/onboarding/SKILL.md` -> `core/onboarding/ONBOARDING.md`.
 
 ## Adapter: Gemini CLI (pointer only)

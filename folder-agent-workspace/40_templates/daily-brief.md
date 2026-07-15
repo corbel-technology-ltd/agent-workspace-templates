@@ -39,7 +39,7 @@ explicit approval (autonomy-by-reversibility).
 
 | Decision | Reversibility | Recommendation | Packet | Queue ref |
 |---|---|---|---|---|
-| <decision_needed> | low / med / high | <approve/reject/snooze/ask> | `90_runs/<packet>.md` | [#<id>](../50_registers/decision-queue.md) |
+| <decision_needed> | reversible / recoverable / irreversible | <approve/reject/snooze/ask> | `90_runs/<packet>.md` | [#<id>](../50_registers/decision-queue.md) |
 
 ## 3. Email needing approval
 

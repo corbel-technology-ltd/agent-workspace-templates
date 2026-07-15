@@ -54,12 +54,13 @@ The easiest path: build the thing inside a workspace first, prove it there, then
 ## Before distributing your own copy
 
 Populate `tools/scrub-terms.txt` (your fleet's private names do not belong in a shared registry),
-then run the gates - all four must exit `0`:
+then run every gate below; all must exit `0`:
 
 ```bash
 python3 tools/scrub-check.py
 python3 tools/okf-check.py
 python3 tools/agnostic-check.py
+python3 tools/skill-surface-check.py
 python3 core/chandler.py verify
 ```
 

@@ -77,9 +77,10 @@ def write_changes(line):
 
 
 BOOT_RULE = """\
-> **Load the shared context first.** Read `{store}/SHARED.md`, then `identity/` and
-> `operating-rules/`. The store outranks this workspace's local notes on the principal. Check
-> `_coordination/dashboard.md` for open handoffs owed to this workspace."""
+> **Load the shared context first.** Read `{store}/SHARED.md` and the `identity/`,
+> `operating-rules/`, and `boundaries/` index READMEs. Load their current, non-blank `always`
+> set before local context, then only triggered files relevant to the task. The store outranks
+> local notes on the principal. Check `_coordination/dashboard.md` for open handoffs."""
 
 
 def main():

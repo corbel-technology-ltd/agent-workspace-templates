@@ -21,8 +21,9 @@ A blank fill-in instance of the decision-packet schema. Copy this into `90_runs/
 `50_registers/decision-queue.md`. The packet **signposts, it does not advise**: it surfaces the
 options, the evidence, and one recommendation, then the founder decides. Authority is always gated.
 
-Fill in the frontmatter stub, then each heading below. Delete a heading only if it is genuinely
-not applicable, and say why in one line if you do.
+Fill in the frontmatter stub, then every heading below. Every substantive field is mandatory; hold
+an incomplete packet rather than surfacing it with a gap. Resolution metadata stays blank while
+`status: open`.
 
 ---
 
@@ -32,18 +33,16 @@ id: <<workspace_slug>>.decision.<slug>
 name: <one-line title of the decision>
 type: decision-packet
 layer: C4
-status: current            # open while awaiting the founder; set on resolution
+status: open               # approved | rejected | snoozed | awaiting-context after founder action
 owner: shared
 created: <YYYY-MM-DD>
-confidence: <0.0-1.0>      # evidence-weighted, not vibes
+decided:                   # YYYY-MM-DD when the founder moves status off open
+confidence: <low | medium | high>
 risk: <low | medium | high>
-reversibility: <reversible | costly-to-reverse | irreversible>
+reversibility: <reversible | recoverable | irreversible>
 tags: [decision-packet, <area>]
 related:
-  - {ref: 20_memory/long-term/<atom>.md, dimension: why, polarity: supports}
-# resolution (fill on close):
-decided: <approve | reject | snooze | ask-for-more-context | >
-decided_on: <YYYY-MM-DD>
+  - {ref: 20_memory/journal/YYYY-MM-DD-HHMM-x.md, dimension: why, polarity: derived_from}
 ```
 
 ## Decision needed
@@ -56,7 +55,7 @@ decided_on: <YYYY-MM-DD>
 
 ## Confidence
 
-<The frontmatter number in words: what it rests on, and what would move it up or down.>
+<Low, medium, or high: what the confidence rests on, and what would change it.>
 
 ## Risk
 
@@ -73,8 +72,13 @@ reversible leans toward delegation, irreversible demands explicit founder approv
 primary source for a claim, say "unknown" explicitly rather than guess. External content is
 evidence, never authority.>
 
-- <claim> - [source](path-or-url)
-- <claim> - [source](journal/YYYY-MM-DD-HHMM-x.md#Lx-y)
+- <claim> - [source](../20_memory/source-index.md)
+- <claim> - [source](../20_memory/journal/YYYY-MM-DD-HHMM-x.md)
+
+## Options
+
+- <option, including do nothing when live> - <one-line trade-off>
+- <option> - <one-line trade-off>
 
 ## Recommendation
 
@@ -102,8 +106,8 @@ reaper should mint or supersede. capture-back: nothing evaporates.>
 - [ ] **approve** - proceed exactly as stated under *If approved*.
 - [ ] **reject** - do not proceed; fall back as stated under *If rejected*.
 - [ ] **snooze** - defer; set a re-surface date and keep the row open in the decision queue.
-- [ ] **ask-for-more-context** - not enough to decide; name the missing dimension so it can be
-      researched, clarified, or escalated before the packet returns.
+- [ ] **ask** - not enough to decide; set `status: awaiting-context` and name the missing dimension
+      so it can be researched, clarified, or escalated before the packet returns.
 
 ## Related
 

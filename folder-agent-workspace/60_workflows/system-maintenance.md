@@ -36,7 +36,7 @@ Handle local machine or homelab maintenance where changes may be R1: reversible 
 | Stage | Skill or action | Input | Output | Check |
 |---|---|---|---|---|
 | 1 | scope | user request | impact class and target list | R-level named |
-| 2 | snapshot | `70_integrations/tools/system-snapshot.sh <slug> pre-change` | run snapshot | snapshot path exists |
+| 2 | snapshot | configured snapshot command from `70_integrations/README.md` | run snapshot, or stop if unwired | snapshot path exists, or stop reason recorded |
 | 3 | approve | ask <<OWNER>> for approval if system settings change | explicit approval | approval text captured |
 | 4 | execute | smallest approved change | changed system state | command output reviewed |
 | 5 | verify | direct live-state check | verification result | claim verified against actual system |
@@ -45,7 +45,7 @@ Handle local machine or homelab maintenance where changes may be R1: reversible 
 ## Final output contract
 
 - impact class
-- snapshot path
+- snapshot path, or the missing-integration stop reason
 - commands run
 - verification performed
 - files or system settings changed
@@ -55,6 +55,8 @@ Handle local machine or homelab maintenance where changes may be R1: reversible 
 
 - Never modify <<OWNER>>'s system settings without approval.
 - Snapshot before R1 changes, not after.
+- Never invent a snapshot command. If the integration slot is blank, stop before approval or
+  execution and ask the operator to wire one.
 - Do not read, print, or store credential values.
 - Prefer one small working integration over mixed-in polish.
 

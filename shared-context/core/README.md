@@ -22,8 +22,8 @@ adapters wire the two into whatever runtime is used.
 ## What lives here
 
 - [`hooks/`](hooks/onboarding-gate.py) - the two store reflexes: `onboarding-gate.py` (route a
-  fresh agent to onboarding while the sentinel exists) and `store-brief.py` (surface open
-  objection windows, open handoffs, and the roster at session start; silent when clean).
+  fresh agent to onboarding while the sentinel exists) and `store-brief.py` (inject the eligible
+  always set, then surface open objection windows, handoffs, and roster state at session start).
 - [`onboarding/`](onboarding/ONBOARDING.md) - the instantiation playbook, the token registry
   (`placeholders.yml`, six tokens), and the deterministic substitution engine (`apply.py` -
   byte-identical to its siblings across the family; its tests live upstream with Folder-Agent-Workspace).

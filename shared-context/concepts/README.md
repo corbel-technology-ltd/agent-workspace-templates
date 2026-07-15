@@ -26,5 +26,5 @@ pointing at it). Same scope test as everything shared: two or more workspaces mu
 ## Related
 
 - [<<STORE_NAME>>](../SHARED.md)
-- [Glossary - terms that fit in two sentences](../glossary/glossary.md)
+- [The glossary table](../glossary/glossary.md)
 - [Scope test - what earns a place in the store](../operating-rules/scope-test.md)

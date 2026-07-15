@@ -25,11 +25,11 @@ conflict, `SHARED.md` wins on doctrine and this file wins on routing.
 | You are here to | Do |
 |---|---|
 | Onboard a blank store (`.uninitialised` present) | Run the onboarding playbook: `core/onboarding/ONBOARDING.md`. Do nothing else first. |
-| Consume the shared context for a workspace session | Follow the boot reflex in [`SHARED.md`](SHARED.md) §link-in: `identity/` + `operating-rules/` minimum, then the dashboard. Read-only; leave. |
+| Consume the shared context for a workspace session | Follow [`SHARED.md`](SHARED.md) §link-in: constitution plus the three index READMEs, their current non-blank `always` set, relevant triggered files, then the dashboard. Read-only; leave. |
 | Edit or add shared content | [`_meta/governance.md`](_meta/governance.md) first: scope test, CHANGES trailer, objection window, sign-off rules. |
 | Register a new workspace | `python3 core/link-workspace.py --name <ws> --path </abs> --agent <name>` (see [`SHARED.md`](SHARED.md) §link-in). |
 | Update handoffs / check what is owed | [`_coordination/dashboard.md`](_coordination/dashboard.md) (row updates are low-risk; structure changes are not). |
-| Check the store's health before distributing | `tools/`: scrub-check, okf-check, agnostic-check, shared-lint - all must exit 0. |
+| Check the store's health before distributing | `tools/`: scrub-check, okf-check, agnostic-check, skill-surface-check, shared-lint - all must exit 0. |
 
 ## Hard rules
 

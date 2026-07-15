@@ -35,7 +35,7 @@ packets, and never sends, publishes, pays, or signs without an explicit `approve
    set this row's status accordingly. The row stays here only while it is live; settled rows are
    pruned once logged, so the log is the durable record and this table is the working set.
 
-5. A `snooze` carries a `Review` date; an `ask` carries the missing dimension the packet must
+5. A `snooze` carries a `review` date; an `ask` carries the missing dimension the packet must
    resolve before it can be decided.
 
 ## Action vocabulary (the only four)
@@ -46,19 +46,20 @@ packets, and never sends, publishes, pays, or signs without an explicit `approve
 - **ask** - not yet decidable. Name the missing evidence or 5W1H dimension; the packet goes back
   for that input rather than being decided on a guess (source-or-abstain).
 
-Mapped status: `approve`→`approved`, `reject`→`rejected`, `snooze`→`snoozed`,
-`ask`→`awaiting-context`. A row stays `open` until acted on.
+Mapped status: `approve` -> `approved`, `reject` -> `rejected`, `snooze` -> `snoozed`,
+`ask` -> `awaiting-context`. A row stays `open` until acted on. The packet uses the same status
+and records the action date in `decided`.
 
 ## Open decisions
 
-| id | date | summary | packet | risk | status |
-|---|---|---|---|---|---|
-| (none yet) | | | | | |
+| id | date | summary | packet | risk | status | review |
+|---|---|---|---|---|---|---|
+| (none yet) | | | | | | |
 
 <!-- Row shape, newest first. risk = low | medium | high (qualitative tiers,
      `10_doctrine/autonomy-and-gates.md`). Example:
 
-| dq-YYYY-MM-DD-001 | YYYY-MM-DD | One-line decision_needed | [packet](../90_runs/YYYY-MM-DD-<slug>-packet.md) | medium | open |
+| dq-YYYY-MM-DD-001 | YYYY-MM-DD | One-line decision_needed | [packet](../90_runs/YYYY-MM-DD-<slug>-packet.md) | medium | open | |
 
 -->
 
@@ -67,6 +68,7 @@ Mapped status: `approve`→`approved`, `reject`→`rejected`, `snooze`→`snooze
 - **id:** `dq-YYYY-MM-DD-NNN` (date opened + same-day sequence).
 - **risk:** low / medium / high, read straight off the packet (reversibility-weighted).
 - **status:** `open` / `approved` / `rejected` / `snoozed` / `awaiting-context`.
+- **review:** `YYYY-MM-DD` when snoozed; blank otherwise.
 - A high-risk or irreversible item is never auto-actioned; it waits here for an explicit
   `approve`. Mandatory-escalation classes (external send, publish, pay, sign) are blocked at the
   gate regardless of how this row reads.

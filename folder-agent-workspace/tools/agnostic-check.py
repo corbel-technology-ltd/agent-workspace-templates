@@ -44,6 +44,8 @@ SANCTIONED = {
     "tools/agnostic-check.py",
     # The update policy must enumerate adapter paths to hash/copy them, but owns no adapter logic.
     "tools/template_paths.py",
+    # The Folder updater's origin metadata records managed adapter paths as inert data.
+    "00_meta/template-origin.json",
 }
 
 # Capability payloads in a Capability-Registry registry are CARGO: they are checked in the

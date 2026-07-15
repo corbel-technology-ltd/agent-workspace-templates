@@ -45,7 +45,7 @@ weekly review reads.
 
 - **`reversibility` drives nothing retroactively but explains everything.** It records the gate
   tier the decision sat at under `autonomy-by-reversibility`: `reversible` (the action could be
-  undone cheaply), `costly` (undoable but with real cost or delay), or `irreversible` (an external
+  undone cheaply), `recoverable` (undoable but with real cost or delay), or `irreversible` (an external
   send, payment, signature, or publish). Irreversible decisions should always trace to an explicit
   founder approval.
 
@@ -63,7 +63,7 @@ weekly review reads.
 | `date` | `YYYY-MM-DD` the decision was made |
 | `decision` | what was decided, in the founder's terms (approved / rejected / chose X over Y) |
 | `rationale` | one line: why; for a reversal, names the row it overturns |
-| `reversibility` | `reversible` \| `costly` \| `irreversible` |
+| `reversibility` | `reversible` \| `recoverable` \| `irreversible` |
 | `memory_update` | atom written or amended (e.g. `long-term/<slug>.md`), or `none` |
 | `source` | link to the Decision Packet in `90_runs/` or a `journal/` entry |
 

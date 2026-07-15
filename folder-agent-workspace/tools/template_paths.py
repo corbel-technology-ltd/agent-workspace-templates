@@ -13,13 +13,24 @@ MANAGED_PREFIXES = (
     "40_templates/",
 )
 MANAGED_ROOT_FILES = frozenset({"AGENTS.md", "CLAUDE.md", "GEMINI.md"})
+MANAGED_EXACT_FILES = frozenset(
+    {
+        "00_meta/agent-os-design.md",
+        "10_doctrine/context-decomposition.md",
+        "10_doctrine/memory-homeostasis.md",
+    }
+)
 
 
 def is_managed(relpath):
     rel = Path(relpath).as_posix()
     if rel.startswith("./"):
         rel = rel[2:]
-    return rel in MANAGED_ROOT_FILES or any(rel.startswith(p) for p in MANAGED_PREFIXES)
+    return (
+        rel in MANAGED_ROOT_FILES
+        or rel in MANAGED_EXACT_FILES
+        or any(rel.startswith(p) for p in MANAGED_PREFIXES)
+    )
 
 
 def managed_files(root):

@@ -4,6 +4,7 @@ name: Operating rules - how agents behave, everywhere
 type: reference
 layer: C3
 status: current
+load: always
 owner: shared
 created: <<CREATED_DATE>>
 tags: [operating-rules, governance, cross-workspace, discipline]
@@ -26,12 +27,13 @@ lives in their workspaces; how they *behave* lives here once.
 - Workspace-specific rules - each workspace's own constitution
 - Domain knowledge - each workspace's own folders
 
-## Rules
+## Load policy
 
-| Rule | Governs |
-|---|---|
-| [`scope-test.md`](scope-test.md) | What earns a place in this store: the mutual-benefit test every addition must pass. |
-| [`rule-plumbing.md`](rule-plumbing.md) | How a new rule is installed properly - location, frontmatter, propagation, discoverability - so rules never scatter or fork. |
+| File | Load | Trigger |
+|---|---|---|
+| [`scope-test.md`](scope-test.md) | triggered | Adding, promoting or placing shared content. |
+| [`rule-plumbing.md`](rule-plumbing.md) | triggered | Adding, changing or retiring a cross-workspace rule. |
+| [`_rule-template.md`](_rule-template.md) | triggered | Drafting a new operating rule. |
 
 Two seed rules ship because they are the store's own operating mechanics. Your rules accrue
 through governance: propose with [`_rule-template.md`](_rule-template.md), collect sign-off, land

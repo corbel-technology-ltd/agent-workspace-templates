@@ -4,6 +4,7 @@ name: "TODO: rule name"
 type: doctrine
 layer: C3
 status: proposed
+load: triggered
 owner: shared
 created: "{{YYYY-MM-DD}}"
 tags: [operating-rules, proposed]

@@ -13,5 +13,11 @@ Contents:
   (`core/onboarding/ONBOARDING.md`).
 - `skills/template-update/SKILL.md` - thin pointer to the neutral safe-update playbook
   (`60_workflows/template-update.md`).
+- `skills/memory-sleep/SKILL.md` - thin pointer to the neutral bounded memory-synthesis playbook
+  (`60_workflows/memory-sleep.md`).
 
-`tools/agnostic-check.py` fails the build if this layer grows content beyond wiring.
+Skill pointers follow the neutral [promotion contract](../60_workflows/README.md#skill-promotion-contract);
+runtime support requires the discovery-and-effect proof in `core/RUNTIMES.md`.
+
+`tools/agnostic-check.py` keeps this layer runtime-only; `tools/skill-surface-check.py` keeps its
+skills as valid neutral pointers.

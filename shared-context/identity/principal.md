@@ -4,6 +4,7 @@ name: <<PRINCIPAL_NAME>> - canonical identity
 type: context
 layer: C0
 status: seed
+load: always
 owner: human
 created: <<CREATED_DATE>>
 tags: [identity, canonical, principal, roles, risk-posture]

@@ -145,7 +145,8 @@ def main():
         shutil.copytree(
             src, stage, dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(".git", "__pycache__", ".pytest_cache", ".venv"))
-        write_origin_stamp(stage, name)
+        if name == "folder-agent-workspace":
+            write_origin_stamp(stage, name)
         subprocess.run(["git", "init", "-q"], cwd=stage, check=True)
         subprocess.run(["git", "add", "-A"], cwd=stage, check=True)
         subprocess.run(

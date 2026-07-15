@@ -15,6 +15,10 @@ registry with a parity ledger - the mechanism by which deterministic capabilitie
 hooks, onboarding engines, schemas, workflow specs) move between workspaces, and by which drift
 between siblings becomes visible instead of silent.
 
+> **Amendment, 2026-07-15:** references to five vendored tools and five seed capabilities below
+> describe the v0.1 decision-time stock. The current family stocks and vendors six after adding
+> `skill-surface-check` v1.
+
 ## The gap it fills
 
 Folder-Agent-Workspace is **one workspace**. Shared-Context is **one principal's shared brain** above many

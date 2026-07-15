@@ -78,6 +78,10 @@ score only when the inputs (confidence, recurrence, cost-to-delay) are actually 
 - **Moves out (enforcement/inventory):** the gate's *enforcement* → a `PreToolUse` hook; long
   playbooks → skills; heavy audits → subagents; events/metrics → the journal + registers.
 
+- **Placement test:** additions to always-loaded text must pass the
+  [delta rule](../10_doctrine/context-decomposition.md#always-loaded-delta); explanatory detail
+  stays in indexed documentation.
+
 ## Load policy
 
 The staged build status and the emergent-intelligence learning-system detail are situational, not

@@ -46,7 +46,7 @@ This file is a pinned pointer, not a document. Do not add content here;
    filename to `ADAPTER_POINTERS` in `tools/agnostic-check.py`.
 2. **Session start** (optional). Wire the onboarding gate if the runtime has hooks; without it,
    `AGENTS.md` still routes a fresh agent to onboarding by intent.
-3. **Prove it.** `python3 tools/agnostic-check.py` exits 0.
+3. **Prove it.** `python3 tools/agnostic-check.py` and `python3 tools/skill-surface-check.py` exit 0.
 
 ## Adapter: Claude Code (ships wired)
 

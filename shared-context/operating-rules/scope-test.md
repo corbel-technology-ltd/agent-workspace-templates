@@ -4,6 +4,7 @@ name: Scope test - what earns a place in the store
 type: doctrine
 layer: C3
 status: current
+load: triggered
 owner: shared
 created: <<CREATED_DATE>>
 tags: [scope, anti-dumping, mutual-benefit, file-cap, doctrine]

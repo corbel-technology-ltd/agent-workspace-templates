@@ -30,7 +30,9 @@ Each file here is one **contract**, not a generator. It states the frontmatter k
 and the rules that make an instance valid - then leaves the producing to a workflow or a template.
 Every durable artefact is Markdown with an **OKF-compatible body** plus the typed-edge + lifecycle
 frontmatter extension (`AGENTS.md` rule 6): `type` required, one concept per file, `related[].ref`
-edges mirrored as inline body links. The schemas are where those keys are pinned down per artefact.
+edges mirrored as inline body links. The extension keys are a permitted producer superset of plain
+OKF: a consumer that does not know them preserves unknown keys and still reads every relationship
+from the mirrored body links. The schemas are where those keys are pinned down per artefact.
 Many fields map to a future SQL column, so the file store can graduate to a database + vector + graph
 as a migration rather than a rewrite.
 

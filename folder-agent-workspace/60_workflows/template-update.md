@@ -60,6 +60,12 @@ can then migrate the unambiguous stamp to two hashes.
    path remains `customized`, `missing`, or `new-upstream` unless the operator explicitly accepts
    that state.
 
+If an update replaces `tools/template_paths.py`, start a fresh process and repeat steps 1 to 5.
+The first pass installs the expanded path policy without reclassifying existing local content under
+the old policy. The fresh second pass then surfaces newly managed existing files as protected
+`.template-new` review candidates. Do not treat the first pass as complete merely because its
+origin commit is current.
+
 If legacy reconstruction cannot find the recorded commit, make it fetchable from origin or restore
 it to the updater's mirror cache, restore any missing fill values, then rerun `--check`. Upgrade
 `tools/template-update.py` when it reports an unsupported recorded or target fill engine. Offline status

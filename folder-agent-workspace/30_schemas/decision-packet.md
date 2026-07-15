@@ -39,23 +39,28 @@ id: <<workspace_slug>>.decision.<slug>     # stable id; matches the decision-que
 name: <short imperative title>
 type: decision-packet
 layer: C4
-status: open | approved | rejected | snoozed | needs-info
+status: open | approved | rejected | snoozed | awaiting-context
 owner: shared
 created: <YYYY-MM-DD>
-decided: <date>                            # set when status leaves `open`
+decided: <YYYY-MM-DD>                      # set when the founder moves status off `open`
+confidence: low | medium | high
+risk: low | medium | high
+reversibility: reversible | recoverable | irreversible
 tags: [...]
 related:
   - {ref: 20_memory/journal/YYYY-MM-DD-HHMM-x.md, dimension: why, polarity: derived_from}
 ---
 ```
 
-`status` mirrors the four decision-queue actions plus `needs-info`. A packet never self-resolves;
-only the founder moves it off `open`.
+`status` mirrors the decision queue: `ask` maps to `awaiting-context`; the other actions map to
+their past-tense status. A packet never self-resolves; only the founder moves it off `open` and
+sets `decided` to that action date.
 
 ## Fields (the one page, in order)
 
-Every field is mandatory. An empty field is a packet that is not ready to surface; hold it, don't
-ship it with a gap.
+Every substantive field below is mandatory. An empty substantive field is not ready to surface;
+hold the packet rather than shipping a gap. Resolution metadata follows the lifecycle: `decided`
+stays blank while `status: open` and is filled when the founder acts.
 
 1. **decision_needed** - the single explicit question, phrased as a yes/no or a pick-one. One
    decision per packet. If it needs "and", it is two packets.

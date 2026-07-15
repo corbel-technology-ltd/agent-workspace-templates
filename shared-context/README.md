@@ -36,12 +36,13 @@ the workspace an agent runs; Shared-Context is the star all of those workspaces 
 5. Register your first workspace:
    `python3 core/link-workspace.py --name Acme --path /home/you/acme-workspace --agent aster`.
 
-Before sharing your copy onward, four gates prove it is clean, portable, and in shape:
+Before sharing your copy onward, five gates prove it is clean, portable, and in shape:
 
 ```bash
 python3 tools/scrub-check.py      # no private terms leak (boundaries/ feeds the list)
 python3 tools/okf-check.py        # OKF-compatible frontmatter + linked knowledge graph
 python3 tools/agnostic-check.py   # neutral core stays vendor-free, adapters stay pointers
+python3 tools/skill-surface-check.py  # skill metadata and neutral pointers stay valid
 python3 tools/shared-lint.py      # structure lock, file cap, frontmatter, ledger format
 ```
 
@@ -64,7 +65,7 @@ _coordination/     live dashboard of open handoffs + the workspace roster
 CHANGES.md         the append-only ledger every edit lands in
 _meta/             the governance protocol + this store's design spec
 core/              neutral machinery: onboarding engine, store hooks, link-in + scrub-derive tools
-tools/             the four gates
+tools/             the five gates
 ```
 
 Plus one thin adapter per wired runtime (a pinned pointer file at the root and that runtime's

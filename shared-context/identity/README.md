@@ -4,6 +4,7 @@ name: Identity - the principal's canonical profile
 type: reference
 layer: C0
 status: current
+load: always
 owner: shared
 created: <<CREATED_DATE>>
 tags: [identity, principal, canonical, voice, availability]
@@ -18,15 +19,17 @@ The canonical, cross-workspace answer to **who the principal is**. Every workspa
 on the principal are deltas over this folder; on conflict, this folder wins (precedence doctrine,
 [`SHARED.md`](../SHARED.md)).
 
-All three files ship as **blank skeletons**: headings and guidance, no facts. They earn content
-through calibration sessions and confirmed corrections
-([`calibration-os/`](../calibration-os/README.md)) - never through agent inference. An agent that
-"remembers" something about the principal not written here logs it as a correction candidate; it
-does not write it here directly.
+All three files ship as **blank skeletons** and never load until current and populated. They earn
+content through confirmed calibration, never agent inference. An unwritten recollection becomes a
+correction candidate, not a direct edit.
 
-- [`principal.md`](principal.md) - roles, context, risk posture, hard rules.
-- [`voice.md`](voice.md) - how the principal writes and wants to be written for.
-- [`availability.md`](availability.md) - time shape, response expectations, escalation windows.
+## Load policy
+
+| File | Load | Trigger |
+|---|---|---|
+| [`principal.md`](principal.md) | always | Every session once current and populated, because it carries risk posture, approval rules and principal hard rules. |
+| [`voice.md`](voice.md) | triggered | Drafting, editing or communication that must match the principal. |
+| [`availability.md`](availability.md) | triggered | Scheduling, escalation, workload or capacity decisions. |
 
 Owner note: files here are typically `owner: human` - agents propose, the principal confirms.
 

@@ -51,7 +51,8 @@ An adapter has at most three parts:
 2. **Hook wiring**, if the runtime has lifecycle hooks: a shim that translates the runtime's
    payloads into the neutral contract below and calls `core/hooks/<name>.py`.
 3. **A playbook pointer**, if the runtime has a skill/command mechanism: a thin file that says
-   "follow `core/onboarding/ONBOARDING.md`" (see `.claude/skills/onboarding/SKILL.md`).
+   "follow `core/onboarding/ONBOARDING.md`" (see `.claude/skills/onboarding/SKILL.md`). Its
+   presence alone does not prove support.
 
 ## The neutral hook contract
 
@@ -93,8 +94,11 @@ onto those three; anything unmapped is allowed (fail-open).
    append-only then holds at commit time for ANY runtime.
 4. **Session end (3 min).** Wire `session-digest.py`, `reaper.py`, `registry-drift.py` at session
    end if the runtime supports it; otherwise run them from the weekly-review workflow by hand.
-5. **Prove it.** `python3 tools/agnostic-check.py` must exit 0: your pointer file stays a pointer
-   and no vendor specifics leaked into the neutral core.
+5. **Prove it.** `python3 tools/agnostic-check.py` and `python3 tools/skill-surface-check.py` must
+   exit 0. For every claimed skill, also prove
+   that this runtime discovers it on an applicable cue, ignores its nearest non-applicable cue,
+   and produces and validates the intended artefact. Re-verify after runtime changes; file
+   presence or invocation alone is not support.
 
 Reduced wiring is honest wiring: a runtime with no hooks still gets the full workspace (documents,
 doctrine, onboarding, gates) plus git-level journal enforcement; it loses only the automatic
@@ -109,8 +113,9 @@ session reflexes, and this file says so.
   (Claude Code treats exit 2 from a PreToolUse hook as "block", matching the contract directly).
   Tool mapping: `Edit`/`MultiEdit`/`NotebookEdit` -> `modify`; `Write` -> `create-or-overwrite`;
   `Bash` -> `shell`.
-- **Playbook pointers:** `.claude/skills/onboarding/SKILL.md` -> `core/onboarding/ONBOARDING.md`;
-  `.claude/skills/template-update/SKILL.md` -> `60_workflows/template-update.md`.
+- **Playbook pointers present:** `.claude/skills/onboarding/SKILL.md` -> `core/onboarding/ONBOARDING.md`;
+  `.claude/skills/template-update/SKILL.md` -> `60_workflows/template-update.md`;
+  `.claude/skills/memory-sleep/SKILL.md` -> `60_workflows/memory-sleep.md`.
 - **Verified hook reality** (checked against the live binary; re-verify before relying on it -
   hook surfaces drift across versions): events include `SessionStart`, `UserPromptSubmit`,
   `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `SubagentStop`, `SessionEnd`,

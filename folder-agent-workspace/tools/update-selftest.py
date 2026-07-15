@@ -79,6 +79,173 @@ def refuse(*args, cwd, env, origin_path, needle, candidate=None):
     require(origin_path.read_bytes() == before, "refusal changed the origin stamp")
     require(candidate is None or candidate.is_file(), "refusal removed the candidate")
     return result
+
+
+def shared_doc(status, load, marker, *, blank=False):
+    load_line = f"load: {load}\n" if load is not None else ""
+    body = "> Blank by design - fixture.\n" if blank else f"{marker}\n"
+    return (f"---\nid: test.{marker.lower()}\ntype: context\nstatus: {status}\n{load_line}"
+            f"owner: shared\n---\n\n# {marker}\n\n{body}")
+
+
+def prove_shared_loading(instance, temp, env):
+    """Folder consumes Shared data safely: lifecycle, loading, fallback and containment."""
+    shared = temp / "shared-fixture"
+    for directory in ("identity", "operating-rules", "boundaries", "core/hooks"):
+        (shared / directory).mkdir(parents=True)
+    files = {
+        "SHARED.md": ("current", "always", "SHARED_ROOT"),
+        "identity/README.md": ("current", "always", "IDENTITY_INDEX"),
+        "identity/principal.md": ("seed", "always", "SEED_PRINCIPAL"),
+        "identity/voice.md": ("current", "triggered", "VOICE_TRIGGERED"),
+        "operating-rules/README.md": ("current", "always", "RULES_INDEX"),
+        "boundaries/README.md": ("current", "always", "BOUNDARIES_INDEX"),
+        "boundaries/boundaries.md": ("seed", "always", "SEED_BOUNDARIES"),
+    }
+    for rel, values in files.items():
+        (shared / rel).write_text(shared_doc(*values), encoding="utf-8")
+    executed = shared / "external-executed"
+    (shared / "core/hooks/store-brief.py").write_text(
+        f"from pathlib import Path\nPath({str(executed)!r}).write_text('executed')\n", encoding="utf-8")
+    shared_env = dict(env, ACME_ROOT_SHARED=str(shared))
+    sentinel = shared / ".uninitialised"
+    sentinel.write_text("", encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("SHARED_ROOT" not in output, "uninitialised Shared store injected content")
+    require("Consequential work must wait" in output and "was not safely injected" in output
+            and "always set is injected" not in output,
+            "uninitialised Shared store did not surface the safe-stop state")
+    sentinel.unlink()
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require(all(marker in output for marker in ("SHARED_ROOT", "IDENTITY_INDEX", "RULES_INDEX", "BOUNDARIES_INDEX")),
+            "Shared always indexes were not injected")
+    require(not any(marker in output for marker in ("SEED_PRINCIPAL", "SEED_BOUNDARIES", "VOICE_TRIGGERED")),
+            "Shared seed or triggered content was injected")
+    positions = [output.index(marker) for marker in
+                 ("SHARED_ROOT", "IDENTITY_INDEX", "RULES_INDEX", "BOUNDARIES_INDEX")]
+    require(positions == sorted(positions), "Shared core always set was not injected deterministically")
+    (shared / "identity/principal.md").write_text(shared_doc("current", "always", "CURRENT_PRINCIPAL"), encoding="utf-8")
+    (shared / "boundaries/boundaries.md").write_text(shared_doc("current", "always", "CURRENT_BOUNDARIES"), encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("CURRENT_PRINCIPAL" in output and "CURRENT_BOUNDARIES" in output,
+            "current substantive Shared safety files were not injected")
+    (shared / "identity/principal.md").write_text(shared_doc("current", "triggered", "CURRENT_PRINCIPAL"), encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("CURRENT_PRINCIPAL" in output and "required always" in output,
+            "required Shared file did not fail safe when marked triggered")
+    (shared / "identity/voice.md").write_text(shared_doc("current", None, "VOICE_TRIGGERED"), encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("VOICE_TRIGGERED" in output and "metadata is incomplete" in output,
+            "legacy Shared metadata did not use the conservative fallback")
+    (shared / "identity/voice.md").write_text(shared_doc("current", "invalid", "VOICE_TRIGGERED"), encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("VOICE_TRIGGERED" in output and "incomplete or invalid" in output,
+            "invalid Shared loading metadata did not use the conservative fallback")
+    duplicate = shared_doc("current", "triggered", "VOICE_TRIGGERED").replace(
+        "load: triggered", "load: triggered\nload: always")
+    (shared / "identity/voice.md").write_text(duplicate, encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("Consequential work must wait" in output and "duplicate frontmatter" in output,
+            "duplicate Shared loading metadata did not fail safe")
+    (shared / "identity/voice.md").write_text(
+        shared_doc("current", "triggered", "VOICE_TRIGGERED", blank=True), encoding="utf-8")
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("Consequential work must wait" in output and "blank body" in output,
+            "current blank Shared content did not fail safe")
+    (shared / "identity/voice.md").write_text(shared_doc("current", "triggered", "VOICE_TRIGGERED"), encoding="utf-8")
+    identity_index = shared / "identity/README.md"
+    identity_bytes = identity_index.read_bytes()
+    identity_index.unlink()
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("Consequential work must wait" in output and "required always file" in output,
+            "missing required Shared index did not fail safe")
+    identity_index.write_bytes(identity_bytes)
+    (shared / "identity/principal.md").write_text(
+        shared_doc("current", "always", "CURRENT_PRINCIPAL"), encoding="utf-8")
+    outside = temp / "outside-shared.md"
+    outside.write_text(shared_doc("current", "always", "OUTSIDE_CONTENT"), encoding="utf-8")
+    principal = shared / "identity/principal.md"
+    principal.unlink(); principal.symlink_to(outside)
+    output = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=shared_env).stdout
+    require("Consequential work must wait" in output and "OUTSIDE_CONTENT" not in output,
+            "Shared path containment did not stop safe loading")
+    require(not executed.exists(), "Folder executed code from the external Shared store")
+
+
+def prove_policy_transition(temp, env):
+    """An instance with the former path policy discovers new exact files on the required second pass."""
+    root = temp / "policy-transition"
+    family = root / "family"
+    family.mkdir(parents=True)
+    shutil.copy2(FAMILY / "instantiate.py", family / "instantiate.py")
+    shutil.copy2(FAMILY / "CHANGELOG.md", family / "CHANGELOG.md")
+    shutil.copytree(MEMBER, family / "folder-agent-workspace",
+                    ignore=shutil.ignore_patterns(".git", "__pycache__", ".pytest_cache"))
+    policy = family / "folder-agent-workspace/tools/template_paths.py"
+    current_policy = policy.read_bytes()
+    adapter = "." + "cl" + "aude"
+    first_pointer = "CL" + "AUDE.md"
+    second_pointer = "GE" + "MINI.md"
+    policy.write_text(
+        "from pathlib import Path\n\n"
+        f"MANAGED_PREFIXES = ('core/', 'tools/', '{adapter}/hooks/', '{adapter}/skills/', "
+        "'30_schemas/', '60_workflows/', '40_templates/')\n"
+        f"MANAGED_ROOT_FILES = frozenset({{'AGENTS.md', '{first_pointer}', '{second_pointer}'}})\n\n"
+        "def is_managed(relpath):\n"
+        "    rel = Path(relpath).as_posix()\n"
+        "    return rel in MANAGED_ROOT_FILES or any(rel.startswith(p) for p in MANAGED_PREFIXES)\n\n"
+        "def managed_files(root):\n"
+        "    root = Path(root)\n"
+        "    return sorted(p.relative_to(root).as_posix() for p in root.rglob('*') "
+        "if p.is_file() and is_managed(p.relative_to(root)) and '__pycache__' not in p.parts "
+        "and p.suffix not in {'.pyc', '.pyo'} and not p.name.endswith('.template-new'))\n",
+        encoding="utf-8")
+    git(family, env, "init", "-q")
+    git(family, env, "add", "-A")
+    git(family, env, "commit", "-q", "-m", "legacy path policy")
+    git(family, env, "branch", "-M", "main")
+    remote = root / "remote.git"
+    git(root, env, "init", "-q", "--bare", str(remote))
+    git(family, env, "remote", "add", "origin", str(remote))
+    git(family, env, "push", "-q", "-u", "origin", "main")
+    instance = root / "instance"
+    run([sys.executable, "instantiate.py", "folder-agent-workspace", str(instance)],
+        cwd=family, env=env)
+    (instance / "values.json").write_text(json.dumps(VALUES), encoding="utf-8")
+    run([sys.executable, "core/onboarding/apply.py", "--root", "."], cwd=instance, env=env)
+    exact = ("00_meta/agent-os-design.md", "10_doctrine/context-decomposition.md",
+             "10_doctrine/memory-homeostasis.md")
+    origin_path = instance / "00_meta/template-origin.json"
+    require(not set(exact) & set(load_json(origin_path)["managed_manifest"]),
+            "legacy path policy unexpectedly managed the new exact files")
+    before = {rel: (instance / rel).read_bytes() for rel in exact}
+
+    policy.write_bytes(current_policy)
+    for rel in exact:
+        path = family / "folder-agent-workspace" / rel
+        path.write_text(path.read_text(encoding="utf-8") + "\nPolicy-transition fixture.\n",
+                        encoding="utf-8")
+    git(family, env, "add", "-A")
+    git(family, env, "commit", "-q", "-m", "expand managed path policy")
+    git(family, env, "push", "-q", "origin", "main")
+    updater(instance, env, "--check", expected=10)
+    first = updater(instance, env, "--apply").stdout
+    require("replaced tools/template_paths.py" in first,
+            "first transition pass did not install the expanded path policy")
+    require(all((instance / rel).read_bytes() == before[rel] for rel in exact),
+            "first transition pass changed formerly unmanaged exact files")
+    require(not set(exact) & set(load_json(origin_path)["managed_manifest"]),
+            "old updater classified exact files before the expanded policy was active")
+
+    updater(instance, env, "--check")
+    second = updater(instance, env, "--apply").stdout
+    require(all((instance / rel).with_name(Path(rel).name + ".template-new").is_file()
+                for rel in exact),
+            "fresh second pass did not surface exact files as protected review candidates")
+    require(all(f"preserved {rel}" in second for rel in exact),
+            "second transition pass did not report every exact-file candidate")
+
+
 def status_paths(output, group, next_group):
     lines = output.splitlines()
     start = next(i for i, line in enumerate(lines) if line.startswith(group + ": "))
@@ -96,6 +263,7 @@ def main():
             home.mkdir()
             env = dict(os.environ, HOME=str(home), GIT_AUTHOR_NAME="Test", GIT_AUTHOR_EMAIL="t@t.t",
                        GIT_COMMITTER_NAME="Test", GIT_COMMITTER_EMAIL="t@t.t")
+            prove_policy_transition(temp, env)
             family = temp / "family"
             family.mkdir()
             shutil.copy2(FAMILY / "instantiate.py", family / "instantiate.py")
@@ -120,12 +288,15 @@ def main():
             require(origin["values"] == VALUES, "onboarding values were not persisted")
             managed = origin["managed_manifest"]
             require("AGENTS.md" in managed and "tools/template-update.py" in managed, "origin manifest omitted the managed spine")
-            require(not any(path.startswith(("00_meta/", "10_doctrine/", "15_canon/", "20_memory/",
-                                             "50_registers/", "80_projects/", "90_runs/")) for path in managed),
-                    "origin manifest included instance content or doctrine")
+            exact_managed = {"00_meta/agent-os-design.md", "10_doctrine/context-decomposition.md", "10_doctrine/memory-homeostasis.md"}
+            special_managed = {path for path in managed if path.startswith(("00_meta/", "10_doctrine/"))}
+            require(special_managed == exact_managed, "origin manifest did not contain exactly the allowed doctrine/meta files")
+            require(not any(path.startswith(("15_canon/", "20_memory/", "50_registers/", "80_projects/", "90_runs/"))
+                            for path in managed), "origin manifest included instance content")
             clean_origin = copied(origin)
-            bad_paths = (str(temp / "absolute.md"), "40_templates/../90_runs/private.md", "90_runs/private.md",
-                         "40_templates/private.md.template-new", "./40_templates/private.md", "40_templates//private.md")
+            bad_paths = (str(temp / "absolute.md"), "40_templates/../90_runs/private.md", "90_runs/private.md", "40_templates/private.md.template-new",
+                         "./40_templates/private.md", "40_templates//private.md", "00_meta/design-spec.md", "00_meta/agent-os-design/01-staged-plan.md",
+                         "10_doctrine/principles.md", "10_doctrine/context-decomposition.md.extra")
             for manifest_name in ("managed_manifest", "accepted_local_manifest"):
                 for bad_rel in bad_paths:
                     probe = copied(clean_origin)
@@ -139,6 +310,7 @@ def main():
             store_json(origin_path, clean_origin)
             origin = clean_origin
             (instance / ".uninitialised").unlink()
+            prove_shared_loading(instance, temp, env)
             brief = run([sys.executable, "core/hooks/session-brief.py"], cwd=instance, env=env).stdout
             require("Template: update check due" in brief, "session brief did not nudge when check state was absent")
             check_state = instance / "20_memory/_meta/template-check.json"
@@ -148,17 +320,25 @@ def main():
             require("Template: update check due" in brief, "session brief did not nudge when check state was stale")
             pristine_rel = "60_workflows/default.md"
             custom_rel = "30_schemas/action-intent.md"
+            exact_rels = tuple(sorted(exact_managed))
+            unmanaged_rels = ("00_meta/design-spec.md", "10_doctrine/principles.md")
             new_rel = "40_templates/update-proof.md"
             pristine = instance / pristine_rel
             custom = instance / custom_rel
+            exact_paths = {rel: instance / rel for rel in exact_rels}
+            unmanaged_before = {rel: (instance / rel).read_bytes() for rel in unmanaged_rels}
             custom_baseline = origin["managed_manifest"][custom_rel]
             custom_before = custom.read_text(encoding="utf-8") + "\nLocal custom line.\n"
             custom.write_text(custom_before, encoding="utf-8")
             status = updater(instance, env, "--status").stdout
             require("customized: 1" in status and custom_rel in status, "offline status did not identify the customized file")
-            for rel in (pristine_rel, custom_rel):
+            for rel in (pristine_rel, custom_rel, *exact_rels):
                 path = family / "folder-agent-workspace" / rel
-                path.write_text(path.read_text(encoding="utf-8") + "\nUpstream owner: " + "<<" + "OWNER>>.\n", encoding="utf-8")
+                path.write_text(path.read_text(encoding="utf-8") + "\nExact managed owner: " + "<<" + "OWNER>>.\n", encoding="utf-8")
+            for rel in unmanaged_rels:
+                path = family / "folder-agent-workspace" / rel
+                path.write_text(path.read_text(encoding="utf-8") + "\nUnmanaged upstream sentinel.\n",
+                                encoding="utf-8")
             new_path = family / "folder-agent-workspace" / new_rel
             new_path.write_text("---\nid: " + "<<" + "workspace_slug>>.update-proof\n"
                                 "type: template\n---\n\nOwner: " + "<<" + "OWNER>>.\n", encoding="utf-8")
@@ -217,6 +397,8 @@ def main():
             require("new-upstream: 1" in status and new_rel in status, "cached status did not identify the new upstream file")
             preview = updater(instance, env, "--apply", "--dry-run").stdout
             require("replaced " + pristine_rel in preview and "preserved " + custom_rel in preview, "apply preview did not classify pristine/customized paths")
+            require(all("replaced " + rel in preview for rel in exact_rels), "apply preview omitted an exact managed doctrine/meta file")
+            require(not any(rel in preview for rel in unmanaged_rels), "apply preview included a neighbouring unmanaged doctrine/meta file")
             file_sentinel = temp / "outside-file-sentinel"
             file_bytes = b"outside file sentinel\n"
             file_sentinel.write_bytes(file_bytes)
@@ -226,15 +408,27 @@ def main():
             require(file_sentinel.read_bytes() == file_bytes, "predictable managed-file temp followed a symlink outside the workspace")
             file_temp.unlink()
             require("replaced " + pristine_rel in applied and "added " + new_rel in applied, "apply output omitted replaced/added actions")
-            require("Upstream owner: Alex." in pristine.read_text(encoding="utf-8"), "pristine file was not replaced and token-filled")
+            exact_owner = f"Exact managed owner: {VALUES['OWNER']}."
+            require(exact_owner in pristine.read_text(encoding="utf-8"),
+                    "pristine file was not replaced and token-filled")
+            require(all(exact_owner in path.read_text(encoding="utf-8")
+                        for path in exact_paths.values()),
+                    "an exact managed doctrine/meta file did not propagate and token-fill")
+            require(all((instance / rel).read_bytes() == unmanaged_before[rel] for rel in unmanaged_rels),
+                    "an upstream neighbour changed an unmanaged doctrine/meta file")
             require(custom.read_text(encoding="utf-8") == custom_before, "customized file was changed")
             pacnew = custom.with_name(custom.name + ".template-new")
-            require(pacnew.is_file() and "Upstream owner: Alex." in pacnew.read_text(encoding="utf-8"), "customized file did not receive a token-filled .template-new")
+            require(pacnew.is_file() and exact_owner in pacnew.read_text(encoding="utf-8"), "customized file did not receive a token-filled .template-new")
             require((instance / new_rel).is_file() and "Owner: Alex." in (instance / new_rel).read_text(encoding="utf-8"), "new upstream file was not added and token-filled")
             origin = json.loads((instance / "00_meta/template-origin.json").read_text())
             require(origin["commit"] == latest, "origin commit was not advanced")
             require(origin["managed_manifest"][pristine_rel] == digest(pristine), "pristine manifest hash was not updated")
             require(origin["managed_manifest"][new_rel] == digest(instance / new_rel), "new-file manifest hash was not added")
+            require(all(origin["managed_manifest"].get(rel) == digest(path)
+                        for rel, path in exact_paths.items()),
+                    "an exact managed doctrine/meta manifest hash was not updated")
+            require(not any(rel in origin["managed_manifest"] for rel in unmanaged_rels),
+                    "a neighbouring unmanaged doctrine/meta path entered the manifest")
             require(origin["managed_manifest"][custom_rel] == custom_baseline, "customized manifest hash advanced before human acceptance")
             require(new_stamp_has_empty_accepted, "new origin stamp omitted an empty accepted-local manifest")
             u2_candidate_digest = digest(pacnew)
@@ -325,7 +519,7 @@ def main():
             updater(instance, env, "--apply")
             require(custom.read_bytes() == legacy_local_bytes, "legacy accepted local content was clobbered by a later upstream update")
             pacnew = custom.with_name(custom.name + ".template-new")
-            require(pacnew.is_file() and "Upstream owner: Alex." in (candidate_text := pacnew.read_text(encoding="utf-8"))
+            require(pacnew.is_file() and exact_owner in (candidate_text := pacnew.read_text(encoding="utf-8"))
                     and "LIVE-DRIFT" not in candidate_text and "Upstream generation: U4." in candidate_text, "legacy accepted local content did not receive the newer upstream candidate")
             origin = load_json(origin_path)
             require(origin["managed_manifest"][custom_rel] == legacy_upstream_digest and origin["accepted_local_manifest"][custom_rel] == legacy_local_digest,
@@ -466,8 +660,8 @@ def main():
             require(set(count_lines) == set(groups), "status omitted a standalone count group")
             require(count_lines["accepted-customized"] == 3 and count_lines["customized"] == 0
                     and count_lines["missing"] == 0 and count_lines["new-upstream"] == 0, "final status was not clean")
-        print("update-selftest: all green - manifest keys and pending reviews preserve authority; "
-              "write-all, provenance, containment, and legacy refusal atomicity are enforced.")
+        print("update-selftest: all green - manifest/update authority, atomic writes, containment, "
+              "legacy refusal, and non-executing Shared loading are enforced.")
         return 0
     except (AssertionError, OSError, subprocess.SubprocessError) as exc:
         print(f"update-selftest: FAILURE - {exc}", file=sys.stderr)

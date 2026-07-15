@@ -10,4 +10,5 @@ Contents:
 - `hooks/shim.py` - pipes hook payloads to the matching `core/hooks/` script (shared family-wide).
 - `skills/onboarding/SKILL.md` - thin pointer to `core/onboarding/ONBOARDING.md`.
 
-`tools/agnostic-check.py` fails the build if this layer grows content beyond wiring.
+`tools/agnostic-check.py` keeps this layer runtime-only; `tools/skill-surface-check.py` keeps its
+skills as valid neutral pointers.
